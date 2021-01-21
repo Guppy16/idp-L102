@@ -43,6 +43,7 @@ ax.broken_barh([(mdates.date2num(dates[29]), 10)], (7.125, .75), facecolors='tab
 ax.broken_barh([(mdates.date2num(dates[38]), 10)], (8.125, .75), facecolors='tab:cyan')
 ax.broken_barh([(mdates.date2num(dates[40]), 10)], (9.125, .75), facecolors='tab:cyan')
 
+
 ax.set_title('L102 IDP Gantt Chart')
 
 plt.xticks(rotation=30)
