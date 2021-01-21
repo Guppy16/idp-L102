@@ -3,6 +3,7 @@ The ultimate repo for the idp
 
 # Tasks
 - [ ] Create a team name
+- [ ] Create the Gantt chart
 
 ## Deadlines
 
