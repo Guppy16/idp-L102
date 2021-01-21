@@ -9,7 +9,7 @@ The ultimate repo for the idp
 ---
 ## Meetings
 - Week 1
-  - Tue 26th 14:30 (GMT) - First Presentation
+  - Tue 26th 14:30 (GMT) - [First Presentation](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit#slide=id.gb7adb26c31_0_31)
 - Week 2
   - Thurs 16:00 - First Report
   - Tue 14:30? - Progress Meeting
