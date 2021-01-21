@@ -1,2 +1,27 @@
-# idp-L102
+# IDP L102 [insert team name]
 The ultimate repo for the idp
+
+# Tasks
+- [ ] Create a team name
+
+## Deadlines
+
+---
+## Meetings
+- Week 1
+  - Tue 26th 14:30 (GMT) - First Presentation
+- Week 2
+  - Thurs 16:00 - First Report
+  - Tue 14:30? - Progress Meeting
+- Week 3
+  - Tue - Progress Meeting
+- Week 4
+  - Thurs 9 am - First Competition
+  - Tue 9am - Final Presentation
+  - Wed 14:00 pm - Final Competition
+- Week 5
+  - Mon 16:00 - Final Report and Documentation Deadline
+
+---
+
+## Useful Links
