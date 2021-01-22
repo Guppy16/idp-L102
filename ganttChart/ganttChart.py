@@ -31,16 +31,17 @@ ax.set_ylim(0,7)
 
 #broken barh
 #ax.broken_barh([(mdates.date2num(dates[0]), mdates.date2num(dates[10]))], (2,1), facecolors = ('tab:red'))
-barcolor='black'
-ax.broken_barh([(mdates.date2num(dates[0]), 2)], (0.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[2]), 10)], (2.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[2]), 10)], (3.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[2]), 10)], (4.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[10]), 17)], (5.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[17]), 15)], (6.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[3]), 4)], (1.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[24]), 2)], (1.125, .75), facecolors=barcolor)
-ax.broken_barh([(mdates.date2num(dates[29]), 3)], (1.125, .75), facecolors=barcolor)
+#barcolor1='lightgray'
+barcolor1='darkgray'
+ax.broken_barh([(mdates.date2num(dates[0]), 2)], (0.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[2]), 10)], (2.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[2]), 10)], (3.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[2]), 10)], (4.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[10]), 17)], (5.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[17]), 15)], (6.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[3]), 4)], (1.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[24]), 2)], (1.125, .75), facecolors=barcolor1)
+ax.broken_barh([(mdates.date2num(dates[29]), 3)], (1.125, .75), facecolors=barcolor1)
 
 #deadline dates
 
