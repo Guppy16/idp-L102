@@ -3,11 +3,16 @@ The ultimate repo for the idp
 
 # Tasks
 - [ ] Create a team name
+ - Orange background
+ - Cheesy Poops
+ - 
+ 
+ 
 - Before the first Presenetation ~ 5 days
- - [ ] Gannt chart ~ inf
- - [ ] Get used to Webots ~ 2 days
- - [ ] Initial CAD and PCB design ~ 5
- - [ ] Inital algorithms for navigation ~ 4
+  - [x] Gannt chart ~ inf
+  - [ ] Get used to Webots ~ 2 days
+  - [ ] Initial CAD and PCB design ~ 5
+  - [ ] Inital algorithms for navigation ~ 4
 - Before progress Meeting 1 ~ 7 days
   - [ ] Simple simulation of environment (only 1 robot) ~ 2
   - [ ] Complete cad design of bulk components ~ 5
@@ -43,6 +48,24 @@ The ultimate repo for the idp
   - Wed 17 14:00 - Final Competition
 - Week 5
   - Mon 22 16:00 - Final Report and Documentation Deadline
+
+---
+## Software
+
+- [x] Build a simulation
+- [x] Add robots
+- [ ] Add controllers to the robot to drive it using arrow keys
+- [ ] Add a colour sensor
+- [ ] Add a distance sensor
+- [ ] Add a GPS sensor
+
+Extras
+- [ ] Control the robot using a simple grid search algo (without building a map of the env)
+- [ ] Test some extreme cases: e.g. detecting collisions, getting a block from the wall
+- [ ] Build a map of the env by detecting blocks using the distance sensor with GPS
+- [ ] Use an algo (e.g. A* or Dijkstras) to find the best path to search for blocks
+- [ ] Add a servo to the distance sensor to make it rotate to build a more accurate map
+
 
 ---
 
