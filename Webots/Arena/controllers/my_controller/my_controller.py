@@ -2,7 +2,7 @@
 
 # You may need to import some classes of the controller module. Ex:
 #  from controller import Robot, Motor, DistanceSensor
-from controller import Robot, Motor
+from controller import Robot
 
 # create the Robot instance.
 robot = Robot()
@@ -27,7 +27,7 @@ while robot.step(timestep) != -1:
 
     # Enter here functions to send actuator commands, like:
     #  motor.setPosition(10.0)
-    print("Hello, world!")
-    #pass
+    #print("Hello, world!")
+    pass
 
 # Enter here exit cleanup code.

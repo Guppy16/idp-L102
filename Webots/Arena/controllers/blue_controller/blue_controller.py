@@ -60,13 +60,13 @@ while robot.step(timestep) != -1:
     #  val = ds.getValue()
     key=keyboard.getKey()
 
-    if key==keyboard.UP:
+    if key==ord("W"):
         go_forward()
-    elif key==keyboard.DOWN:
+    elif key==ord("S"):
         go_backward()
-    elif key==keyboard.LEFT:
+    elif key==ord("A"):
         turn_left()
-    elif key==keyboard.RIGHT:
+    elif key==ord("D"):
         turn_right()
     else:
         stop()
