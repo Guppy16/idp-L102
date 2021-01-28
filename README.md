@@ -1,5 +1,5 @@
 # IDP L102
-Team Name: root g
+Team Name: Root g 
 Robots: pi, e
 
 The ultimate repo for the idp
