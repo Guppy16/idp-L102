@@ -198,3 +198,4 @@ dmypy.json
 
 # CLion
 .idea/
+.DS_Store

@@ -1,20 +1,30 @@
-# IDP L102 [insert team name]
+# IDP L102
+Team Name: root g
+Robots: pi, e
+
 The ultimate repo for the idp
 
 # Tasks
-- [ ] Create a team name
+- [ ] Write up First Report
+  - [Draft](https://docs.google.com/document/d/1v2MvU0iz8C-MFJlQ4b2S1USyDgQTOsfpWKXyA-FDR0s/edit?usp=sharing)
+  - [Latex](https://www.overleaf.com/read/jndqsdmcqbcx)
+  - [ ] Create block diagrams of the electronic components
+  - [ ] Think about the navigation algorithms required for the robot
+- [ ] Improve Gannt Chart
+- [ ] Complete all the Webots [tutorials](https://cyberbotics.com/doc/guide/tutorials) (in python)
+ 
+ 
 - Before the first Presenetation ~ 5 days
- - [ ] Gannt chart ~ inf
- - [ ] Get used to Webots ~ 2 days
- - [ ] Initial CAD and PCB design ~ 5
- - [ ] Inital algorithms for navigation ~ 4
+  - [x] Gannt chart -> [ ] Make this better
+  - [x] Get used to Webots ~ 2 days
+  - [x] Initial CAD and PCB design ~ 5
+  - [x] Inital algorithms for navigation ~ 4
 - Before progress Meeting 1 ~ 7 days
-  - [ ] Simple simulation of environment (only 1 robot) ~ 2
+  - [ ] Complete simulation of environment (2 robots)
   - [ ] Complete cad design of bulk components ~ 5
   - [ ] Finished full schematic ~ 3
   - [ ] Started implementing algorithms ~ 3
 - Before Progress Meeting 2 ~ 7 days
-  - [ ] Complete simulation of environment (2 robots)
   - [ ] Finished CAD design
   - [ ] Implemented Algorithms
   - [ ] Start documentation
@@ -43,6 +53,46 @@ The ultimate repo for the idp
   - Wed 17 14:00 - Final Competition
 - Week 5
   - Mon 22 16:00 - Final Report and Documentation Deadline
+
+---
+## Software
+
+- [x] Build a simulation
+- [x] Add robots
+- [ ] Add controllers to the robot to drive it using arrow keys
+- [ ] Add a colour sensor
+- [ ] Add a distance sensor
+- [ ] Add a GPS sensor
+- [ ] Add a compass
+- [ ] Control Algorithm
+  - AVOID THE OTHER ROBOT AT ALL COST. Possible ways of implelementing this:
+    - Get the location of the other robot using GPS
+    - Use IR emitter and receiver to send a signal
+  - Find a block. This can be implemented in 2 ways: 
+    - Rotate the robot
+    - Rotate the distance sensor (trickier)
+    - Ques: how to distringuish between a wall and block from far away
+  - Get close to the block
+    - Once the block is located, keep the heading aligned to the block
+    - Don't get too close to it, because we don't know whether we'll be be aligned with it or not
+  - Check the colour
+    - Use the colour sensor
+  - if it's not the right colour, restart the loop. otherwise:
+    - Somehow get aligned to it
+    - Get close to it and "pick it up"
+    - Ques: How can we be confident that we've picked up the block
+  - Once the block has been picked up
+    - Use the GPS sensor to locate ur pos
+    - Align the robot using the hall sensor
+
+
+Extras
+- [ ] Control the robot using a simple grid search algo (without building a map of the env)
+- [ ] Test some extreme cases: e.g. detecting collisions, getting a block from the wall
+- [ ] Build a map of the env by detecting blocks using the distance sensor with GPS
+- [ ] Use an algo (e.g. A* or Dijkstras) to find the best path to search for blocks
+- [ ] Add a servo to the distance sensor to make it rotate to build a more accurate map
+
 
 ---
 
