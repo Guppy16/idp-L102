@@ -1,17 +1,14 @@
 # IDP L102
-Team Name: root g
+Team Name: Root g 
 Robots: pi, e
 
 The ultimate repo for the idp
 
 # Tasks
-- [ ] Write up First Report
-  - [Draft](https://docs.google.com/document/d/1v2MvU0iz8C-MFJlQ4b2S1USyDgQTOsfpWKXyA-FDR0s/edit?usp=sharing)
-  - [Latex](https://www.overleaf.com/read/jndqsdmcqbcx)
-  - [ ] Create block diagrams of the electronic components
-  - [ ] Think about the navigation algorithms required for the robot
-- [ ] Improve Gannt Chart
 - [ ] Complete all the Webots [tutorials](https://cyberbotics.com/doc/guide/tutorials) (in python)
+- [ ] Complete cad design of bulk components
+- [ ] Finished full schematic
+- [ ] Started implementing algorithms
  
  
 - Before the first Presenetation ~ 5 days
@@ -20,7 +17,7 @@ The ultimate repo for the idp
   - [x] Initial CAD and PCB design ~ 5
   - [x] Inital algorithms for navigation ~ 4
 - Before progress Meeting 1 ~ 7 days
-  - [ ] Complete simulation of environment (2 robots)
+  - [x] Complete simulation of environment (2 robots)
   - [ ] Complete cad design of bulk components ~ 5
   - [ ] Finished full schematic ~ 3
   - [ ] Started implementing algorithms ~ 3
@@ -43,7 +40,7 @@ The ultimate repo for the idp
 - Week 1
   - Tue 26 14:30 - [First Presentation](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit#slide=id.gb7adb26c31_0_31)
 - Week 2
-  - Thurs 28 16:00 - First Report
+  - Thurs 28 16:00 - [First Report](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit?usp=sharing)
   - Tue 2 14:30 - Progress Meeting
 - Week 3
   - Tue 9 14:30 - Progress Meeting
@@ -96,9 +93,10 @@ Extras
 
 ---
 
-## Useful Links
+## Quick Links
 - CAD
   - [Parts list](https://www.vle.cam.ac.uk/pluginfile.php/19716321/mod_resource/content/0/Tools%20and%20Parts%20List%20Rev%202.0.pdf)
   - [Good and bad drawings](https://www.vle.cam.ac.uk/pluginfile.php/19604241/mod_resource/content/1/Good_Bad_drawing_examples.pdf)
   - 
 - [repo for CAD](onshape.com)
+- [Drive Folder](https://drive.google.com/drive/folders/1ipIikCvn5a5h6eHkmM2m4k-qFC2ZiWPo?usp=sharing)
