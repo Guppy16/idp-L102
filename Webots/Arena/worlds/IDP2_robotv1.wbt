@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.27388137424008124 -0.9616550406106934 -0.014442150546581909 0.7654977362782428
-  position 0.11043686028660193 0.4015974727996464 0.6683823834054398
+  orientation -0.5456484755477622 0.7681687330521343 0.33493960454607624 1.126352793899625
+  position 3.2634359294878768 2.614878781053615 1.5558621459750852
 }
 TexturedBackground {
 }
@@ -199,7 +199,7 @@ DEF WALL_4 Solid {
   boundingObject USE WALL_SHAPE
 }
 DEF NEW_ROBOT Robot {
-  translation 1 0.09 -1
+  translation 1 0.09 -0.63
   children [
     Camera {
       translation 0 0 0.1
@@ -489,4 +489,6 @@ Robot {
     mass 1
   }
   controller "red_controller"
+}
+NewRRobot {
 }
