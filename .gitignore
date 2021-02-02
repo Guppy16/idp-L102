@@ -41,9 +41,6 @@ ehthumbs.db
 Thumbs.db
 *.swp
 
-# Text editor backup files
-*~
-
 # Log files
 *.log
 
@@ -61,9 +58,9 @@ Thumbs.db
 
 /.clang-format
 /msys64
-/webots
 /webots.lnk
 /webots_debug_output.txt
+
 /util
 pics/
 
