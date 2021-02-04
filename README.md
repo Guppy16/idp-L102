@@ -5,7 +5,7 @@ Robots: pi, e
 The ultimate repo for the idp
 
 # Tasks
-- [ ] Complete all the Webots [tutorials](https://cyberbotics.com/doc/guide/tutorials) (in python)
+- [x] Complete all the Webots [tutorials](https://cyberbotics.com/doc/guide/tutorials) (in python)
 - [ ] Complete cad design of bulk components
 - [ ] Finished full schematic
 - [ ] Started implementing algorithms
@@ -36,7 +36,7 @@ The ultimate repo for the idp
   - [ ] Completed documentation
 
 ---
-## Schecdule
+## Schedule
 - Week 1
   - Tue 26 14:30 - [First Presentation](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit#slide=id.gb7adb26c31_0_31)
 - Week 2
@@ -56,13 +56,13 @@ The ultimate repo for the idp
 
 - [x] Build a simulation
 - [x] Add robots
-- [ ] Add controllers to the robot to drive it using arrow keys
+- [x] Add controllers to the robot to drive it using arrow keys
 - [ ] Add a colour sensor
 - [ ] Add a distance sensor
 - [ ] Add a GPS sensor
 - [ ] Add a compass
 - [ ] Control Algorithm
-  - AVOID THE OTHER ROBOT AT ALL COST. Possible ways of implelementing this:
+  - AVOID THE OTHER ROBOT AT ALL COST. Possible ways of implementing this:
     - Get the location of the other robot using GPS
     - Use IR emitter and receiver to send a signal
   - Find a block. This can be implemented in 2 ways: 
