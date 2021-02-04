@@ -8,7 +8,7 @@ ts = int(robot.getBasicTimeStep())
 MAX_SPEED = 5
 
 # Initialize gps
-gps = robot.getDevice("GPS")
+gps = robot.getDevice("gps")
 gps.enable(ts)
 
 # Initialize motors

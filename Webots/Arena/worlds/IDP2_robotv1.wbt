@@ -201,6 +201,8 @@ DEF WALL_4 Solid {
 DEF NEW_ROBOT Robot {
   translation 1 0.09 -0.63
   children [
+    Compass {
+    }
     Camera {
       translation 0 0 0.1
       width 1
