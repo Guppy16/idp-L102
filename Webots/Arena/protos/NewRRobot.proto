@@ -1,11 +1,13 @@
-  PROTO NewRRobot [
-  field SFVec3f    translation  0 0 0
+PROTO NewRRobot [
+  field SFVec3f    translation  1 0.09 -1
   field SFRotation rotation     0 1 0 0
   field SFFloat    bodyMass     1
-  ]
-  {
-    Robot {
-  translation 1 0.09 -1
+]
+{
+  Robot {
+  translation IS translation
+  rotation IS rotation
+
   children [
     Camera {
       translation 0 0 0.1
@@ -160,12 +162,12 @@
       translation 0 0.005 0
     }
   ]
-  name "blueRobot"
+  name "rootg"
   boundingObject USE BODY
   physics Physics {
     density -1
-    mass 1
+    mass IS bodyMass
   }
   controller "red_controller"
 }
-  }
+}
