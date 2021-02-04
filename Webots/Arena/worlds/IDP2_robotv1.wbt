@@ -350,6 +350,9 @@ DEF NEW_ROBOT Robot {
       ]
       name "ds_left"
     }
+    GPS {
+      translation 0 0.005 0
+    }
   ]
   name "blueRobot"
   boundingObject USE BODY
