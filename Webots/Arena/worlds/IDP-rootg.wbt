@@ -363,6 +363,4 @@ DEF ROOT_G Robot {
   controller "red_controller"
 }
 root_g {
-  translation 1 0.09 1
-  rotation 0 1 0 3.14159
 }
