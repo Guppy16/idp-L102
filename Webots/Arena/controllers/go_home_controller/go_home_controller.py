@@ -1,7 +1,6 @@
 """ controller to return robot to starting point."""
 
 from controller import Robot, GPS
-import math
 import numpy as np
 
 robot = Robot()
@@ -26,37 +25,37 @@ r_motor.setPosition(float('inf'))
 r_motor.setVelocity(0.0)
 
 # Block drop-off coords (ignore height coordinate)
-HOME = [1.0, 1.0]
+HOME = np.array([1.0, 1.0])
 # In competition HOME = START_POSITION
 
 # Get bearing from compass readings. Adapted from Webots documentation
 def getHeadingDegrees(compassVals):
-    angle = math.atan2(compassVals[0], compassVals[2])
-    bearing = 180 + (angle - math.pi/2) * 180 / math.pi 
-    if bearing < 0:
-        bearing += 360
-    if bearing > 360:
-        bearing -= 360
+    """Return angle of robot head wrt global north"""
+    angle = np.arctan2(compassVals[0], compassVals[2])
+    bearing = 180 + (angle - np.pi/2) * 180 / np.pi 
+    bearing %= 360
     return bearing
 
-def getHomeBearing(positionCoords):
-    homeVector = [HOME[0] - positionCoords[0], HOME[1] - positionCoords[1]]
-    unitHomeVector = homeVector / np.linalg.norm(homeVector)
+def getHomeBearing(homeVec):
+    """Return angle between home and global north"""
+    unitHomeVector = homeVec / np.linalg.norm(homeVec)
     dotProduct = np.dot(unitHomeVector, [0, 1]) # Dot unit North vector with vector home
-    return np.arccos(dotProduct) * 180 / math.pi
+    dotProduct = np.clip(dotProduct, -1.0, 1.0)
+    return np.arccos(dotProduct) * 180 / np.pi
 
 
 while robot.step(ts) != -1:
-    position = [gps.getValues()[0], - gps.getValues()[2]]
+    pos = np.array([gps.getValues()[0],-gps.getValues()[2]])
+    homeVec = HOME - pos
     heading = getHeadingDegrees(cps.getValues())
-    homeBearing = getHomeBearing(position)
-    homeVector = [HOME[0] - position[0], HOME[1] - position[1]]
+    homeBearing = getHomeBearing(homeVec)
+    
     """print("Bearing home is: " + str(homeBearing))
     print("Heading is: " + str(heading))
     print("Home vector is: " + str(homeVector))
     print("Position is: " + str(position))"""
 
-    if np.linalg.norm(homeVector) > 0.05:
+    if np.linalg.norm(homeVec) > 0.05:
         r_motor.setVelocity(MAX_SPEED)
         l_motor.setVelocity(MAX_SPEED)
         if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
