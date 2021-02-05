@@ -50,10 +50,10 @@ while robot.step(ts) != -1:
     heading = getHeadingDegrees(cps.getValues())
     homeBearing = getHomeBearing(position)
     homeVector = [HOME[0] - position[0], HOME[1] - position[1]]
-    print("Bearing home is: " + str(homeBearing))
+    """print("Bearing home is: " + str(homeBearing))
     print("Heading is: " + str(heading))
     print("Home vector is: " + str(homeVector))
-    print("Position is: " + str(position))
+    print("Position is: " + str(position))"""
 
     if np.linalg.norm(homeVector) > 0.05:
         r_motor.setVelocity(MAX_SPEED)
