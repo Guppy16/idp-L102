@@ -362,7 +362,7 @@ DEF NEW_ROBOT Robot {
     density -1
     mass 1
   }
-  controller "red_controller"
+  controller "go_home_controller"
 }
 Robot {
   translation 1 0.05 1
