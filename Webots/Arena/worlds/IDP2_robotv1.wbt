@@ -199,7 +199,7 @@ DEF WALL_4 Solid {
   boundingObject USE WALL_SHAPE
 }
 DEF NEW_ROBOT Robot {
-  translation 1 0.09 -0.63
+  translation -0.42 0.09 0.42
   children [
     Compass {
     }

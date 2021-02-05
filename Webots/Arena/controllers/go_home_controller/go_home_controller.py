@@ -18,8 +18,8 @@ cps = robot.getDevice("compass")
 cps.enable(ts)
 
 # Initialize motors
-r_motor = robot.getDevice("wheel1")
-l_motor = robot.getDevice("wheel2")
+r_motor = robot.getDevice("wheel2")
+l_motor = robot.getDevice("wheel1")
 l_motor.setPosition(float('inf'))
 l_motor.setVelocity(0.0)
 r_motor.setPosition(float('inf'))
@@ -55,23 +55,24 @@ while robot.step(ts) != -1:
     print("Home vector is: " + str(homeVector))
     print("Position is: " + str(position))
 
-    if np.linalg.norm(homeVector) > 0.2:
-        if heading > homeBearing + 10:
-            l_motor.setVelocity(-0.2 * MAX_SPEED)
-            r_motor.setVelocity(MAX_SPEED)
-        elif heading < homeBearing - 10:
+    if np.linalg.norm(homeVector) > 0.05:
+        r_motor.setVelocity(MAX_SPEED)
+        l_motor.setVelocity(MAX_SPEED)
+        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
             l_motor.setVelocity(MAX_SPEED)
             r_motor.setVelocity(-0.2 * MAX_SPEED)
-        elif heading > homeBearing + 5:
-            l_motor.setVelocity(0.95 * MAX_SPEED)
+        elif heading > homeBearing + 10:
+            l_motor.setVelocity(-0.2 * MAX_SPEED)
             r_motor.setVelocity(MAX_SPEED)
-        elif heading < homeBearing - 5:
+        elif heading > homeBearing + 0.5:
+            r_motor.setVelocity(0.8 * MAX_SPEED)
             l_motor.setVelocity(MAX_SPEED)
-            r_motor.setVelocity(0.95 * MAX_SPEED)
-        else:
-            l_motor.setVelocity(MAX_SPEED)
+        elif heading < homeBearing - 0.5:
             r_motor.setVelocity(MAX_SPEED)
+            l_motor.setVelocity(0.8 * MAX_SPEED)
     else:
+        r_motor.setVelocity(0)
+        l_motor.setVelocity(0)
         print('Arrived home, chief')            
 
 
