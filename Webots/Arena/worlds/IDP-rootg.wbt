@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5456484755477622 0.7681687330521343 0.33493960454607624 1.126352793899625
-  position 3.2634359294878768 2.614878781053615 1.5558621459750852
+  orientation -0.5451779444981351 -0.6604936176221384 -0.5162646510397637 2.0418529396300946
+  position -0.9817394584714016 6.506490100902746 -0.36936885975844924
 }
 TexturedBackground {
 }
@@ -161,7 +161,7 @@ DEF WALL_1 Solid {
   children [
     DEF WALL_SHAPE Shape {
       appearance PBRAppearance {
-        baseColor 0.12549 0.368627 0.729412
+        baseColor 0 0.333333 0
         roughness 1
         metalness 0
       }
@@ -198,8 +198,8 @@ DEF WALL_4 Solid {
   name "solid(3)"
   boundingObject USE WALL_SHAPE
 }
-DEF NEW_ROBOT Robot {
-  translation 1 0.09 -0.63
+DEF ROOT_G Robot {
+  translation 1 0.09 -1
   children [
     Camera {
       translation 0 0 0.1
@@ -274,7 +274,7 @@ DEF NEW_ROBOT Robot {
       ]
       endPoint Solid {
         translation 0.06 -0.04 0.06
-        rotation 0 0 1 1.5708036407833588
+        rotation 2.977097247001865e-10 -2.977119021536409e-10 1 1.5708036407833588
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -306,7 +306,7 @@ DEF NEW_ROBOT Robot {
       ]
       endPoint Solid {
         translation -0.06 -0.04 0.06
-        rotation 0 0 1 1.5708029067519502
+        rotation -2.955910485702302e-10 2.955929935530342e-10 1 1.5708029067519502
         children [
           USE WHEEL
         ]
@@ -362,136 +362,7 @@ DEF NEW_ROBOT Robot {
   }
   controller "red_controller"
 }
-Robot {
-  translation 1 0.05 1
-  rotation 0 1 0 3.14
-  children [
-    Camera {
-      translation 0 0 0.1
-      width 1
-      height 1
-    }
-    Solid {
-      translation 0 -0.03 0
-      children [
-        Shape {
-          geometry DEF CASTOR_BALL Sphere {
-            radius 0.01
-          }
-        }
-      ]
-      name "solid(2)"
-      contactMaterial "slippy"
-      boundingObject USE CASTOR_BALL
-      physics Physics {
-      }
-    }
-    DEF BODY Shape {
-      appearance PBRAppearance {
-        baseColor 1 0 0
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.1 0.05 0.2
-      }
-    }
-    DEF WHEEL1 HingeJoint {
-      jointParameters HingeJointParameters {
-        anchor 0.06 0 0.05
-      }
-      device [
-        RotationalMotor {
-          name "wheel1"
-          maxTorque 100
-        }
-      ]
-      endPoint Solid {
-        translation 0.06000000000005251 1.4531748733392746e-07 0.04999909020156158
-        rotation 0.0019079727809748464 -0.0019079797047584805 -0.9999963596200304 4.712381666377444
-        children [
-          DEF WHEEL Shape {
-            appearance PBRAppearance {
-              baseColor 0.305882 0.898039 0.25098
-              roughness 1
-              metalness 0
-            }
-            geometry Cylinder {
-              height 0.02
-              radius 0.04
-              subdivision 24
-            }
-          }
-        ]
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF WHEEL2 HingeJoint {
-      jointParameters HingeJointParameters {
-        anchor -0.06 0 0.05
-      }
-      device [
-        RotationalMotor {
-          name "wheel2"
-          maxTorque 100
-        }
-      ]
-      endPoint Solid {
-        translation -0.05999999999986491 2.9408924358078494e-07 0.049999115915629125
-        rotation 0.0017048106017812177 -0.001704816680961621 -0.9999970936062246 4.712382400408873
-        children [
-          USE WHEEL
-        ]
-        name "solid(1)"
-        boundingObject USE WHEEL
-        physics Physics {
-        }
-      }
-    }
-    DEF DS_RIGHT DistanceSensor {
-      translation -0.03 0 0.1
-      rotation 0 1 0 -1.87079
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 0.184314 0.596078 0.847059
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.01 0.01 0.01
-          }
-        }
-      ]
-      name "ds_right"
-    }
-    DEF DS_LEFT DistanceSensor {
-      translation 0.03 0 0.1
-      rotation 0 1 0 -1.27079
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 0.184314 0.596078 0.847059
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.01 0.01 0.01
-          }
-        }
-      ]
-      name "ds_left"
-    }
-  ]
-  name "redRobot"
-  boundingObject USE BODY
-  physics Physics {
-    density -1
-    mass 1
-  }
-  controller "red_controller"
-}
-NewRRobot {
+root_g {
+  translation 1 0.09 1
+  rotation 0 1 0 3.14159
 }
