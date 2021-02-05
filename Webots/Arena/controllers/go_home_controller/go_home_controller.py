@@ -27,6 +27,7 @@ r_motor.setVelocity(0.0)
 
 # Block drop-off coords (ignore height coordinate)
 HOME = [1.0, 1.0]
+# In competition HOME = START_POSITION
 
 # Get bearing from compass readings. Adapted from Webots documentation
 def getHeadingDegrees(compassVals):
