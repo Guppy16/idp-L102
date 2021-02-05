@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5451779444981351 -0.6604936176221384 -0.5162646510397637 2.0418529396300946
-  position -0.9817394584714016 6.506490100902746 -0.36936885975844924
+  orientation -0.567957414387266 -0.6171852314758046 -0.5445243479319254 2.110368736994087
+  position -0.17900630451712668 5.531682485534172 -0.2998089470311904
 }
 TexturedBackground {
 }
@@ -199,10 +199,8 @@ DEF WALL_4 Solid {
   boundingObject USE WALL_SHAPE
 }
 DEF ROOT_G Robot {
-  translation 1 0.09 -1
+  translation -0.107827 0.09 -0.304791
   children [
-    Compass {
-    }
     Camera {
       translation 0 0 0.1
       width 1
@@ -355,6 +353,8 @@ DEF ROOT_G Robot {
     GPS {
       translation 0 0.005 0
     }
+    Compass {
+    }
   ]
   name "blueRobot"
   boundingObject USE BODY
@@ -362,7 +362,7 @@ DEF ROOT_G Robot {
     density -1
     mass 1
   }
-  controller "go_home_controller"
+  controller "main_controller"
 }
 root_g {
 }

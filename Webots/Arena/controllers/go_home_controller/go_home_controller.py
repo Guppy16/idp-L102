@@ -1,28 +1,30 @@
 """ controller to return robot to starting point."""
 
-from controller import Robot, GPS
+# from controller import Robot, GPS
 import numpy as np
 
-robot = Robot()
+# robot = Robot()
 
-ts = int(robot.getBasicTimeStep())
-MAX_SPEED = 5
+# ts = int(robot.getBasicTimeStep())
+# MAX_SPEED = 5
 
 # Initialize gps
-gps = robot.getDevice("gps")
-gps.enable(ts)
+# gps = robot.getDevice("gps")
+# gps.enable(ts)
 
 # Initialize compass
-cps = robot.getDevice("compass")
-cps.enable(ts)
+# cps = robot.getDevice("compass")
+# cps.enable(ts)
 
 # Initialize motors
-r_motor = robot.getDevice("wheel2")
-l_motor = robot.getDevice("wheel1")
-l_motor.setPosition(float('inf'))
-l_motor.setVelocity(0.0)
-r_motor.setPosition(float('inf'))
-r_motor.setVelocity(0.0)
+# r_motor = robot.getDevice("wheel2")
+# l_motor = robot.getDevice("wheel1")
+# l_motor.setPosition(float('inf'))
+# l_motor.setVelocity(0.0)
+# r_motor.setPosition(float('inf'))
+# r_motor.setVelocity(0.0)
+
+MAX_SPEED = 5
 
 # Block drop-off coords (ignore height coordinate)
 HOME = np.array([1.0, 1.0])
@@ -43,11 +45,18 @@ def getHomeBearing(homeVec):
     dotProduct = np.clip(dotProduct, -1.0, 1.0)
     return np.arccos(dotProduct) * 180 / np.pi
 
-
-while robot.step(ts) != -1:
-    pos = np.array([gps.getValues()[0],-gps.getValues()[2]])
+def reached_home(gps_vals):
+    """Returns true if robot pos is within home box"""
+    pos = np.array([gps_vals[0],-gps_vals[2]])
     homeVec = HOME - pos
-    heading = getHeadingDegrees(cps.getValues())
+    return np.linalg.norm(homeVec) < 0.05
+    print("Arrived home chief")
+
+def go_home(gps_vals, cps_vals, l_motor, r_motor):
+    """Sets the velocities of the motor to return home"""
+    pos = np.array([gps_vals[0],-gps_vals[2]])
+    homeVec = HOME - pos
+    heading = getHeadingDegrees(cps_vals)
     homeBearing = getHomeBearing(homeVec)
     
     """print("Bearing home is: " + str(homeBearing))
@@ -55,25 +64,20 @@ while robot.step(ts) != -1:
     print("Home vector is: " + str(homeVector))
     print("Position is: " + str(position))"""
 
-    if np.linalg.norm(homeVec) > 0.05:
-        r_motor.setVelocity(MAX_SPEED)
+    r_motor.setVelocity(MAX_SPEED)
+    l_motor.setVelocity(MAX_SPEED)
+    if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
         l_motor.setVelocity(MAX_SPEED)
-        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
-            l_motor.setVelocity(MAX_SPEED)
-            r_motor.setVelocity(-0.2 * MAX_SPEED)
-        elif heading > homeBearing + 10:
-            l_motor.setVelocity(-0.2 * MAX_SPEED)
-            r_motor.setVelocity(MAX_SPEED)
-        elif heading > homeBearing + 0.5:
-            r_motor.setVelocity(0.8 * MAX_SPEED)
-            l_motor.setVelocity(MAX_SPEED)
-        elif heading < homeBearing - 0.5:
-            r_motor.setVelocity(MAX_SPEED)
-            l_motor.setVelocity(0.8 * MAX_SPEED)
-    else:
-        r_motor.setVelocity(0)
-        l_motor.setVelocity(0)
-        print('Arrived home, chief')            
+        r_motor.setVelocity(-0.2 * MAX_SPEED)
+    elif heading > homeBearing + 10:
+        l_motor.setVelocity(-0.2 * MAX_SPEED)
+        r_motor.setVelocity(MAX_SPEED)
+    elif heading > homeBearing + 0.5:
+        r_motor.setVelocity(0.8 * MAX_SPEED)
+        l_motor.setVelocity(MAX_SPEED)
+    elif heading < homeBearing - 0.5:
+        r_motor.setVelocity(MAX_SPEED)
+        l_motor.setVelocity(0.8 * MAX_SPEED)          
 
 
 
