@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5456484755477622 0.7681687330521343 0.33493960454607624 1.126352793899625
-  position 3.2634359294878768 2.614878781053615 1.5558621459750852
+  orientation -0.22507040732916345 -0.938199194480409 -0.26291744563835245 2.0115829582050284
+  position -4.77790910549514 3.524659543321239 -2.156304529268869
 }
 TexturedBackground {
 }
@@ -161,7 +161,7 @@ DEF WALL_1 Solid {
   children [
     DEF WALL_SHAPE Shape {
       appearance PBRAppearance {
-        baseColor 0.12549 0.368627 0.729412
+        baseColor 0 0.333333 0
         roughness 1
         metalness 0
       }
