@@ -201,6 +201,8 @@ DEF WALL_4 Solid {
 DEF ROOT_G Robot {
   translation 1 0.09 -1
   children [
+    Compass {
+    }
     Camera {
       translation 0 0 0.1
       width 1
@@ -360,7 +362,7 @@ DEF ROOT_G Robot {
     density -1
     mass 1
   }
-  controller "red_controller"
+  controller "go_home_controller"
 }
 root_g {
 }
