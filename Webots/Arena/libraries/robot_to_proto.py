@@ -1,9 +1,10 @@
 # Script to convert a robot in a wbt file to a .proto file
+# NOTE: need to manually change name, baseColor, mass and density
 import re
 
 path_to_wbt = "../worlds/IDP-rootg" + ".wbt"
 path_to_proto = "../protos/rootg" + ".proto"
-robot_def = "DEF NEW_ROBOT Robot"
+robot_def = "DEF ROOT_G Robot"
 
 r = re.compile(r'(?s)' + robot_def + r' (\{.*?\n\})')
 

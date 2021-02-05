@@ -1,8 +1,10 @@
-PROTO NewRRobot [
-            field SFVec3f    translation  1 0.09 -1
-            field SFRotation rotation     0 1 0 0
-            field SFFloat    bodyMass     1
-        ]
+PROTO root_g [
+    field SFVec3f    translation  1 0.09 1
+    field SFRotation rotation     0 1 0 3.14159
+    field SFFloat    bodyMass     1
+    field SFColor    color        1 0 0 
+    field SFString   name         "root_g"
+]
 {
 	Robot {
   translation IS translation
@@ -32,7 +34,7 @@ PROTO NewRRobot [
       children [
         DEF TOP Shape {
           appearance DEF BLUE PBRAppearance {
-            baseColor 0 0 1
+            baseColor IS color
             metalness 0
           }
           geometry Box {
@@ -98,6 +100,8 @@ PROTO NewRRobot [
         ]
         boundingObject USE WHEEL
         physics Physics {
+          density -1
+          mass IS bodyMass
         }
       }
     }
@@ -161,7 +165,7 @@ PROTO NewRRobot [
       translation 0 0.005 0
     }
   ]
-  name "blueRobot"
+  name IS name
   boundingObject USE BODY
   physics Physics {
     density -1
