@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.8843804565010167 0.465329908414921 0.03659623605802193 5.901586281427337
-  position 0.9182235664599729 0.29765414054434786 -0.3928861306809214
+  orientation 0.8847833169409853 0.463975452623097 0.04341959725861268 5.879248042279132
+  position 0.8975316948653632 0.2675314268874619 -0.4967084216764936
 }
 TexturedBackground {
 }
@@ -380,6 +380,8 @@ DEF ROOT_G Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0 0.04 0.07
       }
       device [
         RotationalMotor {
