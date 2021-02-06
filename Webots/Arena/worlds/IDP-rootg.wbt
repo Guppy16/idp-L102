@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.567957414387266 -0.6171852314758046 -0.5445243479319254 2.110368736994087
-  position -0.17900630451712668 5.531682485534172 -0.2998089470311904
+  orientation 0.8847833169409853 0.463975452623097 0.04341959725861268 5.879248042279132
+  position 0.8975316948653632 0.2675314268874619 -0.4967084216764936
 }
 TexturedBackground {
 }
@@ -31,7 +31,8 @@ Floor {
   }
 }
 DEF Block_R1 Solid {
-  translation 0.377 0.05 -0.9
+  translation 0.377 0.02497547451951153 -0.9
+  rotation 0.16686656833226043 0.9636641493310073 -0.2085832104153186 -1.0219557955004574e-16
   children [
     DEF BOX_R Shape {
       appearance PBRAppearance {
@@ -50,7 +51,8 @@ DEF Block_R1 Solid {
   }
 }
 DEF Block_R2 Solid {
-  translation 1 0.05 0.3
+  translation 1 0.02497547451951153 0.3
+  rotation -0.36750708266021803 0.9087236729683694 -0.19788842912472573 1.508061640284877e-16
   children [
     USE BOX_R
   ]
@@ -61,7 +63,8 @@ DEF Block_R2 Solid {
   }
 }
 DEF Block_R3 Solid {
-  translation -1 0.05 -0.5
+  translation -1 0.02497547451951153 -0.5
+  rotation 0.3854770849102864 0.922717409074451 -4.081832740687572e-14 -1.1059688322464795e-17
   children [
     USE BOX_R
   ]
@@ -71,7 +74,8 @@ DEF Block_R3 Solid {
   }
 }
 DEF Block_R4 Solid {
-  translation 0.1 0.05 1.1
+  translation 0.1 0.02497547451951153 1.1
+  rotation 3.487333347262494e-14 0.6771592814607587 0.7358364679271808 -6.373130797970658e-17
   children [
     USE BOX_R
   ]
@@ -81,7 +85,8 @@ DEF Block_R4 Solid {
   }
 }
 DEF Block_B1 Solid {
-  translation -1.1 0.05 1
+  translation -1.1 0.02497547451951153 1
+  rotation -0.48510915379872044 0.8735186698642385 0.04042576281655928 1.0545889842341123e-16
   children [
     DEF BOX_B Shape {
       appearance PBRAppearance {
@@ -99,7 +104,8 @@ DEF Block_B1 Solid {
   }
 }
 DEF Block_B2 Solid {
-  translation 0.03 0.05 0.72
+  translation 0.029999999999999985 0.024975474519511525 0.72
+  rotation 0.14272312242232377 0.9663321678178627 0.21408468363349212 -5.974163600408589e-17
   children [
     USE BOX_B
   ]
@@ -109,7 +115,8 @@ DEF Block_B2 Solid {
   }
 }
 DEF Block_B3 Solid {
-  translation -0.85 0.05 -0.2
+  translation -0.85 0.024975474519511525 -0.2
+  rotation -0.4247210096408211 0.8599067670138462 -0.28314733976055084 9.034002759480529e-17
   children [
     USE BOX_B
   ]
@@ -119,7 +126,8 @@ DEF Block_B3 Solid {
   }
 }
 DEF Block_B4 Solid {
-  translation 1 0.05 0.7
+  translation 1 0.024975474519511525 0.7
+  rotation 0.2074031990538158 0.9773757054189204 0.04148063981077562 -1.0277701679650052e-16
   children [
     USE BOX_B
   ]
@@ -199,15 +207,28 @@ DEF WALL_4 Solid {
   boundingObject USE WALL_SHAPE
 }
 DEF ROOT_G Robot {
-  translation -0.107827 0.09 -0.304791
+  translation 1 0.15 -1
   children [
     Camera {
-      translation 0 0 0.1
+      translation 0.08 -0.04 0.1
+      rotation 0 1 0 2.618
+      children [
+        DEF CAMERA_SHAPE Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.005 0.005 0.005
+          }
+        }
+      ]
+      boundingObject USE CAMERA_SHAPE
+      fieldOfView 0.01
       width 1
       height 1
+      far 0.1
     }
     DEF CASTER Solid {
-      translation 0 -0.065 -0.1
+      translation 0 -0.105 -0.1
       children [
         Shape {
           geometry DEF CASTOR_BALL Sphere {
@@ -229,41 +250,42 @@ DEF ROOT_G Robot {
             metalness 0
           }
           geometry Box {
-            size 0.1 0.01 0.2
+            size 0.17 0.01 0.2
           }
         }
         DEF LEFT_SIDE Transform {
-          translation 0.045 -0.035 0
+          translation 0.08 -0.055 0
           children [
             DEF SIDE Shape {
               appearance USE BLUE
               geometry Box {
-                size 0.01 0.06 0.2
+                size 0.01 0.1 0.2
               }
             }
           ]
         }
         DEF RIGHT_SIDE Transform {
-          translation -0.045 -0.035 0
+          translation -0.08 -0.055 0
           children [
             USE SIDE
           ]
         }
         DEF BACK Transform {
-          translation 0 -0.035 -0.095
+          translation 0 -0.055 -0.095
           children [
             DEF BACK Shape {
               appearance USE BLUE
               geometry Box {
-                size 0.08 0.06 0.01
+                size 0.15 0.1 0.01
               }
             }
           ]
         }
       ]
     }
-    DEF WHEEL1 HingeJoint {
+    DEF RIGHT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
+        position 2.3519943914640696e-11
         anchor 0.06 -0.04 0.06
       }
       device [
@@ -273,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06 -0.04 0.06
-        rotation 2.977097247001865e-10 -2.977119021536409e-10 1 1.5708036407833588
+        translation 0.1 -0.07500000000000008 0.06000129999753041
+        rotation 9.533999003449627e-10 -9.534068741732263e-10 1 1.5708036414618565
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -294,8 +316,9 @@ DEF ROOT_G Robot {
         }
       }
     }
-    DEF WHEEL2 HingeJoint {
+    DEF LEFT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
+        position -3.280296839556894e-11
         anchor -0.06 -0.04 0.06
       }
       device [
@@ -305,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.06 -0.04 0.06
-        rotation -2.955910485702302e-10 2.955929935530342e-10 1 1.5708029067519502
+        translation -0.0999996 -0.07499999999999987 0.06000130000344431
+        rotation -1.7886826567451726e-09 1.7886944275151218e-09 1 1.570802907465461
         children [
           USE WHEEL
         ]
@@ -355,6 +378,30 @@ DEF ROOT_G Robot {
     }
     Compass {
     }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0 0.04 0.07
+      }
+      device [
+        RotationalMotor {
+          name "servo_motor"
+        }
+      ]
+      endPoint DistanceSensor {
+        translation 0 0.04 0.07
+        rotation 0.07096075410035216 -0.994951829364125 -0.07096075410035216 1.5758584235071784
+        children [
+          Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.01 0.01 0.01
+            }
+          }
+        ]
+      }
+    }
   ]
   name "blueRobot"
   boundingObject USE BODY
@@ -365,4 +412,6 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
+  translation 0.9996342927663698 0.07776465206441362 1.002648509782327
+  rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
 }

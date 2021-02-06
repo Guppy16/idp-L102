@@ -7,5 +7,5 @@ centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: 0 "controllers/main_controller/main_controller.py" "controllers/go_home_controller/go_home_controller.py"
 consoles: Console:All:All
-renderingDevicePerspectives: blueRobot:camera;1;32;0;0
-renderingDevicePerspectives: root_g:camera;1;32;0;0
+renderingDevicePerspectives: blueRobot:camera;1;127;0.131175;0.0157195
+renderingDevicePerspectives: root_g:camera;1;77;0.0195911;0.0290205
