@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5774761748314567 0.8094492483565642 0.10636344220182947 5.716469009437611
-  position 0.7248199292208439 0.4629399920983847 -0.09216033609317464
+  orientation 0.8843804565010167 0.465329908414921 0.03659623605802193 5.901586281427337
+  position 0.9182235664599729 0.29765414054434786 -0.3928861306809214
 }
 TexturedBackground {
 }
@@ -208,7 +208,6 @@ DEF WALL_4 Solid {
 }
 DEF ROOT_G Robot {
   translation 1 0.15 -1
-  rotation -1 0 0 0
   children [
     Camera {
       translation 0.08 -0.04 0.1
@@ -296,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.075 0.0600013
-        rotation 9.298801284702493e-10 -9.298869302585857e-10 1 1.5708036414618565
+        translation 0.1 -0.07500000000000008 0.06000129999753041
+        rotation 9.533999003449627e-10 -9.534068741732263e-10 1 1.5708036414618565
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -329,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.075 0.0600013
-        rotation -1.7558799042144218e-09 1.7558914591195528e-09 1 1.570802907465461
+        translation -0.0999996 -0.07499999999999987 0.06000130000344431
+        rotation -1.7886826567451726e-09 1.7886944275151218e-09 1 1.570802907465461
         children [
           USE WHEEL
         ]
@@ -378,6 +377,28 @@ DEF ROOT_G Robot {
       translation 0 0.005 0
     }
     Compass {
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+      }
+      device [
+        RotationalMotor {
+          name "servo_motor"
+        }
+      ]
+      endPoint DistanceSensor {
+        translation 0 0.04 0.07
+        rotation 0.07096075410035216 -0.994951829364125 -0.07096075410035216 1.5758584235071784
+        children [
+          Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.01 0.01 0.01
+            }
+          }
+        ]
+      }
     }
   ]
   name "blueRobot"
