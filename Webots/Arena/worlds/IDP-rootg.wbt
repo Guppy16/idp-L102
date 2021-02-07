@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.9732553304600245 0.22721158234323155 0.03389629154100932 5.720931692434451
-  position 0.7703619285469154 0.9417957718735976 0.5618310132692511
+  orientation 0.9702001000853832 0.22748387564154263 0.08344370627803974 5.401449482731736
+  position 0.8746164114005587 0.5088539922270479 -0.4925884494892436
 }
 TexturedBackground {
 }
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000027 0.060001299995060826
-        rotation 1.0357191019064596e-09 -1.0357266778744684e-09 1 1.5708036414618565
+        translation 0.1 -0.07500000000000033 0.060001299995060826
+        rotation 1.0592388737811732e-09 -1.0592466217891092e-09 1 1.5708036414618565
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999958 0.060001300006888615
-        rotation -1.903492290602801e-09 1.9035048168996128e-09 1 1.570802907465461
+        translation -0.0999996 -0.0749999999999995 0.060001300006888615
+        rotation -1.936295043133552e-09 1.9363077852951817e-09 1 1.5708029074654606
         children [
           USE WHEEL
         ]
@@ -401,6 +401,27 @@ DEF ROOT_G Robot {
           }
         ]
       }
+    }
+    LED {
+      translation 0 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+            emissiveIntensity 12
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      color [
+        1 0 0
+        0 1 0
+        0 0 1
+        1 1 0
+      ]
     }
   ]
   name "blueRobot"
