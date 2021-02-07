@@ -1486,7 +1486,7 @@ Source: Siemens</description>
 <part name="P+1" library="IDP_library" deviceset="+5V" device=""/>
 <part name="GND1" library="IDP_library" deviceset="GND" device=""/>
 <part name="GND2" library="IDP_library" deviceset="GND" device=""/>
-<part name="R3" library="IDP_library" deviceset="R-EU_" device="0207/5V" package3d_urn="urn:adsk.eagle:package:23502/1"/>
+<part name="R3" library="IDP_library" deviceset="R-EU_" device="0207/5V" package3d_urn="urn:adsk.eagle:package:23502/1" value="150k"/>
 <part name="R4" library="IDP_library" deviceset="R-EU_" device="0207/5V" package3d_urn="urn:adsk.eagle:package:23502/1"/>
 <part name="R5" library="IDP_library" deviceset="R-EU_" device="0207/5V" package3d_urn="urn:adsk.eagle:package:23502/1"/>
 <part name="R6" library="IDP_library" deviceset="R-EU_" device="0207/5V" package3d_urn="urn:adsk.eagle:package:23502/1"/>
@@ -1502,9 +1502,10 @@ Source: Siemens</description>
 <part name="T1" library="opto-trans-siemens" library_urn="urn:adsk.eagle:library:317" deviceset="SFH303" device="" package3d_urn="urn:adsk.eagle:package:21797/1" value="SFH 313 FA"/>
 <part name="R2" library="IDP_library" deviceset="R-EU_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="150"/>
 <part name="R1" library="IDP_library" deviceset="R-EU_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="10k"/>
-<part name="J1" library="IDP_library" deviceset="22-?-03" device="05-7038" package3d_urn="urn:adsk.eagle:package:8078646/1" value="To IR Distance Sensor"/>
+<part name="J1" library="IDP_library" deviceset="22-?-03" device="05-7038" package3d_urn="urn:adsk.eagle:package:8078646/1" value="To Left IR Distance Sensor"/>
 <part name="P+3" library="IDP_library" deviceset="+5V" device=""/>
 <part name="GND3" library="IDP_library" deviceset="GND" device=""/>
+<part name="J2" library="IDP_library" deviceset="22-?-03" device="05-7038" package3d_urn="urn:adsk.eagle:package:8078646/1" value="To Right IR Distance Sensor"/>
 </parts>
 <sheets>
 <sheet>
@@ -1545,15 +1546,15 @@ Source: Siemens</description>
 <instance part="R6" gate="G$1" x="170.18" y="99.06" smashed="yes">
 <attribute name="NAME" x="168.91" y="98.0186" size="1.778" layer="95"/>
 </instance>
-<instance part="LED2" gate="G$1" x="182.88" y="106.68" smashed="yes" rot="R90"/>
-<instance part="LED3" gate="G$1" x="182.88" y="104.14" smashed="yes" rot="R90">
-<attribute name="NAME" x="187.452" y="105.156" size="1.778" layer="95" rot="R180"/>
+<instance part="LED2" gate="G$1" x="190.5" y="106.68" smashed="yes" rot="R90"/>
+<instance part="LED3" gate="G$1" x="185.42" y="104.14" smashed="yes" rot="R90">
+<attribute name="NAME" x="189.992" y="115.316" size="1.778" layer="95" rot="R180"/>
 </instance>
-<instance part="LED4" gate="G$1" x="182.88" y="101.6" smashed="yes" rot="R90">
-<attribute name="NAME" x="187.452" y="102.616" size="1.778" layer="95" rot="R180"/>
+<instance part="LED4" gate="G$1" x="180.34" y="101.6" smashed="yes" rot="R90">
+<attribute name="NAME" x="179.832" y="102.616" size="1.778" layer="95" rot="R180"/>
 </instance>
-<instance part="LED5" gate="G$1" x="182.88" y="99.06" smashed="yes" rot="R90">
-<attribute name="NAME" x="187.452" y="100.076" size="1.778" layer="95" rot="R180"/>
+<instance part="LED5" gate="G$1" x="175.26" y="99.06" smashed="yes" rot="R90">
+<attribute name="NAME" x="174.752" y="97.536" size="1.778" layer="95" rot="R180"/>
 </instance>
 <instance part="GND4" gate="1" x="193.04" y="93.98" smashed="yes">
 <attribute name="VALUE" x="190.5" y="91.44" size="1.778" layer="96"/>
@@ -1571,7 +1572,6 @@ Source: Siemens</description>
 </instance>
 <instance part="T1" gate="G$1" x="73.66" y="55.88" smashed="yes">
 <attribute name="NAME" x="66.04" y="53.34" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="60.96" y="60.96" size="1.778" layer="96" rot="R270"/>
 </instance>
 <instance part="R2" gate="G$1" x="88.9" y="71.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="87.4014" y="67.31" size="1.778" layer="95" rot="R90"/>
@@ -1590,6 +1590,10 @@ Source: Siemens</description>
 </instance>
 <instance part="GND3" gate="1" x="55.88" y="88.9" smashed="yes">
 <attribute name="VALUE" x="53.34" y="86.36" size="1.778" layer="96"/>
+</instance>
+<instance part="J2" gate="G$1" x="40.64" y="76.2" smashed="yes">
+<attribute name="VALUE" x="36.83" y="66.04" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="34.29" y="74.422" size="1.778" layer="95" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -1707,20 +1711,20 @@ Source: Siemens</description>
 </segment>
 <segment>
 <pinref part="LED2" gate="G$1" pin="C"/>
-<wire x1="187.96" y1="106.68" x2="193.04" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="106.68" x2="193.04" y2="106.68" width="0.1524" layer="91"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 <wire x1="193.04" y1="106.68" x2="193.04" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="LED5" gate="G$1" pin="C"/>
 <wire x1="193.04" y1="104.14" x2="193.04" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="193.04" y1="101.6" x2="193.04" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="193.04" y1="99.06" x2="193.04" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="187.96" y1="99.06" x2="193.04" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="180.34" y1="99.06" x2="193.04" y2="99.06" width="0.1524" layer="91"/>
 <junction x="193.04" y="99.06"/>
 <pinref part="LED4" gate="G$1" pin="C"/>
-<wire x1="187.96" y1="101.6" x2="193.04" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="101.6" x2="193.04" y2="101.6" width="0.1524" layer="91"/>
 <junction x="193.04" y="101.6"/>
 <pinref part="LED3" gate="G$1" pin="C"/>
-<wire x1="187.96" y1="104.14" x2="193.04" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="190.5" y1="104.14" x2="193.04" y2="104.14" width="0.1524" layer="91"/>
 <junction x="193.04" y="104.14"/>
 </segment>
 <segment>
@@ -1885,28 +1889,28 @@ Source: Siemens</description>
 <segment>
 <pinref part="R3" gate="G$1" pin="2"/>
 <pinref part="LED2" gate="G$1" pin="A"/>
-<wire x1="175.26" y1="106.68" x2="180.34" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="175.26" y1="106.68" x2="187.96" y2="106.68" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
 <segment>
 <pinref part="R4" gate="G$1" pin="2"/>
 <pinref part="LED3" gate="G$1" pin="A"/>
-<wire x1="175.26" y1="104.14" x2="180.34" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="182.88" y1="104.14" x2="175.26" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$4" class="0">
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
 <pinref part="LED4" gate="G$1" pin="A"/>
-<wire x1="175.26" y1="101.6" x2="180.34" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="175.26" y1="101.6" x2="177.8" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$5" class="0">
 <segment>
 <pinref part="R6" gate="G$1" pin="2"/>
 <pinref part="LED5" gate="G$1" pin="A"/>
-<wire x1="175.26" y1="99.06" x2="180.34" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="172.72" y1="99.06" x2="175.26" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
