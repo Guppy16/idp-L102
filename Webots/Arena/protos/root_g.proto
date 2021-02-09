@@ -6,17 +6,30 @@ PROTO root_g [
     field SFString   name         "root_g"
 ]
 {
-	Robot {
+Robot {
   translation IS translation
 	rotation IS rotation
   children [
     Camera {
-      translation 0 0 0.1
+      translation 0.08 -0.04 0.1
+      rotation 0 1 0 2.618
+      children [
+        DEF CAMERA_SHAPE Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.005 0.005 0.005
+          }
+        }
+      ]
+      boundingObject USE CAMERA_SHAPE
+      fieldOfView 0.01
       width 1
       height 1
+      far 0.1
     }
     DEF CASTER Solid {
-      translation 0 -0.065 -0.1
+      translation 0 -0.105 -0.1
       children [
         Shape {
           geometry DEF CASTOR_BALL Sphere {
@@ -34,46 +47,47 @@ PROTO root_g [
       children [
         DEF TOP Shape {
           appearance DEF BLUE PBRAppearance {
-            baseColor IS color
+            baseColor 1 0 0
             metalness 0
           }
           geometry Box {
-            size 0.1 0.01 0.2
+            size 0.17 0.01 0.2
           }
         }
         DEF LEFT_SIDE Transform {
-          translation 0.045 -0.035 0
+          translation 0.08 -0.055 0
           children [
             DEF SIDE Shape {
               appearance USE BLUE
               geometry Box {
-                size 0.01 0.06 0.2
+                size 0.01 0.1 0.2
               }
             }
           ]
         }
         DEF RIGHT_SIDE Transform {
-          translation -0.045 -0.035 0
+          translation -0.08 -0.055 0
           children [
             USE SIDE
           ]
         }
         DEF BACK Transform {
-          translation 0 -0.035 -0.095
+          translation 0 -0.055 -0.095
           children [
             DEF BACK Shape {
               appearance USE BLUE
               geometry Box {
-                size 0.08 0.06 0.01
+                size 0.15 0.1 0.01
               }
             }
           ]
         }
       ]
     }
-    DEF WHEEL1 HingeJoint {
+    DEF RIGHT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        anchor 0.06 -0.04 0.06
+        position 2.3519943914640696e-11
+        anchor 0.1 -0.075 0.06
       }
       device [
         RotationalMotor {
@@ -82,8 +96,8 @@ PROTO root_g [
         }
       ]
       endPoint Solid {
-        translation 0.06 -0.04 0.06
-        rotation 0 0 1 1.5708036407833588
+        translation 0.1 -0.07500000000000305 0.06000129999506084
+        rotation 2.2117074396788634e-09 -2.211723827031711e-09 1 1.5708036414618538
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -100,14 +114,13 @@ PROTO root_g [
         ]
         boundingObject USE WHEEL
         physics Physics {
-          density -1
-          mass IS bodyMass
         }
       }
     }
-    DEF WHEEL2 HingeJoint {
+    DEF LEFT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        anchor -0.06 -0.04 0.06
+        position -3.280296839556894e-11
+        anchor -0.1 -0.075 0.06
       }
       device [
         RotationalMotor {
@@ -116,8 +129,8 @@ PROTO root_g [
         }
       ]
       endPoint Solid {
-        translation -0.06 -0.04 0.06
-        rotation 0 0 1 1.5708029067519502
+        translation -0.0999996 -0.07499999999999542 0.060001300006888594
+        rotation -3.5436300622990186e-09 3.5436532503815235e-09 1 1.5708029074654577
         children [
           USE WHEEL
         ]
@@ -128,8 +141,8 @@ PROTO root_g [
       }
     }
     DEF DS_RIGHT DistanceSensor {
-      translation -0.03 0 0.1
-      rotation 0 1 0 -1.87079
+      translation -0.08 -0.06 0.1
+      rotation 0 1 0 -1.5707953071795862
       children [
         Shape {
           appearance PBRAppearance {
@@ -164,13 +177,61 @@ PROTO root_g [
     GPS {
       translation 0 0.005 0
     }
+    Compass {
+      rotation 0 1 0 -1.5707953071795862
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0 0.04 0.07
+      }
+      device [
+        RotationalMotor {
+          name "servo_motor"
+        }
+      ]
+      endPoint DistanceSensor {
+        translation 0 0.04 0.07
+        rotation 0.07096075410035216 -0.994951829364125 -0.07096075410035216 1.5758584235071784
+        children [
+          Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.01 0.01 0.01
+            }
+          }
+        ]
+      }
+    }
+    LED {
+      translation 0 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+            emissiveIntensity 12
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      color [
+        1 0 0
+        0 1 0
+        0 0 1
+        1 1 0
+      ]
+    }
   ]
-  name IS name
+  name "redRobot"
   boundingObject USE BODY
   physics Physics {
     density -1
-    mass 1
+    mass IS bodyMass
   }
-  controller "red_controller"
+  controller "main_controller"
 }
 }

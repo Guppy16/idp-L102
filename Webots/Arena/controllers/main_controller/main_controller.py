@@ -1,10 +1,10 @@
 """main_controller controller."""
 
-from controller import Robot
-import os, sys
-sys.path.insert(1, os.path.join(sys.path[0], '../'))
-from go_home_controller.go_home_controller import go_home, inside_home
-from exit_home import exit_home
+# from controller import Robot
+# import os, sys
+# sys.path.insert(1, os.path.join(sys.path[0], '../'))
+# from go_home_controller.go_home_controller import go_home, inside_home
+# from exit_home import exit_home
 
 from robocar import Robocar
 
