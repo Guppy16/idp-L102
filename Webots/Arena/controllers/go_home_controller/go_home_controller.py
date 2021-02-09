@@ -40,6 +40,9 @@ def getHeadingDegrees(compassVals):
 
 def getHomeBearing(homeVec):
     """Return angle between home and global north"""
+    # Check for divide by zero
+    if np.linalg.norm(homeVec) < 0.001:
+        return 0
     unitHomeVector = homeVec / np.linalg.norm(homeVec)
     dotProduct = np.dot(unitHomeVector, [0, 1]) # Dot unit North vector with vector home
     dotProduct = np.clip(dotProduct, -1.0, 1.0)

@@ -5,7 +5,6 @@ import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '../'))
 from go_home_controller.go_home_controller import go_home, reached_home
 
-
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
@@ -38,7 +37,6 @@ while robot.step(timestep) != -1 and BLOCKS:
     # Get sensor values
     gps_vals = gps.getValues()
     cps_vals = cps.getValues()
-
 
     if SEARCH_BLOCK:
         r_motor.setVelocity(MAX_SPEED)
