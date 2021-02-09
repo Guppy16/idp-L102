@@ -84,10 +84,10 @@ class Robocar(Robot):
         dotProduct = np.clip(dotProduct, -1.0, 1.0)
         return 360 - np.arccos(dotProduct) * 180 / np.pi
 
-    def inside_home(self, gps_vals, HOME, range=0.1):
+    def inside_home(self, range=0.1):
         """Returns true if robot pos is within home box"""
-        pos = np.array([gps_vals[0],gps_vals[2]])
-        homeVec = HOME - pos
+        pos = np.array([self.gps_vals[0],self.gps_vals[2]])
+        homeVec = self.HOME - pos
         return np.linalg.norm(homeVec) < range
         print("Arrived home chief")
 
@@ -104,17 +104,18 @@ class Robocar(Robot):
         # print("Home vector is: " + str(homeVec))
         # print("Position is: " + str(pos))
 
-        self.go_forward()
+        while(not self.inside_home()):
+            self.go_forward()
 
-        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
-            self.left_motor.setVelocity(self.MAX_SPEED)
-            self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
-        elif heading > homeBearing + 10:
-            self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
-            self.right_motor.setVelocity(self.MAX_SPEED)
-        elif heading > homeBearing + 0.5:
-            self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
-            self.left_motor.setVelocity(self.MAX_SPEED)
-        elif heading < homeBearing - 0.5:
-            self.right_motor.setVelocity(self.MAX_SPEED)
-            self.left_motor.setVelocity(0.8 * self.MAX_SPEED)          
+            if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
+                self.left_motor.setVelocity(self.MAX_SPEED)
+                self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
+            elif heading > homeBearing + 10:
+                self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
+                self.right_motor.setVelocity(self.MAX_SPEED)
+            elif heading > homeBearing + 0.5:
+                self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
+                self.left_motor.setVelocity(self.MAX_SPEED)
+            elif heading < homeBearing - 0.5:
+                self.right_motor.setVelocity(self.MAX_SPEED)
+                self.left_motor.setVelocity(0.8 * self.MAX_SPEED)          
