@@ -3,7 +3,8 @@
 from controller import Robot
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '../'))
-from go_home_controller.go_home_controller import go_home, reached_home
+from go_home_controller.go_home_controller import go_home, inside_home
+from exit_home import exit_home
 
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
@@ -29,6 +30,7 @@ cps.enable(timestep)
 # Flags
 SEARCH_BLOCK = False
 RETURN_HOME = True
+EXIT_HOME = False
 BLOCKS = 4
 ROBOT_NEARBY = False
 
@@ -42,7 +44,11 @@ while robot.step(timestep) != -1 and BLOCKS:
         r_motor.setVelocity(MAX_SPEED)
         l_motor.setVelocity(MAX_SPEED)
     if RETURN_HOME:
-        RETURN_HOME = not reached_home(gps_vals)
         go_home(gps_vals, cps_vals, l_motor, r_motor)
-        
-# Enter here exit cleanup code.
+        RETURN_HOME = not inside_home(gps_vals)
+        EXIT_HOME = not RETURN_HOME
+    if EXIT_HOME:
+        EXIT_HOME = exit_home(gps_vals, cps_vals, l_motor, r_motor, [1.0, 1.0])
+        SEARCH_BLOCK = not EXIT_HOME
+    
+# Enter here exit cleanup code

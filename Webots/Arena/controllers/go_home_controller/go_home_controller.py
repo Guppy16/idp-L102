@@ -41,18 +41,18 @@ def getHeadingDegrees(compassVals):
 def getHomeBearing(homeVec):
     """Return angle between home and global north"""
     # Check for divide by zero
-    if np.linalg.norm(homeVec) < 0.001:
+    if np.linalg.norm(homeVec) < 0.00001:
         return 0
     unitHomeVector = homeVec / np.linalg.norm(homeVec)
     dotProduct = np.dot(unitHomeVector, [0, 1]) # Dot unit North vector with vector home
     dotProduct = np.clip(dotProduct, -1.0, 1.0)
     return np.arccos(dotProduct) * 180 / np.pi
 
-def reached_home(gps_vals):
+def inside_home(gps_vals):
     """Returns true if robot pos is within home box"""
     pos = np.array([gps_vals[0],-gps_vals[2]])
     homeVec = HOME - pos
-    return np.linalg.norm(homeVec) < 0.05
+    return np.linalg.norm(homeVec) < 0.40
     print("Arrived home chief")
 
 def go_home(gps_vals, cps_vals, l_motor, r_motor):
@@ -81,8 +81,3 @@ def go_home(gps_vals, cps_vals, l_motor, r_motor):
     elif heading < homeBearing - 0.5:
         r_motor.setVelocity(MAX_SPEED)
         l_motor.setVelocity(0.8 * MAX_SPEED)          
-
-
-
-
-
