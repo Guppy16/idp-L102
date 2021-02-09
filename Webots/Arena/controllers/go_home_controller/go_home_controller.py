@@ -34,7 +34,7 @@ import numpy as np
 def getHeadingDegrees(compassVals):
     """Return angle of robot head wrt global north"""
     angle = np.arctan2(compassVals[0], compassVals[2])
-    bearing = angle * 180 / np.pi 
+    bearing = (angle - np.pi/2) * 180 / np.pi 
     bearing %= 360
     return bearing
 

@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.0750000000000028 0.06000129999506084
-        rotation 2.1058684662426523e-09 -2.1058840794158245e-09 1 1.5708036414618538
+        translation 0.1 -0.075000000000003 0.06000129999506084
+        rotation 2.1881876678041496e-09 -2.1882038831170695e-09 1 1.5708036414618538
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999579 0.060001300006888594
-        rotation -3.396017675910639e-09 3.396039892601461e-09 1 1.5708029074654577
+        translation -0.0999996 -0.0749999999999955 0.060001300006888594
+        rotation -3.5108273097682676e-09 3.510850281985954e-09 1 1.5708029074654577
         children [
           USE WHEEL
         ]
@@ -377,6 +377,7 @@ DEF ROOT_G Robot {
       translation 0 0.005 0
     }
     Compass {
+      rotation 0 1 0 -1.5707953071795862
     }
     HingeJoint {
       jointParameters HingeJointParameters {
