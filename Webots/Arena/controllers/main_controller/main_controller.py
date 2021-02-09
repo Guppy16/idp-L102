@@ -30,17 +30,18 @@ ROBOT_NEARBY = False
 
 # Main loop:
 while robocar.step(timestep) != -1:
-    # Get sensor values
-    # gps_vals = gps.getValues()
-    # cps_vals = cps.getValues()
-    # distance = distanceSensor.getValue()
-    #print(f"GPS values are: {gps_vals}")
-    #print(f"CPS values are: {cps}")
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
+    # Update sensors
     robocar.update_sensors()
-    if (not robocar.arrived_location(HOME)):
-        robocar.go_home()
+
+    # Go to middle
+    if not robocar.at_location(range = 0.5, [0.0, 0.0]):
+        robocar.go_to_location([0.0, 0.0])
     else:
+        robocar.find_blocks()
+
+    # Go home
+    if not robocar.go_to_location(HOME):
         robocar.stop()
 
 '''
@@ -55,21 +56,3 @@ while robocar.step(timestep) != -1:
         pass
 
 '''
-
-
-
-
-'''
-    if SEARCH_BLOCK:
-        r_motor.setVelocity(MAX_SPEED)
-        l_motor.setVelocity(MAX_SPEED)
-    if RETURN_HOME:
-        go_home(gps_vals, cps_vals, l_motor, r_motor, HOME)
-        RETURN_HOME = not inside_home(gps_vals, HOME, 0.1)
-        EXIT_HOME = not RETURN_HOME
-    if EXIT_HOME:
-        EXIT_HOME = exit_home(gps_vals, cps_vals, l_motor, r_motor, HOME)
-        SEARCH_BLOCK = not EXIT_HOME
-'''
-    
-# Enter here exit cleanup code

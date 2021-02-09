@@ -28,13 +28,17 @@ class Robocar(Robot):
 
         self.distanceSensor = self.getDevice("ds_left")
         self.distanceSensor.enable(timestep)
-        
+
+        self.camera = self.getDevice('camera')
+        self.camera.enable(timestep)
+
 
     def update_sensors(self):
         """Update sensor values"""
         self.gps_vec = self.gps.getValues()
         self.cps_vec = self.cps.getValues()
         self.distance = self.distanceSensor.getValue()
+        self.img = self.camera.getImageArray()[0][0]
 
     def robocar_hello(self):
         print("I am a robocar!")
@@ -59,12 +63,9 @@ class Robocar(Robot):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
 
-    def findBlock(self):
-        print(f"Distance is {distance}")
-        if(distance>1):
-            turn_right()
-        else:
-            stop()
+    def rotate(self):
+        self.left_motor.setVelocity(0.1)
+        self.right_motor.setVelocity(-0.1)
 
     #GO HOME FUNCTIONS
 
@@ -85,26 +86,29 @@ class Robocar(Robot):
         dotProduct = np.clip(dotProduct, -1.0, 1.0)
         return 360 - np.arccos(dotProduct) * 180 / np.pi
 
-    def arrived_location(self, range=0.1, location):
-        """Returns true if robot pos is within range of locateion"""
+    def at_location(self, range=0.1, location):
+        """Returns true if robot pos is within range of location"""
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
         pos -= location
         return np.linalg.norm(pos) < range
         print("Arrived home chief")
 
-    def go_to_location(self, location):
+    def go_to_location(self, location, range=0.1):
         """Sets the velocities of the motor to return home"""
+
+        if self.at_location(range, location):
+            return True
+
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
         loc_vec = location - pos
         heading = self.getHeadingDegrees(self.cps_vec)
         location_bearing = self.getLocationBearing(loc_vec)
-    
+
         # print("Bearing home is: " + str(homeBearing))
         # print("Heading is: " + str(heading))
         # print("Home vector is: " + str(homeVec))
         # print("Position is: " + str(pos))
 
-    
         self.go_forward()
 
         if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
@@ -118,7 +122,17 @@ class Robocar(Robot):
             self.left_motor.setVelocity(self.MAX_SPEED)
         elif heading < homeBearing - 0.5:
             self.right_motor.setVelocity(self.MAX_SPEED)
-            self.left_motor.setVelocity(0.8 * self.MAX_SPEED)      
+            self.left_motor.setVelocity(0.8 * self.MAX_SPEED)
 
-    def go_home(self):
-        self.go_to_location(self.HOME)
+    def find_blocks(self):
+        """spin until distance sensors have significant discrepancy"""
+        
+         
+
+    def detect_block_colour(self):
+        """Return the colour displayed in the camera
+        returns: 'b', 'r', or None
+        """
+        # NOTE: Max value of colour is 32
+        if 
+        return 

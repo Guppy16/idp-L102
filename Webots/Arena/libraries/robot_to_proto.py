@@ -1,5 +1,5 @@
 # Script to convert a robot in a wbt file to a .proto file
-# NOTE: need to manually change name, baseColor, (maybe) mass and density
+# NOTE: need to manually change name, baseColor, controller, (maybe) mass and density
 import re
 
 path_to_wbt = "../worlds/IDP-rootg" + ".wbt"
@@ -23,7 +23,7 @@ robot_text = r.sub('translation IS translation\n\trotation IS rotation', robot_t
 with open(path_to_proto, 'w') as f:
     f.write(
         "PROTO root_g [\n\
-            field SFVec3f    translation  1 0.09 -1\n\
+            field SFVec3f    translation  1 0.15 -1\n\
             field SFRotation rotation     0 1 0 0\n\
             field SFFloat    bodyMass     1\n\
         ]\n" +  "{\nRobot " + robot_text + "\n}"

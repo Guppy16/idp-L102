@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5914958550199002 0.5552809259841286 0.5846330017476656 4.138189239615972
-  position 0.44574301128699045 5.31606490514891 -0.07618508261819812
+  orientation 0.8770938096590533 0.4802734455915627 -0.006623180306827722 6.022212569547033
+  position 0.9356940643190768 0.2829571753594236 -0.39394086550773644
 }
 TexturedBackground {
 }
@@ -210,7 +210,7 @@ DEF ROOT_G Robot {
   translation 1 0.15 -1
   children [
     Camera {
-      translation 0.08 -0.04 0.1
+      translation 0.08 -0.06 0.1
       rotation 0 1 0 2.618
       children [
         DEF CAMERA_SHAPE Shape {
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000358 0.06000129999506084
-        rotation 2.4469051584259987e-09 -2.4469232661781253e-09 1 1.5708036414618538
+        translation 0.1 -0.07500000000000374 0.06000129999506084
+        rotation 2.517464474050139e-09 -2.5174830979220495e-09 1 1.5708036414618538
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999463 0.060001300006888594
-        rotation -3.871657587606528e-09 3.87168293433722e-09 1 1.5708029074654577
+        translation -0.0999996 -0.07499999999999438 0.060001300006888594
+        rotation -3.970065845198781e-09 3.97009183952393e-09 1 1.5708029074654577
         children [
           USE WHEEL
         ]
@@ -339,7 +339,7 @@ DEF ROOT_G Robot {
         }
       }
     }
-    DEF DS_RIGHT DistanceSensor {
+    DEF DS_BOTTOM DistanceSensor {
       translation -0.08 -0.06 0.1
       rotation 0 1 0 -1.5707953071795862
       children [
@@ -354,11 +354,11 @@ DEF ROOT_G Robot {
           }
         }
       ]
-      name "ds_right"
+      name "ds_bottom"
     }
-    DEF DS_LEFT DistanceSensor {
-      translation 0.03 0 0.1
-      rotation 0 1 0 -1.27079
+    DEF DS_TOP DistanceSensor {
+      translation -0.08 0 0.0999999
+      rotation 0 1 0 -1.5707996938995747
       children [
         Shape {
           appearance PBRAppearance {
@@ -371,7 +371,7 @@ DEF ROOT_G Robot {
           }
         }
       ]
-      name "ds_left"
+      name "ds_top"
     }
     GPS {
       translation 0 0.005 0
@@ -434,8 +434,8 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
-  hidden rotation_3 2.2587469834282902e-09 -2.258763714860994e-09 1 1.5708036414618538
-  hidden rotation_4 -3.6092355673605206e-09 3.6092591871726627e-09 1 1.5708029074654577
+  hidden rotation_3 2.270506869365647e-09 -2.2705236868183145e-09 1 1.5708036414618538
+  hidden rotation_4 -3.625636943625896e-09 3.625660671370447e-09 1 1.5708029074654577
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
   controller "camera_controller"

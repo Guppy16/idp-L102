@@ -15,7 +15,8 @@ timestep = int(robot.getBasicTimeStep())
 #  motor = robot.getMotor('motorname')
 #  ds = robot.getDistanceSensor('dsname')
 #  ds.enable(timestep)
-
+camera = robot.getDevice('camera')
+camera.enable(timestep)
 
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
@@ -23,11 +24,15 @@ while robot.step(timestep) != -1:
     # Read the sensors:
     # Enter here functions to read sensor data, like:
     #  val = ds.getValue()
+    # val = camera.getValue()
+    img = camera.getImageArray()
+    print(img[0][0])
 
     # Process sensor data here.
 
     # Enter here functions to send actuator commands, like:
     #  motor.setPosition(10.0)
+    
     
 
 # Enter here exit cleanup code.
