@@ -6,40 +6,56 @@ sys.path.insert(1, os.path.join(sys.path[0], '../'))
 from go_home_controller.go_home_controller import go_home, inside_home
 from exit_home import exit_home
 
-robot = Robot()
-timestep = int(robot.getBasicTimeStep())
+from robocar import Robocar
+
+robocar = Robocar()
+timestep = int(robocar.getBasicTimeStep())
+
+#INITIALIZE
+
+# robot = Robot()
+# timestep = int(robot.getBasicTimeStep())
 
 MAX_SPEED = 5
 HOME = [1.0,-1.0]
 
-# Initialise motors
-l_motor = robot.getDevice("wheel1")
-l_motor.setPosition(float('inf'))
-l_motor.setVelocity(0.0)
-r_motor = robot.getDevice("wheel2")
-r_motor.setPosition(float('inf'))
-r_motor.setVelocity(0.0)
-
-# Initialise sensors
-gps = robot.getDevice("gps")
-gps.enable(timestep)
-
-cps = robot.getDevice("compass")
-cps.enable(timestep)
 
 # Flags
 SEARCH_BLOCK = False
 RETURN_HOME = True
 EXIT_HOME = False
-BLOCKS = 4
+blocks = 0
 ROBOT_NEARBY = False
 
-# Main loop:
-while robot.step(timestep) != -1 and BLOCKS:
-    # Get sensor values
-    gps_vals = gps.getValues()
-    cps_vals = cps.getValues()
 
+# Main loop:
+while robocar.step(timestep) != -1:
+    # Get sensor values
+    # gps_vals = gps.getValues()
+    # cps_vals = cps.getValues()
+    # distance = distanceSensor.getValue()
+    #print(f"GPS values are: {gps_vals}")
+    #print(f"CPS values are: {cps}")
+    #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
+    robocar.go_forward()
+
+'''
+    if blocks<4:
+        robot.findBlock(distance)
+        goToBlock()
+        pickUpBlock()
+        returnHome()
+        depositBlock()
+        blocks+=1
+    else:
+        pass
+
+'''
+
+
+
+
+'''
     if SEARCH_BLOCK:
         r_motor.setVelocity(MAX_SPEED)
         l_motor.setVelocity(MAX_SPEED)
@@ -50,5 +66,6 @@ while robot.step(timestep) != -1 and BLOCKS:
     if EXIT_HOME:
         EXIT_HOME = exit_home(gps_vals, cps_vals, l_motor, r_motor, HOME)
         SEARCH_BLOCK = not EXIT_HOME
+'''
     
 # Enter here exit cleanup code
