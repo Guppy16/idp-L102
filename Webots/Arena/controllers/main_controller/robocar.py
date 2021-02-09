@@ -6,7 +6,7 @@ class Robocar(Robot):
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
         self.MAX_SPEED = MAX_SPEED
-        self.HOME = HOME
+        self.HOME = np.array(HOME)
 
         #Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -86,25 +86,25 @@ class Robocar(Robot):
 
     def inside_home(self, range=0.1):
         """Returns true if robot pos is within home box"""
-        pos = np.array([self.gps_vals[0],self.gps_vals[2]])
+        pos = np.array([self.gps_vec[0],self.gps_vec[2]])
         homeVec = self.HOME - pos
         return np.linalg.norm(homeVec) < range
         print("Arrived home chief")
 
     def go_home(self):
         """Sets the velocities of the motor to return home"""
-        HOME = np.array(self.HOME)
-        pos = np.array([self.gps_vec[0],self.gps_vec[2]])
-        homeVec = HOME - pos
-        heading = self.getHeadingDegrees(self.cps_vec)
-        homeBearing = self.getHomeBearing(homeVec)
+        while(timestep != - 1 and not self.inside_home()):  
+            pos = np.array([self.gps_vec[0],self.gps_vec[2]])
+            homeVec = HOME - pos
+            heading = self.getHeadingDegrees(self.cps_vec)
+            homeBearing = self.getHomeBearing(homeVec)
         
         # print("Bearing home is: " + str(homeBearing))
         # print("Heading is: " + str(heading))
         # print("Home vector is: " + str(homeVec))
         # print("Position is: " + str(pos))
 
-        while(not self.inside_home()):
+        
             self.go_forward()
 
             if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
