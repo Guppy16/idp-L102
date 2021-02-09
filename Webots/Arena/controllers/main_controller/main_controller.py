@@ -10,7 +10,7 @@ robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
 MAX_SPEED = 5
-HOME = [1.0,1.0]
+HOME = [1.0,-1.0]
 
 # Initialise motors
 l_motor = robot.getDevice("wheel1")
@@ -44,11 +44,11 @@ while robot.step(timestep) != -1 and BLOCKS:
         r_motor.setVelocity(MAX_SPEED)
         l_motor.setVelocity(MAX_SPEED)
     if RETURN_HOME:
-        go_home(gps_vals, cps_vals, l_motor, r_motor)
-        RETURN_HOME = not inside_home(gps_vals)
+        go_home(gps_vals, cps_vals, l_motor, r_motor, HOME)
+        RETURN_HOME = not inside_home(gps_vals, HOME, 0.1)
         EXIT_HOME = not RETURN_HOME
     if EXIT_HOME:
-        EXIT_HOME = exit_home(gps_vals, cps_vals, l_motor, r_motor, [1.0, 1.0])
+        EXIT_HOME = exit_home(gps_vals, cps_vals, l_motor, r_motor, HOME)
         SEARCH_BLOCK = not EXIT_HOME
     
 # Enter here exit cleanup code
