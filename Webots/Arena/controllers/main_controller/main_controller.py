@@ -38,14 +38,17 @@ while robocar.step(timestep) != -1:
     #print(f"CPS values are: {cps}")
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
     robocar.update_sensors()
-    robocar.go_home()
+    if (not robocar.arrived_location(HOME)):
+        robocar.go_home()
+    else:
+        robocar.stop()
 
 '''
     if blocks<4:
         robot.findBlock(distance)
         goToBlock()
         pickUpBlock()
-        returnHome()
+        robocar.go_home()
         depositBlock()
         blocks+=1
     else:

@@ -3,6 +3,7 @@ import numpy as np
 
 class Robocar(Robot):
     def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0]):
+        """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
         self.MAX_SPEED = MAX_SPEED
@@ -58,7 +59,7 @@ class Robocar(Robot):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
 
-    def findBlock(distance):
+    def findBlock(self):
         print(f"Distance is {distance}")
         if(distance>1):
             turn_right()
@@ -74,48 +75,50 @@ class Robocar(Robot):
         bearing %= 360
         return bearing
 
-    def getHomeBearing(self, homeVec):
+    def getLocationBearing(self, loc_vec):
         """Return angle between home and global north"""
         # Check for divide by zero
-        if np.linalg.norm(homeVec) < 0.00001:
+        if np.linalg.norm(loc_vec) < 0.00001:
             return 0
-        unitHomeVector = homeVec / np.linalg.norm(homeVec)
-        dotProduct = np.dot(unitHomeVector, [1, 0]) # Dot unit North vector with vector home
+        loc_vec /= np.linalg.norm(loc_vec)
+        dotProduct = np.dot(loc_vec, [1, 0]) # Dot unit North vector with vector home
         dotProduct = np.clip(dotProduct, -1.0, 1.0)
         return 360 - np.arccos(dotProduct) * 180 / np.pi
 
-    def inside_home(self, range=0.1):
-        """Returns true if robot pos is within home box"""
+    def arrived_location(self, range=0.1, location):
+        """Returns true if robot pos is within range of locateion"""
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
-        homeVec = self.HOME - pos
-        return np.linalg.norm(homeVec) < range
+        pos -= location
+        return np.linalg.norm(pos) < range
         print("Arrived home chief")
 
-    def go_home(self):
+    def go_to_location(self, location):
         """Sets the velocities of the motor to return home"""
-        while(timestep != - 1 and not self.inside_home()):  
-            pos = np.array([self.gps_vec[0],self.gps_vec[2]])
-            homeVec = HOME - pos
-            heading = self.getHeadingDegrees(self.cps_vec)
-            homeBearing = self.getHomeBearing(homeVec)
-        
+        pos = np.array([self.gps_vec[0],self.gps_vec[2]])
+        loc_vec = location - pos
+        heading = self.getHeadingDegrees(self.cps_vec)
+        location_bearing = self.getLocationBearing(loc_vec)
+    
         # print("Bearing home is: " + str(homeBearing))
         # print("Heading is: " + str(heading))
         # print("Home vector is: " + str(homeVec))
         # print("Position is: " + str(pos))
 
-        
-            self.go_forward()
+    
+        self.go_forward()
 
-            if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
-                self.left_motor.setVelocity(self.MAX_SPEED)
-                self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
-            elif heading > homeBearing + 10:
-                self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
-                self.right_motor.setVelocity(self.MAX_SPEED)
-            elif heading > homeBearing + 0.5:
-                self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
-                self.left_motor.setVelocity(self.MAX_SPEED)
-            elif heading < homeBearing - 0.5:
-                self.right_motor.setVelocity(self.MAX_SPEED)
-                self.left_motor.setVelocity(0.8 * self.MAX_SPEED)          
+        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
+            self.left_motor.setVelocity(self.MAX_SPEED)
+            self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
+        elif heading > homeBearing + 10:
+            self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
+            self.right_motor.setVelocity(self.MAX_SPEED)
+        elif heading > homeBearing + 0.5:
+            self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
+            self.left_motor.setVelocity(self.MAX_SPEED)
+        elif heading < homeBearing - 0.5:
+            self.right_motor.setVelocity(self.MAX_SPEED)
+            self.left_motor.setVelocity(0.8 * self.MAX_SPEED)      
+
+    def go_home(self):
+        self.go_to_location(self.HOME)
