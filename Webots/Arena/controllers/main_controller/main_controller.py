@@ -24,6 +24,7 @@ HOME = [1.0,-1.0]
 SEARCH_BLOCK = False
 RETURN_HOME = True
 EXIT_HOME = False
+found_blocks = 0
 blocks = 0
 ROBOT_NEARBY = False
 
@@ -35,9 +36,9 @@ while robocar.step(timestep) != -1:
     robocar.update_sensors()
 
     # Go to middle
-    if not robocar.at_location(range = 0.5, [0.0, 0.0]):
+    if not robocar.at_location(range = 0.5, location = [0.0, 0.0]):
         robocar.go_to_location([0.0, 0.0])
-    else:
+    elif found_blocks < 4:
         robocar.find_blocks()
 
     # Go home

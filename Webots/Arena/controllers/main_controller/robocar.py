@@ -26,8 +26,11 @@ class Robocar(Robot):
         self.cps = self.getDevice("compass")
         self.cps.enable(timestep)
 
-        self.distanceSensor = self.getDevice("ds_left")
-        self.distanceSensor.enable(timestep)
+        self.ds_low = self.getDevice("ds_low")
+        self.ds_low.enable(timestep)
+
+        self.ds_high = self.getDevice("ds_high")
+        self.ds_high.enable(timestep)
 
         self.camera = self.getDevice('camera')
         self.camera.enable(timestep)
@@ -64,8 +67,8 @@ class Robocar(Robot):
         self.right_motor.setVelocity(0)
 
     def rotate(self):
-        self.left_motor.setVelocity(0.1)
-        self.right_motor.setVelocity(-0.1)
+        self.right_motor.setVelocity(-0.2)
+        self.left_motor.setVelocity(0.2)
 
     #GO HOME FUNCTIONS
 
@@ -109,23 +112,26 @@ class Robocar(Robot):
         # print("Home vector is: " + str(homeVec))
         # print("Position is: " + str(pos))
 
-        self.go_forward()
+        self.go_forward()  
 
-        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
+        if 360 - heading + location_bearing < heading - location_bearing or heading < location_bearing - 10:
             self.left_motor.setVelocity(self.MAX_SPEED)
             self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
-        elif heading > homeBearing + 10:
+        elif heading > location_bearing + 10:
             self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
             self.right_motor.setVelocity(self.MAX_SPEED)
-        elif heading > homeBearing + 0.5:
+        elif heading > location_bearing + 0.5:
             self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
             self.left_motor.setVelocity(self.MAX_SPEED)
-        elif heading < homeBearing - 0.5:
+        elif heading < location_bearing - 0.5:
             self.right_motor.setVelocity(self.MAX_SPEED)
             self.left_motor.setVelocity(0.8 * self.MAX_SPEED)
 
-    def find_blocks(self):
+    def find_blocks(self, robo_heading):
         """spin until distance sensors have significant discrepancy"""
+        if 
+
+
         
          
 
