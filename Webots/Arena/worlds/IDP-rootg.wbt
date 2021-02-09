@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5677253522416797 0.6020382031330361 0.561460529681656 4.207048436553434
-  position -0.11132084655434718 4.9490505133688565 -0.15948672189250312
+  orientation 0.5754987326178068 0.5925153300870873 0.5636725932374999 4.20158886124535
+  position -0.06475092666292978 3.776352658501854 -0.09060521851808469
 }
 TexturedBackground {
 }
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.075000000000003 0.06000129999506084
-        rotation 2.1881876678041496e-09 -2.1882038831170695e-09 1 1.5708036414618538
+        translation 0.1 -0.07500000000000305 0.06000129999506084
+        rotation 2.2117074396788634e-09 -2.211723827031711e-09 1 1.5708036414618538
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.0749999999999955 0.060001300006888594
-        rotation -3.5108273097682676e-09 3.510850281985954e-09 1 1.5708029074654577
+        translation -0.0999996 -0.07499999999999542 0.060001300006888594
+        rotation -3.5436300622990186e-09 3.5436532503815235e-09 1 1.5708029074654577
         children [
           USE WHEEL
         ]
@@ -340,8 +340,8 @@ DEF ROOT_G Robot {
       }
     }
     DEF DS_RIGHT DistanceSensor {
-      translation -0.03 0 0.1
-      rotation 0 1 0 -1.87079
+      translation -0.08 -0.06 0.1
+      rotation 0 1 0 -1.5707953071795862
       children [
         Shape {
           appearance PBRAppearance {
