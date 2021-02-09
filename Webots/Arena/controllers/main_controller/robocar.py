@@ -2,12 +2,14 @@ from controller import Robot
 import numpy as np
 
 class Robocar(Robot):
-    def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0]):
+    def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0], MIDDLE=[0.0,0.0]):
         """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
         self.MAX_SPEED = MAX_SPEED
         self.HOME = np.array(HOME)
+        self.MIDDLE = MIDDLE
+        self.stack = [self.go_home, self.go_middle, self.robocar_hello]
 
         #Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -26,7 +28,7 @@ class Robocar(Robot):
         self.cps = self.getDevice("compass")
         self.cps.enable(timestep)
 
-        self.distanceSensor = self.getDevice("ds_left")
+        self.distanceSensor = self.getDevice("ds_bottom")
         self.distanceSensor.enable(timestep)
 
         self.camera = self.getDevice('camera')
@@ -42,6 +44,7 @@ class Robocar(Robot):
 
     def robocar_hello(self):
         print("I am a robocar!")
+        return True
 
     def go_forward(self):
         self.left_motor.setVelocity(self.MAX_SPEED)
@@ -77,16 +80,21 @@ class Robocar(Robot):
         return bearing
 
     def getLocationBearing(self, loc_vec):
-        """Return angle between home and global north"""
-        # Check for divide by zero
-        if np.linalg.norm(loc_vec) < 0.00001:
-            return 0
-        loc_vec /= np.linalg.norm(loc_vec)
-        dotProduct = np.dot(loc_vec, [1, 0]) # Dot unit North vector with vector home
-        dotProduct = np.clip(dotProduct, -1.0, 1.0)
-        return 360 - np.arccos(dotProduct) * 180 / np.pi
+        """Return angle between home and global north
+        loc_vec: 2D np array [x-coord, z-coord]
+        """
+        # # Check for divide by zero
+        # if np.linalg.norm(loc_vec) < 0.00001:
+        #     return 0
+        # loc_vec /= np.linalg.norm(loc_vec)
+        # dotProduct = np.dot(loc_vec, [1, 0]) # Dot unit North vector with vector home
+        # dotProduct = np.clip(dotProduct, -1.0, 1.0)
+        # return np.arccos(dotProduct) * 180 / np.pi
+        angle = np.arctan2(loc_vec[1], loc_vec[0]) * 180 / np.pi
+        angle %= 360
+        return angle
 
-    def at_location(self, range=0.1, location):
+    def at_location(self, location, range=0.1):
         """Returns true if robot pos is within range of location"""
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
         pos -= location
@@ -96,43 +104,64 @@ class Robocar(Robot):
     def go_to_location(self, location, range=0.1):
         """Sets the velocities of the motor to return home"""
 
-        if self.at_location(range, location):
+        if self.at_location(location, range):
             return True
-
+        print(location)
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
-        loc_vec = location - pos
         heading = self.getHeadingDegrees(self.cps_vec)
-        location_bearing = self.getLocationBearing(loc_vec)
+        location_bearing = self.getLocationBearing(location - pos)
 
-        # print("Bearing home is: " + str(homeBearing))
-        # print("Heading is: " + str(heading))
-        # print("Home vector is: " + str(homeVec))
-        # print("Position is: " + str(pos))
+        print("Loc Bearing is: " + str(location_bearing))
+        print("Heading is: " + str(heading))
+        print("Loc vec is: " + str(location - pos))
+        print("Pos is: " + str(pos))
 
         self.go_forward()
 
-        if 360 - heading + homeBearing < heading - homeBearing or heading < homeBearing - 10:
+        if 360 - heading + location_bearing < heading - location_bearing or heading < location_bearing - 10:
             self.left_motor.setVelocity(self.MAX_SPEED)
             self.right_motor.setVelocity(-0.2 * self.MAX_SPEED)
-        elif heading > homeBearing + 10:
+        elif heading > location_bearing + 10:
             self.left_motor.setVelocity(-0.2 * self.MAX_SPEED)
             self.right_motor.setVelocity(self.MAX_SPEED)
-        elif heading > homeBearing + 0.5:
+        elif heading > location_bearing + 0.5:
             self.right_motor.setVelocity(0.8 * self.MAX_SPEED)
             self.left_motor.setVelocity(self.MAX_SPEED)
-        elif heading < homeBearing - 0.5:
+        elif heading < location_bearing - 0.5:
             self.right_motor.setVelocity(self.MAX_SPEED)
             self.left_motor.setVelocity(0.8 * self.MAX_SPEED)
+        
+        return False
 
     def find_blocks(self):
         """spin until distance sensors have significant discrepancy"""
-        
-         
+        pass
+
+    def go_home(self):
+        """Go home"""
+        return self.go_to_location(self.HOME, range=0.1)
+        ## Add self.get_out_of_home_ to stack IF not all blocks recovered
+
+    def go_middle(self):
+        """Go middle"""
+        return self.go_to_location(self.MIDDLE, range=0.05)
+        # ADD self.find blocks to stack
 
     def detect_block_colour(self):
         """Return the colour displayed in the camera
         returns: 'b', 'r', or None
         """
         # NOTE: Max value of colour is 32
-        if 
-        return 
+        pass
+
+    def pop_task(self):
+        """Pops the task from the list of tasks and executes the next task"""
+        if self.stack == []:
+            return False
+        task = self.stack.pop()
+        # Execute task and push back to stack if not completed
+        if not task():
+            self.stack.append(task)
+        return True
+
+         

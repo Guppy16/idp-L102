@@ -33,16 +33,21 @@ while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
     # Update sensors
     robocar.update_sensors()
+    if not robocar.pop_task():
+        robocar.stop()
+        break
+
 
     # Go to middle
-    if not robocar.at_location(range = 0.5, [0.0, 0.0]):
-        robocar.go_to_location([0.0, 0.0])
-    else:
-        robocar.find_blocks()
+    # MIDDLE = [0.0, 0.0]
+    # if not robocar.at_location(MIDDLE, range = 0.5):
+    #     robocar.go_to_location(MIDDLE)
+    # else:
+    #     robocar.find_blocks()
 
     # Go home
-    if not robocar.go_to_location(HOME):
-        robocar.stop()
+    # if robocar.go_to_location(HOME):
+    #     robocar.stop()
 
 '''
     if blocks<4:
