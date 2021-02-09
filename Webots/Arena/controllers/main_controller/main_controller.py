@@ -37,7 +37,8 @@ while robocar.step(timestep) != -1:
     #print(f"GPS values are: {gps_vals}")
     #print(f"CPS values are: {cps}")
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
-    robocar.go_forward()
+    robocar.update_sensors()
+    robocar.go_home()
 
 '''
     if blocks<4:
