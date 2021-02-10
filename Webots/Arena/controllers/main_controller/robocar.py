@@ -78,8 +78,8 @@ class Robocar(Robot):
         self.right_motor.setVelocity(0)
 
     def rotate(self):
-        self.right_motor.setVelocity(-0.2)
-        self.left_motor.setVelocity(0.2)
+        self.right_motor.setVelocity(-1)
+        self.left_motor.setVelocity(1)
 
     #GO HOME FUNCTIONS
 
@@ -135,9 +135,11 @@ class Robocar(Robot):
         
         return False
 
-    def find_blocks(self, robo_heading):
+    def find_blocks(self):
         """spin until found all blocks"""
-        if self.bot_distance < self.top_distance - 0.1 and not self.looking_at_block:
+        #print(self.bot_distance)
+        #print(self.top_distance)
+        if self.bot_distance < self.top_distance - 0.02 and not self.looking_at_block:
             self.looking_at_block = True
             r = self.bot_distance
             theta = self.getHeadingDegrees(self.cps_vec)*np.pi/180
@@ -147,7 +149,7 @@ class Robocar(Robot):
             block_z = r*np.sin(theta) + ds_z
             print(block_x)
             print(block_z)
-        if self.bot_distance == self.top_distance and self.looking_at_block:
+        if self.bot_distance > self.top_distance - 0.02 and self.looking_at_block:
             self.looking_at_block = False
         self.rotate()
 

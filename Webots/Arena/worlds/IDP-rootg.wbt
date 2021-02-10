@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.4461131345459334 0.7715334150606739 0.45356285190744616 4.405124765826165
-  position -1.8389849649093004 3.4458337967398833 -0.093469546660486
+  orientation 0.11428706530138916 0.9895072070921246 0.08839657129967929 4.79204964363873
+  position -2.427843960290417 0.6525268845725233 0.29889443541327726
 }
 TexturedBackground {
 }
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000497 0.06000129999506084
-        rotation 3.0564913844247632e-09 -3.0565134257638187e-09 1 1.570803641461852
+        translation 0.1 -0.07500000000000544 0.06000129999506084
+        rotation 3.2564094453598263e-09 -3.2564329490382704e-09 1 1.570803641461852
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999103 0.0600013000068886
-        rotation -5.309001588431828e-09 5.309035894750436e-09 1 1.5708029074654555
+        translation -0.0999996 -0.07499999999999032 0.0600013000068886
+        rotation -5.587824984943212e-09 5.5878611261127764e-09 1 1.5708029074654555
         children [
           USE WHEEL
         ]
@@ -355,9 +355,13 @@ DEF ROOT_G Robot {
         }
       ]
       name "ds_bottom"
+      lookupTable [
+        0 0 0
+        2 1000 0
+      ]
     }
     DEF DS_TOP DistanceSensor {
-      translation -0.08 0 0.0999999
+      translation -0.08 -0.05 0.0999999
       rotation 0 1 0 -1.5707996938995747
       children [
         Shape {
@@ -372,6 +376,10 @@ DEF ROOT_G Robot {
         }
       ]
       name "ds_top"
+      lookupTable [
+        0 0 0
+        2 1000 0
+      ]
     }
     GPS {
       translation 0 0.005 0
@@ -434,8 +442,6 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
-  hidden rotation_3 3.0564913844247632e-09 -3.0565134257638187e-09 1 1.570803641461852
-  hidden rotation_4 -5.309001588431828e-09 5.309035894750436e-09 1 1.5708029074654555
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
   controller "camera_controller"
