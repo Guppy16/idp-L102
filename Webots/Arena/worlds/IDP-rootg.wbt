@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.8770938096590533 0.4802734455915627 -0.006623180306827722 6.022212569547033
-  position 0.9356940643190768 0.2829571753594236 -0.39394086550773644
+  orientation 0.4461131345459334 0.7715334150606739 0.45356285190744616 4.405124765826165
+  position -1.8389849649093004 3.4458337967398833 -0.093469546660486
 }
 TexturedBackground {
 }
@@ -210,7 +210,7 @@ DEF ROOT_G Robot {
   translation 1 0.15 -1
   children [
     Camera {
-      translation 0.08 -0.06 0.1
+      translation 0.08 -0.08 0.1
       rotation 0 1 0 2.618
       children [
         DEF CAMERA_SHAPE Shape {
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000374 0.06000129999506084
-        rotation 2.517464474050139e-09 -2.5174830979220495e-09 1 1.5708036414618538
+        translation 0.1 -0.07500000000000497 0.06000129999506084
+        rotation 3.0564913844247632e-09 -3.0565134257638187e-09 1 1.570803641461852
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999438 0.060001300006888594
-        rotation -3.970065845198781e-09 3.97009183952393e-09 1 1.5708029074654577
+        translation -0.0999996 -0.07499999999999103 0.0600013000068886
+        rotation -5.309001588431828e-09 5.309035894750436e-09 1 1.5708029074654555
         children [
           USE WHEEL
         ]
@@ -340,7 +340,7 @@ DEF ROOT_G Robot {
       }
     }
     DEF DS_BOTTOM DistanceSensor {
-      translation -0.08 -0.06 0.1
+      translation -0.08 -0.08 0.1
       rotation 0 1 0 -1.5707953071795862
       children [
         Shape {
@@ -434,8 +434,8 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
-  hidden rotation_3 2.270506869365647e-09 -2.2705236868183145e-09 1 1.5708036414618538
-  hidden rotation_4 -3.625636943625896e-09 3.625660671370447e-09 1 1.5708029074654577
+  hidden rotation_3 3.0564913844247632e-09 -3.0565134257638187e-09 1 1.570803641461852
+  hidden rotation_4 -5.309001588431828e-09 5.309035894750436e-09 1 1.5708029074654555
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
   controller "camera_controller"

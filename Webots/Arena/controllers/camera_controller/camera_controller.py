@@ -17,7 +17,7 @@ timestep = int(robot.getBasicTimeStep())
 #  ds.enable(timestep)
 camera = robot.getDevice('camera')
 camera.enable(timestep)
-
+img = [[[0,0,0]]]
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
 while robot.step(timestep) != -1:
@@ -25,8 +25,11 @@ while robot.step(timestep) != -1:
     # Enter here functions to read sensor data, like:
     #  val = ds.getValue()
     # val = camera.getValue()
-    img = camera.getImageArray()
-    print(img[0][0])
+    if (img != camera.getImageArray()):
+        img = camera.getImageArray()
+        print(img[0][0])
+    # img = camera.getImageArray()
+    # print(img[0][0])
 
     # Process sensor data here.
 
