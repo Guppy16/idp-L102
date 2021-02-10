@@ -40,7 +40,8 @@ class Robocar(Robot):
         """Update sensor values"""
         self.gps_vec = self.gps.getValues()
         self.cps_vec = self.cps.getValues()
-        self.distance = self.distanceSensor.getValue()
+        self.ds_low = self.ds_low.getValue()
+        self.ds_high = self.ds_high.getValue()
         self.img = self.camera.getImageArray()[0][0]
 
     def robocar_hello(self):
@@ -129,7 +130,8 @@ class Robocar(Robot):
 
     def find_blocks(self, robo_heading):
         """spin until distance sensors have significant discrepancy"""
-        if 
+        if self.ds_low.getValue() != self.ds_high.getValue():
+            pass
 
 
         

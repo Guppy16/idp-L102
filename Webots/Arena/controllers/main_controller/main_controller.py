@@ -25,6 +25,7 @@ SEARCH_BLOCK = False
 RETURN_HOME = True
 EXIT_HOME = False
 found_blocks = 0
+looking_at_block = False
 blocks = 0
 ROBOT_NEARBY = False
 
