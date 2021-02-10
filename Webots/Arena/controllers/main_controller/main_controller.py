@@ -33,7 +33,7 @@ while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
     # Update sensors
     robocar.update_sensors()
-    if not robocar.pop_task():
+    if not robocar.next_task():
         robocar.stop()
         break
 

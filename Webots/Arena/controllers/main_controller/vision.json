@@ -1,0 +1,13 @@
+{
+    "robots" : {
+        "blueRobot" : {
+            "pos" : [1,0,1]
+        },
+        "redRobot" : {
+            "pos": [1,0,-1]
+        }
+    },
+    "blocks" : [
+        
+    ]
+}
