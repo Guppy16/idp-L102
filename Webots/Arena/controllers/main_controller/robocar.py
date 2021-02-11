@@ -147,6 +147,7 @@ class Robocar(Robot):
         """Returns true if robot pos is within range of location"""
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         pos -= location
+        print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
     def go_to_location(self, location, range=0.1):
@@ -221,15 +222,20 @@ class Robocar(Robot):
         block_coord = self.closest_block_pos
         if not self.been_to_block:
             self.go_to_location(block_coord, 0.03)
-        if self.at_location(block_coord, 0.03):
+            print("going to block!")
+        if self.at_location(block_coord, 0.04):
             self.been_to_block = True
+            print("arrived at the block")
+
         if self.been_to_block and not self.gone_over_block:
+            print("been to the block, haven't driven over it yet")
             if self.COLOR != self.detect_block_colour():
                 # forget this block, go to a different one
                 pass
             else:
                 self.match = True
         if self.been_to_block and not self.gone_over_block and self.match:
+            print("trying to drive over block")
             self.go_forward()
         if self.been_to_block and not self.at_location(block_coord, 0.05):
             self.gone_over_block = True
