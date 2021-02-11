@@ -15,6 +15,13 @@ class Robocar(Robot):
         self.NAME = NAME
         self.OTHER_NAME = OTHER_NAME
         self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
+        # self.required_bearing = 0
+        
+        #init FLAGS!!!
+        self.looking_at_block = False
+        self.been_to_block = False
+        self.gone_over_block = False
+        self.match = False
 
         #Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -33,8 +40,11 @@ class Robocar(Robot):
         self.cps = self.getDevice("compass")
         self.cps.enable(timestep)
 
-        self.distanceSensor = self.getDevice("ds_bottom")
-        self.distanceSensor.enable(timestep)
+        self.ds_bottom = self.getDevice("ds_bottom")
+        self.ds_bottom.enable(timestep)
+
+        self.ds_top = self.getDevice("ds_top")
+        self.ds_top.enable(timestep)
 
         self.camera = self.getDevice('camera')
         self.camera.enable(timestep)
@@ -44,7 +54,8 @@ class Robocar(Robot):
         """Update sensor values"""
         self.gps_vec = self.gps.getValues()
         self.cps_vec = self.cps.getValues()
-        self.distance = self.distanceSensor.getValue()
+        self.bot_distance = self.ds_bottom.getValue()
+        self.top_distance = self.ds_top.getValue()
         self.colour_sensor = self.camera.getImageArray()[0][0]
 
     def set_home(self):
@@ -77,10 +88,8 @@ class Robocar(Robot):
         self.right_motor.setVelocity(0)
 
     def rotate(self):
-        self.left_motor.setVelocity(0.1)
-        self.right_motor.setVelocity(-0.1)
-
-    #GO HOME FUNCTIONS
+        self.right_motor.setVelocity(-1)
+        self.left_motor.setVelocity(1)
 
     def getHeadingDegrees(self, cpsVals):
         """Return angle of robot head wrt global north"""
@@ -88,6 +97,11 @@ class Robocar(Robot):
         bearing = (angle - np.pi/2) * 180 / np.pi 
         bearing %= 360
         return bearing
+
+    def rotate_to_bearing(self, angle, tol=5):
+        """Rotate until bearing = angle (degrees)"""
+        self.rotate()
+        return abs(self.getHeadingDegrees(self.cps_vec) - angle) < tol
 
     def getLocationBearing(self, loc_vec):
         """Return angle between home and global north
@@ -102,7 +116,6 @@ class Robocar(Robot):
         pos = np.array([self.gps_vec[0],self.gps_vec[2]])
         pos -= location
         return np.linalg.norm(pos) < range
-        print("Arrived home chief")
 
     def go_to_location(self, location, range=0.1):
         """Sets the velocities of the motor to return home"""
@@ -118,7 +131,7 @@ class Robocar(Robot):
         # print("Loc vec is: " + str(location - pos))
         # print("Pos is: " + str(pos))
 
-        self.go_forward()
+        self.go_forward()  
 
         if 360 - heading + location_bearing < heading - location_bearing or heading < location_bearing - 10:
             self.left_motor.setVelocity(self.MAX_SPEED)
@@ -135,9 +148,61 @@ class Robocar(Robot):
         
         return False
 
-    def find_blocks(self):
-        """spin until distance sensors have significant discrepancy"""
-        pass
+    def find_blocks(self, original_bearing=345):
+        """spin until facing -15 degrees from North"""
+
+        if self.bot_distance < self.top_distance - 20.0 and not self.looking_at_block:
+            self.looking_at_block = True
+            r = self.bot_distance/500 # cm distance of block from ds_sensor
+            theta = self.getHeadingDegrees(self.cps_vec)*np.pi/180
+
+            # account for location of ds_sensor relative to gps sensor
+            ds_x = self.gps_vec[0] + 0.08*np.cos(theta) - 0.1*np.sin(theta)
+            ds_z = self.gps_vec[2] + 0.08*np.sin(theta) + 0.1*np.cos(theta)
+
+            # global x,z pos of block
+            block_x = r*np.cos(theta) + ds_x
+            block_z = r*np.sin(theta) + ds_z
+
+            print(f"x: {block_x:.2f}\ty: {block_z:.2f}")
+
+            # Store position in file
+
+        if self.bot_distance > self.top_distance - 20.0 and self.looking_at_block:
+            self.looking_at_block = False
+
+        return self.rotate_to_bearing(original_bearing)        
+
+    def get_block(self, block_coord=[0.03, 0.72]):
+        # Get close to block
+        # Look around to find block
+        # Go over it
+        # if self.go_to_location(block_coord, range=0.05):
+            
+
+
+        if not self.been_to_block:
+            self.go_to_location(block_coord, 0.03)
+        if self.at_location(block_coord, 0.03):
+            self.been_to_block = True
+        if self.been_to_block and not self.gone_over_block:
+            if self.COLOR != self.detect_block_colour():
+                #forget this block, go to a different one
+                pass
+            else:
+                self.match = True
+        if self.been_to_block and not self.gone_over_block and self.match:
+            self.go_forward()
+        if self.been_to_block and not self.at_location(block_coord, 0.05):
+            self.gone_over_block = True
+        if self.been_to_block and self.gone_over_block:
+            self.been_to_block = False
+            self.gone_over_block = False
+            self.match = False
+            print("going home")
+            self.stack.append(self.go_home)
+            return True
+        return False
 
     def go_home(self):
         """Go home"""
@@ -146,8 +211,17 @@ class Robocar(Robot):
 
     def go_middle(self):
         """Go middle"""
-        return self.go_to_location(self.MIDDLE, range=0.05)
-        # ADD self.find blocks to stack
+        if self.go_to_location(self.MIDDLE, range=0.05):
+            # ADD tasks in reverse order
+            self.stack.append(self.get_block)
+            self.stack.append(self.find_blocks)
+            self.stack.append(self.head_north)
+            return True
+        return False
+        
+    def head_north(self):
+        """Change heading to face north"""
+        return self.rotate_to_bearing(angle=0)
 
     def detect_block_colour(self):
         """Return the colour displayed in the camera
