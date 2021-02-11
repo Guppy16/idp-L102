@@ -105,6 +105,7 @@ class Robocar(Robot):
 
     def rotate_to_bearing(self, angle, tol=5):
         """Rotate until bearing = angle (degrees)"""
+        print("rotating")
         self.rotate()
         return abs(self.getHeadingDegrees(self.cps_vec) - angle) < tol
 

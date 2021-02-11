@@ -162,7 +162,33 @@ def get_block(block_coord=[0.03, 0.72]):
             return True
         return False
 
+def add_collect_block_tasks(tm):
+    """ """
+    if blocksCollected >= 4:
+        return True
 
+    print("adding tasks")
+    tm.push_tasks_in_reverse([
+        Task(  # Head North
+            target=robocar.rotate_to_bearing,
+            kwargs={"angle": 0}
+        ),
+        Task(  # Find blocks
+            target=find_blocks,
+            # This can be got from heading?
+            kwargs={"original_bearing": 345}
+        ),
+        Task(  # Get blocks
+            target=get_block,
+        ),
+        # Task(
+        #     target=add_collect_block_tasks,
+        #     kwargs={"tm":tm}
+        # )
+    ])
+
+    return False
+    
 
 tasks = TaskManager([
     Task(
@@ -171,49 +197,65 @@ tasks = TaskManager([
     Task(  # Set Home
         target=robocar.set_home
     ),
-    Task(  # Go to Middle
-        target=go_to_location,
-        kwargs={"location": robocar.MIDDLE, "range": 0.1}
-    ),
-    Task(  # Head North
-        target=robocar.rotate_to_bearing,
-        kwargs={"angle": 0}
-    ),
-    Task(  # Find blocks
-        target=find_blocks,
-        # This can be got from heading?
-        kwargs={"original_bearing": 345}
-    ),
-    Task(  # Get blocks
-        target=get_block,
-    ),
-    Task(  # Go HOME
-        target=go_to_location,
-        kwargs={"location": robocar.HOME, "range": 0.05}
-    ),
+    # Task(  # Go to Middle
+    #     target=go_to_location,
+    #     kwargs={"location": robocar.MIDDLE, "range": 0.1}
+    # ),
+    # Task(  # Head North
+    #     target=robocar.rotate_to_bearing,
+    #     kwargs={"angle": 0}
+    # ),
+    # Task(  # Find blocks
+    #     target=find_blocks,
+    #     # This can be got from heading?
+    #     kwargs={"original_bearing": 345}
+    # ),
+    # Task(  # Get blocks
+    #     target=get_block,
+    # ),
+    # Task(  # Go HOME
+    #     target=go_to_location,
+    #     kwargs={"location": robocar.HOME, "range": 0.05}
+    # ),
 ])
+
+tasks.push_task(Task(
+    target=add_collect_block_tasks,
+    kwargs={"tm":tasks}
+))
 
 
 MAX_SPEED = 5
 HOME = [1.0, -1.0]
+blocksCollected=0
 
 
 # Main loop:
 while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
     robocar.update_sensors()
+
     if not tasks.next_task():
         robocar.stop()
         break
+    
+    # if blocksCollected<4:
+
+    #     if not findBlock():
+    #         findBlock()
+        
+
+
 
 '''
     if blocks<4:
         robot.findBlock(distance)
         goToBlock()
         pickUpBlock()
-        robocar.go_home()
-        depositBlock()
-        blocks+=1
+
+    robocar.go_home()
+    depositBlock()
+    blocks+=1
     else:
         pass
 
