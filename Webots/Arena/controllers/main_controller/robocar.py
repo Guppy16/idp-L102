@@ -17,8 +17,7 @@ class Robocar(Robot):
         self.NAME = NAME
         self.OTHER_NAME = OTHER_NAME
         self.closest_block_pos = None
-        self.stack = [self.go_home, self.go_middle,
-                      self.set_home, self.robocar_hello]
+        # self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
 
         self.tasks = TaskManager([
             Task(
@@ -147,7 +146,7 @@ class Robocar(Robot):
         """Returns true if robot pos is within range of location"""
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         pos -= location
-        print(f"Distance from location: {np.linalg.norm(pos)}")
+        # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
     def go_to_location(self, location, range=0.1):
@@ -205,6 +204,7 @@ class Robocar(Robot):
         if self.bot_distance > self.top_distance - 20.0 and self.looking_at_block:
             self.looking_at_block = False
 
+        # Once rotated 360
         if self.rotate_to_bearing(original_bearing):
             # Get closest block
             self.closest_block_pos = get_next_block_pos(
@@ -281,35 +281,35 @@ class Robocar(Robot):
         # Check if within range
         return np.linalg.norm(other_robot_pos - self.gps_vec) < range
 
-    def go_home(self):
-        """Go home"""
-        return self.go_to_location(self.HOME, range=0.1)
-        # Add self.get_out_of_home_ to stack IF not all blocks recovered
+    # def go_home(self):
+    #     """Go home"""
+    #     return self.go_to_location(self.HOME, range=0.1)
+    #     # Add self.get_out_of_home_ to stack IF not all blocks recovered
 
-    def go_middle(self):
-        """Go middle"""
-        if self.go_to_location(self.MIDDLE, range=0.05):
-            # ADD tasks in reverse order
-            self.stack.append(self.get_block)
-            self.stack.append(self.find_blocks)
-            self.stack.append(self.head_north)
-            return True
-        return False
+    # def go_middle(self):
+    #     """Go middle"""
+    #     if self.go_to_location(self.MIDDLE, range=0.05):
+    #         # ADD tasks in reverse order
+    #         self.stack.append(self.get_block)
+    #         self.stack.append(self.find_blocks)
+    #         self.stack.append(self.head_north)
+    #         return True
+    #     return False
 
-    def head_north(self):
-        """Change heading to face north"""
-        return self.rotate_to_bearing(angle=0)
+    # def head_north(self):
+    #     """Change heading to face north"""
+    #     return self.rotate_to_bearing(angle=0)
 
-    def next_task(self):
-        """executes the next task"""
-        self.tasks.next_task()
+    # def next_task(self):
+    #     """executes the next task"""
+    #     self.tasks.next_task()
 
-    def pop_task(self):
-        """Pops the task from the list of tasks and executes the next task"""
-        if self.stack == []:
-            return False
-        task = self.stack.pop()
-        # Execute task and push back to stack if not completed
-        if not task():
-            self.stack.append(task)
-        return True
+    # def pop_task(self):
+    #     """Pops the task from the list of tasks and executes the next task"""
+    #     if self.stack == []:
+    #         return False
+    #     task = self.stack.pop()
+    #     # Execute task and push back to stack if not completed
+    #     if not task():
+    #         self.stack.append(task)
+    #     return True

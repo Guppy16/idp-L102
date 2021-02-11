@@ -22,7 +22,7 @@ def get_next_block_pos(my_pos, fName='vision.json'):
         return None
     blocks = np.array(blocks)
     pos = np.array(my_pos)
-    print(blocks - pos)
+    # print(blocks - pos)
     blocks_dist = np.linalg.norm(blocks-pos, axis=1)
     closest_block = np.argmin(blocks_dist)
     return blocks[closest_block]
