@@ -20,7 +20,7 @@ def pop_closest_block(my_pos, fName='vision.json'):
     # Load blocks
     data = json.load(open(fName))
 
-    # Check is blocks is empty
+    # Check if blocks is empty
     if data["blocks"] == []:
         print("No closest block found")
         return None

@@ -75,7 +75,7 @@ def go_to_location(location, range=0.1):
         return False
     
 
-def find_blocks(original_bearing=345):
+def find_blocks():
         """spin until facing -15 degrees from North"""
         if robocar.original_heading is None:
             robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
@@ -104,7 +104,7 @@ def find_blocks(original_bearing=345):
             other_robot_pos = robocar.get_other_robot_pos()
             if not other_robot_pos is None:
                 other_robot_pos = np.array([other_robot_pos[0], other_robot_pos[2]])
-                if np.linalg.norm(other_robot_pos - position) < 0.2:
+                if np.linalg.norm(other_robot_pos - position) < 0.3:
                     print("Block close to other robot")
                     return False
 
@@ -125,7 +125,8 @@ def find_blocks(original_bearing=345):
             robocar.looking_at_block = False
 
         # Once rotated 360
-        if robocar.rotate_to_bearing(original_bearing):
+        if robocar.rotate_to_bearing(robocar.original_heading - 15):
+            print("Finished rotation")
             # Reset original heading
             robocar.original_heading = None
 
@@ -175,6 +176,84 @@ def get_block(block_coord=[0.03, 0.72]):
             return True
         return False
 
+def find_target_block():
+    """Rotate until target block found"""
+    # Look around to find block and check colour
+    if robocar.original_heading is None:
+        robocar.looking_at_block = False
+        robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
+
+    # Check distance
+    if abs(robocar.bot_distance) < 0.07:
+        robocar.looking_at_block = True
+        return True
+    
+    # Once rotate 360, block not found
+    if robocar.rotate_to_bearing(robocar.original_heading - 15):
+        # Reset original heading
+        robocar.original_heading = None
+        robocar.looking_at_block = False
+        return True
+    return False
+
+def check_block_colour():
+    """Rotate until block colour detected"""
+    if robocar.original_heading is None:
+        robocar.match = False
+        if not robocar.looking_at_block:
+            return True
+        robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
+    
+    col = robocar.detect_block_colour()
+    if not col is None:
+        if col == robocar.COLOR:
+            robocar.match = True
+        else:
+            robocar.match = False
+        return True
+
+    # Once rotate 360, block not found
+    if robocar.rotate_to_bearing(robocar.original_heading - 15):
+        # Reset original heading
+        robocar.original_heading = None
+        robocar.match = False
+        return True
+    return False
+
+def drive_over_block():
+    if robocar.count > 0:
+        robocar.go_forward()
+        robocar.count -= 1
+        return False
+    robocar.count = 100
+    return True
+
+def go_to_block(tm):
+    # Get close to the block
+    tm.push_tasks_in_reverse([
+        Task(
+            target=go_to_location,
+            kwargs={"location":robocar.closest_block_pos, "range":0.30}
+        ),
+        Task(
+            target=find_target_block
+        ),
+        Task(
+            target=check_block_colour
+        ),
+        Task(
+            target=drive_over_block
+        )
+    ])
+
+    return True
+
+    # block_coord = robocar.closest_block_pos
+    
+
+    
+
+
 
 def add_collect_block_tasks(tm):
     """ """
@@ -193,7 +272,8 @@ def add_collect_block_tasks(tm):
             # kwargs={"original_bearing": 345}
         ),
         Task(  # Get blocks
-            target=get_block,
+            target=go_to_block,
+            kwargs={"tm":tm}
         ),
         Task(
             target=add_collect_block_tasks,

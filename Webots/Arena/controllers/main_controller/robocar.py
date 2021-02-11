@@ -25,11 +25,14 @@ class Robocar(Robot):
        
         # self.required_bearing = 0
 
+
+
         # init FLAGS!!!
         self.looking_at_block = False
         self.been_to_block = False
         self.gone_over_block = False
         self.match = False
+        self.count = 100
 
         # Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -121,7 +124,12 @@ class Robocar(Robot):
 
     def at_location(self, location, range=0.1):
         """Returns true if robot pos is within range of location"""
+        if location is None:
+            return False
+        
+        # location = np.array(location)
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
+        # print(pos)
         pos -= location
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
