@@ -137,19 +137,17 @@ class Robocar(Robot):
 
     def find_blocks(self):
         """spin until found all blocks"""
-        #print(self.bot_distance)
-        #print(self.top_distance)
-        if self.bot_distance < self.top_distance - 0.02 and not self.looking_at_block:
+        if self.bot_distance < self.top_distance - 20.0 and not self.looking_at_block:
             self.looking_at_block = True
-            r = self.bot_distance
+            r = self.bot_distance/500
             theta = self.getHeadingDegrees(self.cps_vec)*np.pi/180
-            ds_x = self.gps_vec[0] - 0.08*np.cos(theta) + 0.1*np.sin(theta) #account for 
-            ds_z = self.gps_vec[2] - 0.08*np.sin(theta) - 0.1*np.cos(theta)
+            ds_x = self.gps_vec[0] + 0.08*np.cos(theta) - 0.1*np.sin(theta) #account for 
+            ds_z = self.gps_vec[2] + 0.08*np.sin(theta) + 0.1*np.cos(theta)
             block_x = r*np.cos(theta) + ds_x
             block_z = r*np.sin(theta) + ds_z
             print(block_x)
             print(block_z)
-        if self.bot_distance > self.top_distance - 0.02 and self.looking_at_block:
+        if self.bot_distance > self.top_distance - 20.0 and self.looking_at_block:
             self.looking_at_block = False
         self.rotate()
 
