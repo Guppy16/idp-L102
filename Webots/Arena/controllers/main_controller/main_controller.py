@@ -100,6 +100,14 @@ def find_blocks(original_bearing=345):
 
             position = np.array([block_x, block_z])
 
+            # Check if block is close to the other robot
+            other_robot_pos = robocar.get_other_robot_pos()
+            if not other_robot_pos is None:
+                other_robot_pos = np.array([other_robot_pos[0], other_robot_pos[2]])
+                if np.linalg.norm(other_robot_pos - position) < 0.2:
+                    print("Block close to other robot")
+                    return False
+
             #appends a block to the list with its position, and it has not been picked up yet
             currentBlock = block.Block(position, False)
             blocks.append(currentBlock)
@@ -172,6 +180,7 @@ def get_block(block_coord=[0.03, 0.72]):
             return True
         return False
 
+
 def add_collect_block_tasks(tm):
     """ """
     if blocksCollected >= 4:
@@ -198,9 +207,15 @@ def add_collect_block_tasks(tm):
     ])
 
     return True
-    
 
-tasks = TaskManager([
+tasks = TaskManager([])
+
+tasks.push_task(Task(
+    target=add_collect_block_tasks,
+    kwargs={"tm":tasks}
+))
+
+tasks.push_tasks_in_reverse([
     Task(
         target=robocar.robocar_hello
     ),
@@ -229,10 +244,7 @@ tasks = TaskManager([
     # ),
 ])
 
-tasks.push_task(Task(
-    target=add_collect_block_tasks,
-    kwargs={"tm":tasks}
-))
+
 
 
 MAX_SPEED = 5
