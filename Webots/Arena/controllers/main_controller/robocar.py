@@ -14,8 +14,9 @@ class Robocar(Robot):
         self.MAX_SPEED = MAX_SPEED
         self.HOME = np.array(HOME)
         self.MIDDLE = MIDDLE
-        self.COLOR = COLOR
-        self.NAME = NAME
+        self.NAME = self.getName()
+        self.COLOR = 'b' if self.NAME == 'blueRobot' else 'r'
+
         self.OTHER_NAME = OTHER_NAME
         self.closest_block_pos = None
         self.original_heading = None
@@ -71,6 +72,7 @@ class Robocar(Robot):
 
     def robocar_hello(self):
         print("I am a robocar!")
+        print(f"{self.NAME}\n{self.COLOR}")
         return True
 
     def go_forward(self):
@@ -94,8 +96,8 @@ class Robocar(Robot):
         self.right_motor.setVelocity(0)
 
     def rotate(self):
-        self.right_motor.setVelocity(-1)
-        self.left_motor.setVelocity(1)
+        self.right_motor.setVelocity(-0.5*self.MAX_SPEED)
+        self.left_motor.setVelocity(0.5*self.MAX_SPEED)
 
     def getHeadingDegrees(self, cpsVals):
         """Return angle of robot head wrt global north"""
@@ -147,8 +149,8 @@ class Robocar(Robot):
             return 'b'
         return None
 
-    def detect_other_robot(self, range=0.2, fName='vision.json'):
-        """Find co-ordinates of other robot and check if that's within 30 cm"""
+    def update_my_pos(self, fName='vision.json'):
+
         # Write position of robot in a file
         data = json.load(open(fName))
 
@@ -158,10 +160,18 @@ class Robocar(Robot):
         data[self.NAME]["pos"] = self.gps_vec
         json.dump(data, open(fName, 'w+'))
 
+    def get_other_robot_pos(self, fName='vision.json'):
+        # Write position of robot in a file
+        data = json.load(open(fName))
+
         # Get position of other robot
         if not self.OTHER_NAME in data:
             return None
-        other_robot_pos = np.array(data[self.OTHER_NAME]["pos"])
+        return np.array(data[self.OTHER_NAME]["pos"])
 
-        # Check if within range
-        return np.linalg.norm(other_robot_pos - self.gps_vec) < range
+    # def detect_other_robot(self, range=0.2, fName='vision.json'):
+    #     """Find co-ordinates of other robot and check if that's within 30 cm"""
+
+
+    #     # Check if within range
+    #     return np.linalg.norm(other_robot_pos - self.gps_vec) < range

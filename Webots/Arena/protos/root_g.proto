@@ -1,9 +1,9 @@
 PROTO root_g [
-  field SFVec3f    translation  1 0.15 1
-  field SFRotation rotation     0 1 0 3.14159
-  field SFColor    color        1 0 0
-  field SFString   name         "root_g"
-  field SFString   controller   "main_controller"
+    field SFVec3f    translation  1 0.15 1
+    field SFRotation rotation     0 1 0 3.14159
+    field SFColor    color        1 0 0
+    field SFString   name         "root_g"
+    field SFString   controller   "main_controller"
 ]
 {
 Robot {
@@ -96,8 +96,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000494 0.06000129999506084
-        rotation 3.03297161255005e-09 -3.0329934818491772e-09 1 1.570803641461852
+        translation 0.1 -0.07500000000000558 0.06000129999506084
+        rotation 3.3152088750466094e-09 -3.3152328088248752e-09 1 1.570803641461852
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -129,8 +129,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999999107 0.0600013000068886
-        rotation -5.276198835901077e-09 5.276232926354866e-09 1 1.5708029074654555
+        translation -0.0999996 -0.07499999999999012 0.0600013000068886
+        rotation -5.669831866270089e-09 5.6698685471017005e-09 1 1.5708029074654555
         children [
           USE WHEEL
         ]
@@ -156,9 +156,13 @@ Robot {
         }
       ]
       name "ds_bottom"
+      lookupTable [
+        0 0 0
+        2 1000 0
+      ]
     }
     DEF DS_TOP DistanceSensor {
-      translation -0.08 0 0.0999999
+      translation -0.08 -0.05 0.0999999
       rotation 0 1 0 -1.5707996938995747
       children [
         Shape {
@@ -173,6 +177,10 @@ Robot {
         }
       ]
       name "ds_top"
+      lookupTable [
+        0 0 0
+        2 1000 0
+      ]
     }
     GPS {
       translation 0 0.005 0
