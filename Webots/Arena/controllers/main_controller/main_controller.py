@@ -186,7 +186,7 @@ def find_target_block():
     # Look around to find block and check colour
     if robocar.original_heading is None:
         robocar.looking_at_block = False
-        robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
+        robocar.original_heading = robocar.getHeadingDegrees()
 
     # Check distance
     if abs(robocar.bot_distance) < 0.07:
@@ -207,7 +207,7 @@ def check_block_colour():
         robocar.match = False
         if not robocar.looking_at_block:
             return True
-        robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
+        robocar.original_heading = robocar.getHeadingDegrees()
     
     col = robocar.detect_block_colour()
     if not col is None:
