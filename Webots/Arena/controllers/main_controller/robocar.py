@@ -15,8 +15,13 @@ class Robocar(Robot):
         self.NAME = NAME
         self.OTHER_NAME = OTHER_NAME
         self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
-        self.looking_at_block = False
         # self.required_bearing = 0
+        
+        #init FLAGS!!!
+        self.looking_at_block = False
+        self.been_to_block = False
+        self.gone_over_block = False
+        self.match = False
 
         #Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -168,6 +173,28 @@ class Robocar(Robot):
 
         return self.rotate_to_bearing(original_bearing)        
 
+    def get_block(self, block_coord=[0.03, 0.72]):
+        if not self.been_to_block:
+            self.go_to_location(block_coord, 0.03)
+        if self.at_location(block_coord, 0.03):
+            self.been_to_block = True
+        if self.been_to_block and not self.gone_over_block:
+            if self.COLOR != self.detect_block_colour():
+                #forget this block, go to a different one
+                pass
+            else:
+                self.match = True
+        if self.been_to_block and not self.gone_over_block and self.match:
+            self.go_forward()
+        if self.been_to_block and not self.at_location(block_coord, 0.05):
+            self.gone_over_block = True
+        if self.been_to_block and self.gone_over_block:
+            self.been_to_block = False
+            self.gone_over_block = False
+            self.match = False
+            self.stack.append(self.go_home)
+            return True 
+
     def go_home(self):
         """Go home"""
         return self.go_to_location(self.HOME, range=0.1)
@@ -177,6 +204,7 @@ class Robocar(Robot):
         """Go middle"""
         if self.go_to_location(self.MIDDLE, range=0.05):
             # ADD self.find blocks to stack
+            self.stack.append(self.get_block)
             self.stack.append(self.find_blocks)
             self.stack.append(self.head_north)
             return True
