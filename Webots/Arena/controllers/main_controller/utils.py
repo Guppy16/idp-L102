@@ -14,15 +14,26 @@ def store_block(pos, range=0.1, fName='vision.json'):
     print(f"block stored at {pos}")
     return True
 
-def get_next_block_pos(my_pos, fName='vision.json'):
-    """Get the position of the next block"""
-    blocks = json.load(open(fName))["blocks"]
-    if blocks == []:
+def pop_closest_block(my_pos, fName='vision.json'):
+    """Get the position of the closest block"""
+
+    # Load blocks
+    data = json.load(open(fName))
+
+    # Check is blocks is empty
+    if data["blocks"] == []:
         print("No closest block found")
         return None
-    blocks = np.array(blocks)
+    
+    # Find the closest block
+    blocks = np.array(data["blocks"])
     pos = np.array(my_pos)
     # print(blocks - pos)
     blocks_dist = np.linalg.norm(blocks-pos, axis=1)
     closest_block = np.argmin(blocks_dist)
+
+    # Remove closest block and add it to the json file
+    del data["blocks"][closest_block]
+    json.dump(data, open(fName, 'w+'))
+
     return blocks[closest_block]
