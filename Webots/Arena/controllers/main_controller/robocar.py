@@ -174,6 +174,13 @@ class Robocar(Robot):
         return self.rotate_to_bearing(original_bearing)        
 
     def get_block(self, block_coord=[0.03, 0.72]):
+        # Get close to block
+        # Look around to find block
+        # Go over it
+        # if self.go_to_location(block_coord, range=0.05):
+            
+
+
         if not self.been_to_block:
             self.go_to_location(block_coord, 0.03)
         if self.at_location(block_coord, 0.03):
@@ -192,8 +199,10 @@ class Robocar(Robot):
             self.been_to_block = False
             self.gone_over_block = False
             self.match = False
+            print("going home")
             self.stack.append(self.go_home)
-            return True 
+            return True
+        return False
 
     def go_home(self):
         """Go home"""
@@ -203,7 +212,7 @@ class Robocar(Robot):
     def go_middle(self):
         """Go middle"""
         if self.go_to_location(self.MIDDLE, range=0.05):
-            # ADD self.find blocks to stack
+            # ADD tasks in reverse order
             self.stack.append(self.get_block)
             self.stack.append(self.find_blocks)
             self.stack.append(self.head_north)
