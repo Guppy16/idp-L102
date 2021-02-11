@@ -9,4 +9,5 @@ textFiles: 2 "controllers/go_home_controller/go_home_controller.py" "main_contro
 globalOptionalRendering: CoordinateSystem::DistanceSensorRays
 consoles: Console:All:All
 renderingDevicePerspectives: blueRobot:camera;1;73;0;0
+renderingDevicePerspectives: redRobot:camera;1;32;0;0
 renderingDevicePerspectives: root_g:camera;1;32;0;0
