@@ -1,7 +1,7 @@
 from controller import Robot
 import json
 import numpy as np
-from utils import store_block, get_next_block_pos
+from utils import store_block, pop_closest_block
 from task_manager import Task, TaskManager
 
 
@@ -26,10 +26,10 @@ class Robocar(Robot):
             Task(  # Set Home
                 target=self.set_home
             ),
-            Task(  # Go to Middle
-                target=self.go_to_location,
-                kwargs={"location": self.MIDDLE, "range": 0.1}
-            ),
+            # Task(  # Go to Middle
+            #     target=self.go_to_location,
+            #     kwargs={"location": self.MIDDLE, "range": 0.1}
+            # ),
             Task(  # Head North
                 target=self.rotate_to_bearing,
                 kwargs={"angle": 0}
@@ -39,7 +39,7 @@ class Robocar(Robot):
                 # This can be got from heading?
                 kwargs={"original_bearing": 345}
             ),
-            Task(  # Get blocks
+            Task(  # Attempt block pick up
                 target=self.get_block,
             ),
             Task(  # Go HOME
@@ -47,7 +47,6 @@ class Robocar(Robot):
                 kwargs={"location": self.HOME, "range": 0.05}
             ),
         ])
-        # self.required_bearing = 0
 
         # init FLAGS!!!
         self.looking_at_block = False
@@ -207,17 +206,29 @@ class Robocar(Robot):
         # Once rotated 360
         if self.rotate_to_bearing(original_bearing):
             # Get closest block
-            self.closest_block_pos = get_next_block_pos(
+            self.closest_block_pos = pop_closest_block(
                 my_pos=[self.gps_vec[0], self.gps_vec[2]],
             )
             return True
         return False
+    
+    def get_block_task(self, block_coord):
+        block_coord = self.closest_block_pos
+        # Append these as tasks
+
+        # Get close to block
+        self.go_to_location(block_coord, range=0.1)
+        # Rotate CW until block found
+        if np.linalg.norm(self.ds_bottom / 500) < 12:
+            self.rotate_to_bearing(self.getHeadingDegrees() - 20)
+        # Once found block
+
+        # Check the colour
+        # IF not correct color, mark it as red
+        # Go over it
 
     def get_block(self, block_coord=[0.03, 0.72]):
-        # Get close to block
-        # Look around to find block
-        # Check the colour
-        # Go over it
+
         # if self.go_to_location(block_coord, range=0.05):
         block_coord = self.closest_block_pos
         if not self.been_to_block:
@@ -280,36 +291,3 @@ class Robocar(Robot):
 
         # Check if within range
         return np.linalg.norm(other_robot_pos - self.gps_vec) < range
-
-    # def go_home(self):
-    #     """Go home"""
-    #     return self.go_to_location(self.HOME, range=0.1)
-    #     # Add self.get_out_of_home_ to stack IF not all blocks recovered
-
-    # def go_middle(self):
-    #     """Go middle"""
-    #     if self.go_to_location(self.MIDDLE, range=0.05):
-    #         # ADD tasks in reverse order
-    #         self.stack.append(self.get_block)
-    #         self.stack.append(self.find_blocks)
-    #         self.stack.append(self.head_north)
-    #         return True
-    #     return False
-
-    # def head_north(self):
-    #     """Change heading to face north"""
-    #     return self.rotate_to_bearing(angle=0)
-
-    # def next_task(self):
-    #     """executes the next task"""
-    #     self.tasks.next_task()
-
-    # def pop_task(self):
-    #     """Pops the task from the list of tasks and executes the next task"""
-    #     if self.stack == []:
-    #         return False
-    #     task = self.stack.pop()
-    #     # Execute task and push back to stack if not completed
-    #     if not task():
-    #         self.stack.append(task)
-    #     return True
