@@ -77,6 +77,8 @@ def go_to_location(location, range=0.1):
 
 def find_blocks(original_bearing=345):
         """spin until facing -15 degrees from North"""
+        if robocar.original_heading is None:
+            robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
 
         if robocar.bot_distance < robocar.top_distance - 20.0 and not robocar.looking_at_block:
             robocar.looking_at_block = True
@@ -116,6 +118,9 @@ def find_blocks(original_bearing=345):
 
         # Once rotated 360
         if robocar.rotate_to_bearing(original_bearing):
+            # Reset original heading
+            robocar.original_heading = None
+
             # Get closest block
             robocar.closest_block_pos = utils.pop_closest_block(
                 my_pos=[robocar.gps_vec[0], robocar.gps_vec[2]],
@@ -169,25 +174,25 @@ def add_collect_block_tasks(tm):
 
     print("adding tasks")
     tm.push_tasks_in_reverse([
-        Task(  # Head North
-            target=robocar.rotate_to_bearing,
-            kwargs={"angle": 0}
-        ),
+        # Task(  # Head North
+        #     target=robocar.rotate_to_bearing,
+        #     kwargs={"angle": 0}
+        # ),
         Task(  # Find blocks
             target=find_blocks,
             # This can be got from heading?
-            kwargs={"original_bearing": 345}
+            # kwargs={"original_bearing": 345}
         ),
         Task(  # Get blocks
             target=get_block,
         ),
-        # Task(
-        #     target=add_collect_block_tasks,
-        #     kwargs={"tm":tm}
-        # )
+        Task(
+            target=add_collect_block_tasks,
+            kwargs={"tm":tm}
+        )
     ])
 
-    return False
+    return True
     
 
 tasks = TaskManager([

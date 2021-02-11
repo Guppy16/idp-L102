@@ -19,7 +19,7 @@ class TaskManager():
         self.stack.append(task)
 
     def push_tasks_in_reverse(self, tasks):
-        self.stack.append(list(reversed(tasks)))
+        self.stack += list(reversed(tasks))
         # print(self.stack)
 
     def next_task(self):

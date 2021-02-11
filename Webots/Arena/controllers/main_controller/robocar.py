@@ -18,6 +18,7 @@ class Robocar(Robot):
         self.NAME = NAME
         self.OTHER_NAME = OTHER_NAME
         self.closest_block_pos = None
+        self.original_heading = None
         # self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
 
        
@@ -105,7 +106,6 @@ class Robocar(Robot):
 
     def rotate_to_bearing(self, angle, tol=5):
         """Rotate until bearing = angle (degrees)"""
-        print("rotating")
         self.rotate()
         return abs(self.getHeadingDegrees(self.cps_vec) - angle) < tol
 
@@ -123,6 +123,15 @@ class Robocar(Robot):
         pos -= location
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
+
+    def get_block(self):
+        """ """
+        # Get close to block
+        # Look around to find block
+        # Check the colour
+        # Go over it
+        # if self.go_to_location(block_coord, range=0.05):
+
 
     def detect_block_colour(self):
         """Return the colour displayed in the camera

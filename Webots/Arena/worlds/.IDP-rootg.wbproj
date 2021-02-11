@@ -5,7 +5,7 @@ sceneTreePerspectives: 000000ff0000000100000002000000c0000000fa01000000020100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 2 "controllers/go_home_controller/go_home_controller.py" "controllers/main_controller/main_controller.py" "controllers/camera_controller/camera_controller.py"
+textFiles: 2 "controllers/go_home_controller/go_home_controller.py" "main_controller.py" "controllers/camera_controller/camera_controller.py"
 globalOptionalRendering: CoordinateSystem::DistanceSensorRays
 consoles: Console:All:All
 renderingDevicePerspectives: blueRobot:camera;1;73;0;0
