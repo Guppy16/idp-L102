@@ -10,8 +10,13 @@ class Robocar(Robot):
         self.HOME = np.array(HOME)
         self.MIDDLE = MIDDLE
         self.COLOR = COLOR
-        self.stack = [self.go_home, self.find_blocks, self.go_middle, self.set_home, self.robocar_hello]
+        self.stack = [self.go_home, self.get_block, self.find_blocks, self.go_middle, self.set_home, self.robocar_hello]
+
+        #init FLAGS!!!
         self.looking_at_block = False
+        self.been_to_block = False
+        self.gone_over_block = False
+        self.match = False
 
         #Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -135,6 +140,20 @@ class Robocar(Robot):
         
         return False
 
+    def detect_block_colour(self):
+        """Return the colour displayed in the camera
+        returns: 'b', 'r', or None
+        """
+        # NOTE: Max value of colour is 256?
+        # NOTE: may need to compare values??
+        if self.colour_sensor[0] > 70:
+            print('red')
+            return 'r'
+        if self.colour_sensor[2] > 70:
+            print('blue')
+            return 'b'
+        return None
+
     def find_blocks(self):
         """spin until found all blocks"""
         if self.bot_distance < self.top_distance - 20.0 and not self.looking_at_block:
@@ -151,6 +170,28 @@ class Robocar(Robot):
             self.looking_at_block = False
         self.rotate()
 
+    def get_block(self, block_coord=[0.03, 0.72]):
+        if not self.been_to_block:
+            self.go_to_location(block_coord, 0.03)
+        if self.at_location(block_coord, 0.03):
+            self.been_to_block = True
+        if self.been_to_block and not self.gone_over_block:
+            if self.COLOR != self.detect_block_colour():
+                #forget this block, go to a different one
+                pass
+            else:
+                self.match = True
+        if self.been_to_block and not self.gone_over_block and self.match:
+            self.go_forward()
+        if self.been_to_block and not self.at_location(block_coord, 0.05):
+            self.gone_over_block = True
+        if self.been_to_block and self.gone_over_block:
+            self.been_to_block = False
+            self.gone_over_block = False
+            self.match = False
+            self.stack.append(self.go_home)
+            return True 
+
     def go_home(self):
         """Go home"""
         return self.go_to_location(self.HOME, range=0.1)
@@ -161,19 +202,6 @@ class Robocar(Robot):
         return self.go_to_location(self.MIDDLE, range=0.05)
         # ADD self.find blocks to stack
 
-    def detect_block_colour(self):
-        """Return the colour displayed in the camera
-        returns: 'b', 'r', or None
-        """
-        # NOTE: Max value of colour is 256?
-        # NOTE: may need to compare values??
-        if self.colour_sensor[0] > 70:
-            print('red')
-            return 'r'
-        if self.colour_sensor[2] > 70:
-            print('blue')
-            return 'b'
-        return None
 
     def pop_task(self):
         """Pops the task from the list of tasks and executes the next task"""
