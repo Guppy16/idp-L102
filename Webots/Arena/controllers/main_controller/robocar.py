@@ -1,8 +1,10 @@
 from controller import Robot
+import json
 import numpy as np
+from utils import *
 
 class Robocar(Robot):
-    def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0], MIDDLE=[0.0,0.0], COLOR='b'):
+    def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0], MIDDLE=[0.0,0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
         """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
@@ -10,6 +12,8 @@ class Robocar(Robot):
         self.HOME = np.array(HOME)
         self.MIDDLE = MIDDLE
         self.COLOR = COLOR
+        self.NAME = NAME
+        self.OTHER_NAME = OTHER_NAME
         self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
         self.looking_at_block = False
         # self.required_bearing = 0
@@ -195,8 +199,28 @@ class Robocar(Robot):
             print('blue')
             return 'b'
         return None
+    
+    def detect_other_robot(self, range=0.2, fName='vision.json'):
+        """Find co-ordinates of other robot and check if that's within 30 cm"""
+        # Write position of robot in a file
+        data = json.load(open(fName))
 
-    def pop_task(self):
+        # Update my pos
+        if not self.NAME in data:
+            data[self.NAME] = {}
+        data[self.NAME]["pos"] = self.gps_vec 
+        json.dump(data, open(fName, 'w+'))
+        
+        # Get position of other robot
+        if not self.OTHER_NAME in data:
+            return None
+        other_robot_pos = np.array(data[self.OTHER_NAME]["pos"])
+        
+        # Check if within range
+        return np.linalg.norm(other_robot_pos - self.gps_vec) < range
+
+
+    def next_task(self):
         """Pops the task from the list of tasks and executes the next task"""
         if self.stack == []:
             return False
@@ -205,5 +229,3 @@ class Robocar(Robot):
         if not task():
             self.stack.append(task)
         return True
-
-         
