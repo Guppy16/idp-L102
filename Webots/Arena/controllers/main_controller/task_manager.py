@@ -1,5 +1,5 @@
 class Task():
-    def __init__(self, target, args, kwargs):
+    def __init__(self, target=None, args=[], kwargs={}):
         self.target = target
         self.args = args
         self.kwargs = kwargs
@@ -10,10 +10,20 @@ class Task():
 
 class TaskManager():
     def __init__(self, tasks):
-        self.stack = [tasks]
+        """Add tasks in reverse
+        tasks: arrays of Task
+        """
+        self.stack = list(reversed(tasks))
     
+    def push_task(self, task):
+        self.stack.append(task)
+
+    def push_tasks_in_reverse(self, tasks):
+        self.stack.append(tasks.reverse())
+
     def next_task(self):
         """Pops the task from the list of tasks and executes the next task"""
+        # print(self.stack)
         if self.stack == []:
             return False
         task = self.stack.pop()

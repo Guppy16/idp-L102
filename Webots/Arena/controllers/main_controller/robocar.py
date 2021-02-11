@@ -1,10 +1,12 @@
 from controller import Robot
 import json
 import numpy as np
-from utils import *
+from utils import store_block, get_next_block_pos
+from task_manager import Task, TaskManager
+
 
 class Robocar(Robot):
-    def __init__(self, MAX_SPEED=5, HOME=[1.0,-1.0], MIDDLE=[0.0,0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
+    def __init__(self, MAX_SPEED=5, HOME=[1.0, -1.0], MIDDLE=[0.0, 0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
         """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
@@ -14,16 +16,47 @@ class Robocar(Robot):
         self.COLOR = COLOR
         self.NAME = NAME
         self.OTHER_NAME = OTHER_NAME
-        self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
+        self.closest_block_pos = None
+        self.stack = [self.go_home, self.go_middle,
+                      self.set_home, self.robocar_hello]
+
+        self.tasks = TaskManager([
+            Task(
+                target=self.robocar_hello
+            ),
+            Task(  # Set Home
+                target=self.set_home
+            ),
+            Task(  # Go to Middle
+                target=self.go_to_location,
+                kwargs={"location": self.MIDDLE, "range": 0.1}
+            ),
+            Task(  # Head North
+                target=self.rotate_to_bearing,
+                kwargs={"angle": 0}
+            ),
+            Task(  # Find blocks
+                target=self.find_blocks,
+                # This can be got from heading?
+                kwargs={"original_bearing": 345}
+            ),
+            Task(  # Get blocks
+                target=self.get_block,
+            ),
+            Task(  # Go HOME
+                target=self.go_to_location,
+                kwargs={"location": self.HOME, "range": 0.05}
+            ),
+        ])
         # self.required_bearing = 0
-        
-        #init FLAGS!!!
+
+        # init FLAGS!!!
         self.looking_at_block = False
         self.been_to_block = False
         self.gone_over_block = False
         self.match = False
 
-        #Init motors
+        # Init motors
         self.left_motor = self.getDevice("wheel1")
         self.left_motor.setPosition(float('inf'))
         self.left_motor.setVelocity(0.0)
@@ -33,7 +66,7 @@ class Robocar(Robot):
         self.right_motor.setPosition(float('inf'))
         self.right_motor.setVelocity(0.0)
 
-        #Init sensors
+        # Init sensors
         self.gps = self.getDevice("gps")
         self.gps.enable(timestep)
 
@@ -48,7 +81,6 @@ class Robocar(Robot):
 
         self.camera = self.getDevice('camera')
         self.camera.enable(timestep)
-
 
     def update_sensors(self):
         """Update sensor values"""
@@ -94,7 +126,7 @@ class Robocar(Robot):
     def getHeadingDegrees(self, cpsVals):
         """Return angle of robot head wrt global north"""
         angle = np.arctan2(cpsVals[0], cpsVals[2])
-        bearing = (angle - np.pi/2) * 180 / np.pi 
+        bearing = (angle - np.pi/2) * 180 / np.pi
         bearing %= 360
         return bearing
 
@@ -113,7 +145,7 @@ class Robocar(Robot):
 
     def at_location(self, location, range=0.1):
         """Returns true if robot pos is within range of location"""
-        pos = np.array([self.gps_vec[0],self.gps_vec[2]])
+        pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         pos -= location
         return np.linalg.norm(pos) < range
 
@@ -122,7 +154,7 @@ class Robocar(Robot):
 
         if self.at_location(location, range):
             return True
-        pos = np.array([self.gps_vec[0],self.gps_vec[2]])
+        pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         heading = self.getHeadingDegrees(self.cps_vec)
         location_bearing = self.getLocationBearing(location - pos)
 
@@ -131,7 +163,7 @@ class Robocar(Robot):
         # print("Loc vec is: " + str(location - pos))
         # print("Pos is: " + str(pos))
 
-        self.go_forward()  
+        self.go_forward()
 
         if 360 - heading + location_bearing < heading - location_bearing or heading < location_bearing - 10:
             self.left_motor.setVelocity(self.MAX_SPEED)
@@ -145,7 +177,7 @@ class Robocar(Robot):
         elif heading < location_bearing - 0.5:
             self.right_motor.setVelocity(self.MAX_SPEED)
             self.left_motor.setVelocity(0.8 * self.MAX_SPEED)
-        
+
         return False
 
     def find_blocks(self, original_bearing=345):
@@ -153,7 +185,7 @@ class Robocar(Robot):
 
         if self.bot_distance < self.top_distance - 20.0 and not self.looking_at_block:
             self.looking_at_block = True
-            r = self.bot_distance/500 # cm distance of block from ds_sensor
+            r = self.bot_distance/500  # cm distance of block from ds_sensor
             theta = self.getHeadingDegrees(self.cps_vec)*np.pi/180
 
             # account for location of ds_sensor relative to gps sensor
@@ -167,27 +199,33 @@ class Robocar(Robot):
             print(f"x: {block_x:.2f}\ty: {block_z:.2f}")
 
             # Store position in file
+            store_block(pos=[block_x, block_z], range=0.05)
 
         if self.bot_distance > self.top_distance - 20.0 and self.looking_at_block:
             self.looking_at_block = False
 
-        return self.rotate_to_bearing(original_bearing)        
+        if self.rotate_to_bearing(original_bearing):
+            # Get closest block
+            self.closest_block_pos = get_next_block_pos(
+                my_pos=[self.gps_vec[0], self.gps_vec[2]],
+            )
+            return True
+        return False
 
     def get_block(self, block_coord=[0.03, 0.72]):
         # Get close to block
         # Look around to find block
+        # Check the colour
         # Go over it
         # if self.go_to_location(block_coord, range=0.05):
-            
-
-
+        block_coord = self.closest_block_pos
         if not self.been_to_block:
             self.go_to_location(block_coord, 0.03)
         if self.at_location(block_coord, 0.03):
             self.been_to_block = True
         if self.been_to_block and not self.gone_over_block:
             if self.COLOR != self.detect_block_colour():
-                #forget this block, go to a different one
+                # forget this block, go to a different one
                 pass
             else:
                 self.match = True
@@ -200,28 +238,9 @@ class Robocar(Robot):
             self.gone_over_block = False
             self.match = False
             print("going home")
-            self.stack.append(self.go_home)
+            # self.stack.append(self.go_home)
             return True
         return False
-
-    def go_home(self):
-        """Go home"""
-        return self.go_to_location(self.HOME, range=0.1)
-        ## Add self.get_out_of_home_ to stack IF not all blocks recovered
-
-    def go_middle(self):
-        """Go middle"""
-        if self.go_to_location(self.MIDDLE, range=0.05):
-            # ADD tasks in reverse order
-            self.stack.append(self.get_block)
-            self.stack.append(self.find_blocks)
-            self.stack.append(self.head_north)
-            return True
-        return False
-        
-    def head_north(self):
-        """Change heading to face north"""
-        return self.rotate_to_bearing(angle=0)
 
     def detect_block_colour(self):
         """Return the colour displayed in the camera
@@ -236,7 +255,7 @@ class Robocar(Robot):
             print('blue')
             return 'b'
         return None
-    
+
     def detect_other_robot(self, range=0.2, fName='vision.json'):
         """Find co-ordinates of other robot and check if that's within 30 cm"""
         # Write position of robot in a file
@@ -245,19 +264,41 @@ class Robocar(Robot):
         # Update my pos
         if not self.NAME in data:
             data[self.NAME] = {}
-        data[self.NAME]["pos"] = self.gps_vec 
+        data[self.NAME]["pos"] = self.gps_vec
         json.dump(data, open(fName, 'w+'))
-        
+
         # Get position of other robot
         if not self.OTHER_NAME in data:
             return None
         other_robot_pos = np.array(data[self.OTHER_NAME]["pos"])
-        
+
         # Check if within range
         return np.linalg.norm(other_robot_pos - self.gps_vec) < range
 
+    def go_home(self):
+        """Go home"""
+        return self.go_to_location(self.HOME, range=0.1)
+        # Add self.get_out_of_home_ to stack IF not all blocks recovered
+
+    def go_middle(self):
+        """Go middle"""
+        if self.go_to_location(self.MIDDLE, range=0.05):
+            # ADD tasks in reverse order
+            self.stack.append(self.get_block)
+            self.stack.append(self.find_blocks)
+            self.stack.append(self.head_north)
+            return True
+        return False
+
+    def head_north(self):
+        """Change heading to face north"""
+        return self.rotate_to_bearing(angle=0)
 
     def next_task(self):
+        """executes the next task"""
+        self.tasks.next_task()
+
+    def pop_task(self):
         """Pops the task from the list of tasks and executes the next task"""
         if self.stack == []:
             return False

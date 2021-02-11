@@ -7,47 +7,45 @@
 # from exit_home import exit_home
 
 from robocar import Robocar
+import json
 
 robocar = Robocar()
 timestep = int(robocar.getBasicTimeStep())
 
-#INITIALIZE
-
-# robot = Robot()
-# timestep = int(robot.getBasicTimeStep())
+json.dump(
+    {
+        "robots": {
+            "blueRobot": {
+                "pos": [
+                    1,
+                    0,
+                    1
+                ]
+            },
+            "redRobot": {
+                "pos": [
+                    1,
+                    0,
+                    -1
+                ]
+            }
+        },
+        "blocks": []
+    },
+    open('vision.json', 'w+')
+)
 
 MAX_SPEED = 5
-HOME = [1.0,-1.0]
-
-
-# Flags
-SEARCH_BLOCK = False
-RETURN_HOME = True
-EXIT_HOME = False
-blocks = 0
-ROBOT_NEARBY = False
+HOME = [1.0, -1.0]
 
 
 # Main loop:
 while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
-    # Update sensors
     robocar.update_sensors()
-    if not robocar.next_task():
+    if not robocar.tasks.next_task():
         robocar.stop()
         break
-
-
-    # Go to middle
-    # MIDDLE = [0.0, 0.0]
-    # if not robocar.at_location(MIDDLE, range = 0.5):
-    #     robocar.go_to_location(MIDDLE)
-    # else:
-    #     robocar.find_blocks()
-
-    # Go home
-    # if robocar.go_to_location(HOME):
-    #     robocar.stop()
 
 '''
     if blocks<4:

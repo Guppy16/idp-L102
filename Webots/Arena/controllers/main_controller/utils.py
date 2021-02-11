@@ -21,7 +21,7 @@ def get_next_block_pos(my_pos, fName='vision.json'):
         print("No closest block found")
         return None
     blocks = np.array(blocks)
-    pos = np.array([my_pos[0],my_pos[2]])
+    pos = np.array(my_pos)
     print(blocks - pos)
     blocks_dist = np.linalg.norm(blocks-pos, axis=1)
     closest_block = np.argmin(blocks_dist)
