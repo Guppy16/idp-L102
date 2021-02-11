@@ -49,7 +49,7 @@ def go_to_location(location, range=0.1):
         if robocar.at_location(location, range):
             return True
         pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
-        heading = robocar.getHeadingDegrees(robocar.cps_vec)
+        heading = robocar.getHeadingDegrees()
         location_bearing = robocar.getLocationBearing(location - pos)
 
         # print("Loc Bearing is: " + str(location_bearing))
@@ -78,12 +78,12 @@ def go_to_location(location, range=0.1):
 def find_blocks(original_bearing=345):
         """spin until facing -15 degrees from North"""
         if robocar.original_heading is None:
-            robocar.original_heading = robocar.getHeadingDegrees(robocar.cps_vec)
+            robocar.original_heading = robocar.getHeadingDegrees()
 
         if robocar.bot_distance < robocar.top_distance - 20.0 and not robocar.looking_at_block:
             robocar.looking_at_block = True
             r = robocar.bot_distance/500  # cm distance of block from ds_sensor
-            theta = robocar.getHeadingDegrees(robocar.cps_vec)*np.pi/180
+            theta = robocar.getHeadingDegrees()*np.pi/180
 
             # account for location of ds_sensor relative to gps sensor
             ds_x = robocar.gps_vec[0] + 0.08*np.cos(theta) - 0.1*np.sin(theta)
@@ -142,17 +142,22 @@ def get_block(block_coord=[0.03, 0.72]):
             print("going to block!")
         
         #if at the block, 
+
         if robocar.at_location(block_coord, 0.04):
             robocar.been_to_block = True
             print("arrived at the block")
 
         if robocar.been_to_block and not robocar.gone_over_block:
             print("been to the block, haven't driven over it yet")
-            if robocar.COLOR != robocar.detect_block_colour():
+            print("ROTATING TO READ COLOR")
+            robocar.rotate()
+            # robocar.rotate_to_bearing(robocar.getHeadingDegrees() - 100)
+            detectedColor="b"
+            if robocar.COLOR != detectedColor:
                 # forget this block, go to a different one
                 pass
             else:
-                robocar.match = True
+                robocar.match = False
         if robocar.been_to_block and not robocar.gone_over_block and robocar.match:
             print("trying to drive over block")
             robocar.go_forward()

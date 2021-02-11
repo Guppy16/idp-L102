@@ -94,12 +94,12 @@ class Robocar(Robot):
         self.right_motor.setVelocity(0)
 
     def rotate(self):
-        self.right_motor.setVelocity(-1)
-        self.left_motor.setVelocity(1)
+        self.right_motor.setVelocity(-0.5*self.MAX_SPEED)
+        self.left_motor.setVelocity(0.5*self.MAX_SPEED)
 
-    def getHeadingDegrees(self, cpsVals):
+    def getHeadingDegrees(self):
         """Return angle of robot head wrt global north"""
-        angle = np.arctan2(cpsVals[0], cpsVals[2])
+        angle = np.arctan2(self.cps_vec[0], self.cps_vec[2])
         bearing = (angle - np.pi/2) * 180 / np.pi
         bearing %= 360
         return bearing
@@ -107,7 +107,7 @@ class Robocar(Robot):
     def rotate_to_bearing(self, angle, tol=5):
         """Rotate until bearing = angle (degrees)"""
         self.rotate()
-        return abs(self.getHeadingDegrees(self.cps_vec) - angle) < tol
+        return abs(self.getHeadingDegrees() - angle) < tol
 
     def getLocationBearing(self, loc_vec):
         """Return angle between home and global north
@@ -139,6 +139,7 @@ class Robocar(Robot):
         """
         # NOTE: Max value of colour is 256?
         # NOTE: may need to compare values??
+        print(f"Detecting block color. Block color reading is {colour_sensor[0]}")
         if self.colour_sensor[0] > 70:
             print('red')
             return 'r'
