@@ -32,7 +32,7 @@ class Robocar(Robot):
         self.been_to_block = False
         self.gone_over_block = False
         self.match = False
-        self.count = 100
+        self.count = 300
 
         # Init motors
         self.left_motor = self.getDevice("wheel1")

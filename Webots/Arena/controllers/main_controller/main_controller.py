@@ -227,10 +227,11 @@ def check_block_colour():
 
 def drive_over_block():
     if robocar.count > 0:
-        robocar.go_forward()
+        robocar.right_motor.setVelocity(0.5*MAX_SPEED)
+        robocar.left_motor.setVelocity(0.9*MAX_SPEED)
         robocar.count -= 1
         return False
-    robocar.count = 100
+    robocar.count = 300
     return True
 
 def go_to_block(tm):

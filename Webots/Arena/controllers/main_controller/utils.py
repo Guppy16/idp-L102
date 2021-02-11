@@ -30,7 +30,10 @@ def pop_closest_block(my_pos, fName='vision.json'):
     pos = np.array(my_pos)
     # print(blocks - pos)
     blocks_dist = np.linalg.norm(blocks-pos, axis=1)
-    closest_block = np.argmin(blocks_dist)
+    print(blocks_dist)
+    # closest_block = np.argmin(blocks_dist)
+    closest_block = np.random.randint(2)
+
 
     # Remove closest block and add it to the json file
     del data["blocks"][closest_block]
