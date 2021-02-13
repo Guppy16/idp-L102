@@ -282,6 +282,10 @@ def add_collect_block_tasks(tm):
             kwargs={"tm":tm}
         ),
         Task(
+            target=go_to_location,
+            kwargs={"location": robocar.HOME, "range": 0.1}
+        ),
+        Task(
             target=add_collect_block_tasks,
             kwargs={"tm":tm}
         )

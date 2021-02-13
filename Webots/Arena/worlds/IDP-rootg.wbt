@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.46011632274966713 0.761519329922441 0.4564879841724213 4.416359155993058
-  position -2.276576629121986 4.672043681808197 0.08943308659713778
+  orientation -0.22507040732916345 -0.938199194480409 -0.26291744563835245 2.0115829582050284
+  position -4.77790910549514 3.524659543321239 -2.156304529268869
 }
 TexturedBackground {
 }
@@ -31,8 +31,7 @@ Floor {
   }
 }
 DEF Block_R1 Solid {
-  translation 0.377 0.02497547451951153 -0.9
-  rotation 0.16686656833226043 0.9636641493310073 -0.2085832104153186 -1.0219557955004574e-16
+  translation  -1.0665    0.0500   -0.2783
   children [
     DEF BOX_R Shape {
       appearance PBRAppearance {
@@ -51,8 +50,7 @@ DEF Block_R1 Solid {
   }
 }
 DEF Block_R2 Solid {
-  translation 1 0.02497547451951153 0.3
-  rotation -0.36750708266021803 0.9087236729683694 -0.19788842912472573 1.508061640284877e-16
+  translation -0.9467    0.0500    0.6240
   children [
     USE BOX_R
   ]
@@ -63,8 +61,7 @@ DEF Block_R2 Solid {
   }
 }
 DEF Block_R3 Solid {
-  translation -1 0.02497547451951153 -0.5
-  rotation 0.3854770849102864 0.922717409074451 -4.081832740687572e-14 -1.1059688322464795e-17
+  translation 0.7601    0.0500    0.6937
   children [
     USE BOX_R
   ]
@@ -74,8 +71,7 @@ DEF Block_R3 Solid {
   }
 }
 DEF Block_R4 Solid {
-  translation 0.1 0.02497547451951153 1.1
-  rotation 3.487333347262494e-14 0.6771592814607587 0.7358364679271808 -6.373130797970658e-17
+  translation 0.4578    0.0500   -0.7358
   children [
     USE BOX_R
   ]
@@ -85,8 +81,7 @@ DEF Block_R4 Solid {
   }
 }
 DEF Block_B1 Solid {
-  translation -1.1 0.02497547451951153 1
-  rotation -0.48510915379872044 0.8735186698642385 0.04042576281655928 1.0545889842341123e-16
+  translation -0.4298    0.0500   -0.0241
   children [
     DEF BOX_B Shape {
       appearance PBRAppearance {
@@ -104,8 +99,7 @@ DEF Block_B1 Solid {
   }
 }
 DEF Block_B2 Solid {
-  translation 0.029999999999999985 0.024975474519511525 0.72
-  rotation 0.14272312242232377 0.9663321678178627 0.21408468363349212 -5.974163600408589e-17
+  translation 1.0580    0.0500   -0.1279
   children [
     USE BOX_B
   ]
@@ -115,8 +109,7 @@ DEF Block_B2 Solid {
   }
 }
 DEF Block_B3 Solid {
-  translation -0.85 0.024975474519511525 -0.2
-  rotation -0.4247210096408211 0.8599067670138462 -0.28314733976055084 9.034002759480529e-17
+  translation -0.1440    0.0500    0.4920
   children [
     USE BOX_B
   ]
@@ -126,8 +119,7 @@ DEF Block_B3 Solid {
   }
 }
 DEF Block_B4 Solid {
-  translation 1 0.024975474519511525 0.7
-  rotation 0.2074031990538158 0.9773757054189204 0.04148063981077562 -1.0277701679650052e-16
+  translation -1.0941    0.0500    0.3438
   children [
     USE BOX_B
   ]
