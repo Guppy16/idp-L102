@@ -7,7 +7,7 @@ from task_manager import Task, TaskManager
 
 
 class Robocar(Robot):
-    def __init__(self, MAX_SPEED=5, HOME=[1.0, -1.0], MIDDLE=[0.0, 0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
+    def __init__(self, MAX_SPEED=10, HOME=[1.0, -1.0], MIDDLE=[0.0, 0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
         """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
@@ -16,6 +16,8 @@ class Robocar(Robot):
         self.MIDDLE = MIDDLE
         self.NAME = self.getName()
         self.COLOR = 'b' if self.NAME == 'blueRobot' else 'r'
+        self.timestep = 32
+        self.frontClear = 0
 
         self.OTHER_NAME = OTHER_NAME
         self.closest_block_pos = None
@@ -121,6 +123,45 @@ class Robocar(Robot):
         angle = np.arctan2(loc_vec[1], loc_vec[0]) * 180 / np.pi
         angle %= 360
         return angle
+
+    def turn_to(self,location, range=0.1):
+
+        """Sets the velocities of the motor to return home"""
+        self.update_sensors()
+        pos = np.array([self.gps_vec[0], self.gps_vec[2]])
+        heading = self.getHeadingDegrees()
+        location_bearing = self.getLocationBearing(location - pos)
+        print(f"location is {location}")
+        print(f"pos is {pos}")
+        print(f"heading is {heading}")
+        print(f"location bearing is is {location_bearing}")
+
+        if heading > location_bearing - 2 and heading < location_bearing + 2:
+            self.stop()
+            print("Done turning.")
+            return
+
+        elif heading < location_bearing:
+            self.turn_right()
+            print("Turning right")
+            self.step(self.timestep)
+            self.stop()
+            self.turn_to(location)
+        elif heading > location_bearing:
+            self.turn_left()
+            print("Turning left")
+            self.step(self.timestep)
+            self.stop()
+            self.turn_to(location)
+
+    def turn_left_time(self,time, range=0.1):
+        #turns a number of degrees
+        """Sets the velocities of the motor to return home"""
+        self.turn_left()
+        self.step(time)
+        self.stop()
+        return
+
 
     def at_location(self, location, range=0.1):
         """Returns true if robot pos is within range of location"""

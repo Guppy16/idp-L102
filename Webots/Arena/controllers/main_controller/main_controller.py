@@ -16,64 +16,12 @@ import utils
 robocar = Robocar()
 timestep = int(robocar.getBasicTimeStep())
 
-json.dump(
-    {
-        "robots": {
-            "blueRobot": {
-                "pos": [
-                    1,
-                    0,
-                    1
-                ]
-            },
-            "redRobot": {
-                "pos": [
-                    1,
-                    0,
-                    -1
-                ]
-            }
-        },
-        "blocks": []
-    },
-    open('vision.json', 'w+')
-)
-
+movementstep=32
+rotationstep=3
+collisiondistance=1
 blocks = []
 
 
-
-def go_to_location(location, range=0.1):
-        """Sets the velocities of the motor to return home"""
-
-        if robocar.at_location(location, range):
-            return True
-        pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
-        heading = robocar.getHeadingDegrees()
-        location_bearing = robocar.getLocationBearing(location - pos)
-
-        # print("Loc Bearing is: " + str(location_bearing))
-        # print("Heading is: " + str(heading))
-        # print("Loc vec is: " + str(location - pos))
-        # print("Pos is: " + str(pos))
-
-        robocar.go_forward()
-
-        if 360 - heading + location_bearing < heading - location_bearing or heading < location_bearing - 10:
-            robocar.left_motor.setVelocity(robocar.MAX_SPEED)
-            robocar.right_motor.setVelocity(-0.2 * robocar.MAX_SPEED)
-        elif heading > location_bearing + 10:
-            robocar.left_motor.setVelocity(-0.2 * robocar.MAX_SPEED)
-            robocar.right_motor.setVelocity(robocar.MAX_SPEED)
-        elif heading > location_bearing + 0.5:
-            robocar.right_motor.setVelocity(0.8 * robocar.MAX_SPEED)
-            robocar.left_motor.setVelocity(robocar.MAX_SPEED)
-        elif heading < location_bearing - 0.5:
-            robocar.right_motor.setVelocity(robocar.MAX_SPEED)
-            robocar.left_motor.setVelocity(0.8 * robocar.MAX_SPEED)
-
-        return False
-    
 
 def find_blocks():
         """spin until facing -15 degrees from North"""
@@ -254,7 +202,50 @@ def go_to_block(tm):
     return True
 
     # block_coord = robocar.closest_block_pos
-    
+
+def checkfrontClear():
+    for i in range(10):
+        robocar.turn_left()
+        robocar.step(rotationstep)
+        robocar.stop()
+        robocar.step(rotationstep)
+        robocar.update_sensors()
+        if robocar.bot_distance < collisiondistance or robocar.top_distance < collisiondistance:
+            return False
+        else:
+            pass
+
+    robocar.frontClear=50
+    return True
+
+
+def go(location):
+
+    robocar.turn_to(location)
+
+    robocar.update_sensors()
+
+    if robocar.frontClear < 1:
+        robocar.stop()
+        checkfrontClear()
+
+    if robocar.frontClear<1:
+        print("ABORT FRONT NOT CLEAR ABORT")
+
+
+    gps_vec = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
+    locationvec = np.array(location)
+    if np.linalg.norm(locationvec - gps_vec) < .2:
+        robocar.stop()
+        return
+    elif robocar.frontClear > 0:
+        robocar.turn_to(location)
+        robocar.go_forward()
+        robocar.frontClear -= 1
+        robocar.step(movementstep)
+        go(location)
+
+
 
     
 
@@ -288,66 +279,21 @@ def add_collect_block_tasks(tm):
 
     return True
 
-tasks = TaskManager([])
-
-tasks.push_task(Task(
-    target=add_collect_block_tasks,
-    kwargs={"tm":tasks}
-))
-
-tasks.push_tasks_in_reverse([
-    Task(
-        target=robocar.robocar_hello
-    ),
-    Task(  # Set Home
-        target=robocar.set_home
-    ),
-    # Task(  # Go to Middle
-    #     target=go_to_location,
-    #     kwargs={"location": robocar.MIDDLE, "range": 0.1}
-    # ),
-    # Task(  # Head North
-    #     target=robocar.rotate_to_bearing,
-    #     kwargs={"angle": 0}
-    # ),
-    # Task(  # Find blocks
-    #     target=find_blocks,
-    #     # This can be got from heading?
-    #     kwargs={"original_bearing": 345}
-    # ),
-    # Task(  # Get blocks
-    #     target=get_block,
-    # ),
-    # Task(  # Go HOME
-    #     target=go_to_location,
-    #     kwargs={"location": robocar.HOME, "range": 0.05}
-    # ),
-])
-
-
-
-
-MAX_SPEED = 5
 HOME = [1.0, -1.0]
+MIDDLE = [0.0, 0.0]
 blocksCollected=0
 
+blocks = []
 
 # Main loop:
 while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
+
     robocar.update_sensors()
 
-    if not tasks.next_task():
-        robocar.stop()
-        break
-    
-    # if blocksCollected<4:
+    go(MIDDLE)
 
-    #     if not findBlock():
-    #         findBlock()
-        
-
-
+    print("gone to the middle!")
 
 '''
     if blocks<4:
