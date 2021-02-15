@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.46011632274966713 0.761519329922441 0.4564879841724213 4.416359155993058
-  position -2.276576629121986 4.672043681808197 0.08943308659713778
+  orientation 0.83937872122759 0.536513695235418 0.08715742753875255 5.764855368405114
+  position 0.8369329507962746 0.3588612637213844 -0.39010139711573144
 }
 TexturedBackground {
 }
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000000663 0.06000129999506082
-        rotation 3.762084814416071e-09 -3.762111719675888e-09 1 1.5708036414618511
+        translation 0.1 -0.07500000000000669 0.06000129999506082
+        rotation 3.785604586290784e-09 -3.7856316635905295e-09 1 1.5708036414618511
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999998853 0.060001300006888636
-        rotation -6.2930841514281216e-09 6.2931247183588855e-09 1 1.570802907465455
+        translation -0.0999996 -0.07499999999998845 0.060001300006888636
+        rotation -6.3258869039588726e-09 6.325927686754455e-09 1 1.570802907465455
         children [
           USE WHEEL
         ]
@@ -387,32 +387,8 @@ DEF ROOT_G Robot {
     Compass {
       rotation 0 1 0 -1.5707953071795862
     }
-    HingeJoint {
-      jointParameters HingeJointParameters {
-        axis 0 1 0
-        anchor 0 0.04 0.07
-      }
-      device [
-        RotationalMotor {
-          name "servo_motor"
-        }
-      ]
-      endPoint DistanceSensor {
-        translation 0 0.04 0.07
-        rotation 0.07096075410035216 -0.994951829364125 -0.07096075410035216 1.5758584235071784
-        children [
-          Shape {
-            appearance PBRAppearance {
-            }
-            geometry Box {
-              size 0.01 0.01 0.01
-            }
-          }
-        ]
-      }
-    }
     LED {
-      translation 0 0.01 0
+      translation -0.03 0.01 0
       children [
         Shape {
           appearance PBRAppearance {
@@ -432,6 +408,72 @@ DEF ROOT_G Robot {
         1 1 0
       ]
     }
+    LED {
+      translation -0.01 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+            emissiveIntensity 12
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "led(1)"
+      color [
+        1 0 0
+        0 1 0
+        0 0 1
+        1 1 0
+      ]
+    }
+    LED {
+      translation 0.01 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+            emissiveIntensity 12
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "led(2)"
+      color [
+        1 0 0
+        0 1 0
+        0 0 1
+        1 1 0
+      ]
+    }
+    LED {
+      translation 0.03 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+            emissiveIntensity 12
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "led(3)"
+      color [
+        1 0 0
+        0 1 0
+        0 0 1
+        1 1 0
+      ]
+    }
   ]
   name "blueRobot"
   boundingObject USE BODY
@@ -442,8 +484,8 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
-  hidden rotation_3 3.762084540666163e-09 -3.762111743203068e-09 1 1.570803641461852
-  hidden rotation_4 -6.293084164354359e-09 6.293124946617522e-09 1 1.5708029074654555
+  hidden rotation_3 3.7738444266035194e-09 -3.7738717151603885e-09 1 1.570803641461852
+  hidden rotation_4 -6.309485540619734e-09 6.309526430815306e-09 1 1.5708029074654555
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
   name "redRobot"
