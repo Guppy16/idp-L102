@@ -5,9 +5,13 @@ sceneTreePerspectives: 000000ff0000000100000002000000c0000000fc01000000060100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
+<<<<<<< HEAD
 textFiles: 2 "controllers/go_home_controller/go_home_controller.py" "controllers/main_controller/main_controller.py" "controllers/camera_controller/camera_controller.py"
 globalOptionalRendering: CoordinateSystem::DistanceSensorRays
+=======
+textFiles: 0 "controllers/go_home_controller/go_home_controller.py" "controllers/camera_controller/camera_controller.py"
+globalOptionalRendering: CoordinateSystem
+>>>>>>> f9f577ce7d4a817dd26650c9c251792cb8e5a2e1
 consoles: Console:All:All
 renderingDevicePerspectives: blueRobot:camera;1;73;0.00116009;0.00156495
 renderingDevicePerspectives: redRobot:camera;1;32;0;0
-renderingDevicePerspectives: root_g:camera;1;32;0;0
