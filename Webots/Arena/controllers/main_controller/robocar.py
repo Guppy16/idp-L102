@@ -26,7 +26,7 @@ class Robocar(Robot):
         # self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
 
 
-        # init FLAGS!!!
+        # Init FLAGS!!!
         self.looking_at_block = False
         self.been_to_block = False
         self.gone_over_block = False
@@ -198,8 +198,19 @@ class Robocar(Robot):
         self.turn_left()
         self.step(time)
         self.stop()
-        return
 
+    def rotate_cw_by(self, angle):
+        """rotates through the angle, if the angle is negative then it is anticlockwise"""
+        heading = self.getHeadingDegrees()
+        if angle > 0:
+            while abs(self.getHeadingDegrees() - heading) < angle or abs(self.getHeadingDegrees() - heading + 360) < angle:
+                self.turn_right()
+                self.step(self.timestep)
+        else:
+            while abs(self.getHeadingDegrees() - heading) < abs(angle) or abs(self.getHeadingDegrees() - heading - 360) < abs(angle):
+                self.turn_left()
+                self.step(self.timestep)            
+        self.stop()
 
     def at_location(self, location, range=0.1):
         """Returns true if robot pos is within range of location"""
