@@ -196,18 +196,20 @@ blocksCollected=0
 
 blocks = []
 
+# Set home
 robocar.step(timestep)
 robocar.update_sensors()
 robocar.set_home()
 
 # Main loop:
-while robocar.step(timestep) != -1:
+def main_loop(time=300):
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
+    blocks = []
 
     print(robocar.getTime())
-
-    # Check if the time is 4:30
-    # Go home
+    if robocar.getTime() > time:
+        print("--- returning home")
+        return
 
     robocar.update_sensors()
 
@@ -222,7 +224,7 @@ while robocar.step(timestep) != -1:
     if robocar.target_block is None:
         go(MIDDLE)
         blocks = [] # Try resetting list of blocks
-        continue
+        return
 
     # Otherwise, go to closest block
     print(f"Next block at {robocar.target_block.position}")
@@ -258,25 +260,32 @@ while robocar.step(timestep) != -1:
     for b in blocks:
         print(b)
 
-
-    # go(MIDDLE)
-
-    print("gone to the middle!")
-
     robocar.stop()
-    print("Finishing up robot")
+    print("- Finisehed 1 loop")
 
+# Drive around blue robot if less 120 secs
+while robocar.step(timestep) != -1:
+    # Drive back home if more than 2 mins passed
+    if robocar.getTime() > 120:
+        go(robocar.HOME)
+        robocar.stop()
+        break
+    if robocar.NAME != "blueRobot":
+        continue
+    main_loop(time=120)
 
-'''
-    if blocks<4:
-        robot.findBlock(distance)
-        goToBlock()
-        pickUpBlock()
+# Drive around red robot if less 240 secs
+while robocar.step(timestep) != -1:
+    # Drive back home if more than 2 mins passed
+    if robocar.getTime() > 240:
+        go(robocar.HOME)
+        robocar.stop()
+        break
+    if robocar.NAME != "redRobot":
+        continue
+    main_loop(time=240)
+ 
 
-    robocar.go_home()
-    depositBlock()
-    blocks+=1
-    else:
-        pass
+# Only drive blue robot
 
-'''
+# Now drive red robo
