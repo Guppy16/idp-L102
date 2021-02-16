@@ -23,7 +23,7 @@ rotationstep=3
 collisiondistance=1
 
 
-def find_blocks(other_robot_threshold=0.3):
+def find_blocks(blocks, other_robot_threshold=0.3):
     """Rotate and Check if what we're seeing is a wall or a block"""
 
     # Keep track of the original heading
@@ -62,7 +62,8 @@ def find_blocks(other_robot_threshold=0.3):
 
     # Once rotated 360
     if robocar.rotate_to_bearing(robocar.original_heading - 15):
-        print("---Finished rotation")
+        print("---Finished scanning blocks")
+        
         # Reset original heading
         robocar.original_heading = None
         robocar.stop()
@@ -78,7 +79,7 @@ def find_blocks(other_robot_threshold=0.3):
         block = utils.next_block(blocks, pos=[robocar.gps_vec[0], robocar.gps_vec[2]])
         robocar.target_block = None if robocar.target_block == block else block
         
-        print("---Finished scanning blocks")
+        
         return True
 
     # Return false to advance the timestep
@@ -88,18 +89,20 @@ def rotate_to_target_block():
     """Rotate until target block found"""
     # Set original heading
     if robocar.original_heading is None:
+        print("--- Setting original heading in rotate_to_target_block")
         robocar.looking_at_block = False
         robocar.original_heading = robocar.getHeadingDegrees()
 
     # Check if ds sensors have found a block within 25 cm
     # print(utils.ds_sensor_to_m(robocar.bot_distance))
-    if robocar.found_object() and abs(utils.ds_sensor_to_m(robocar.bot_distance)) < 0.25:
+    if robocar.found_object() and abs(utils.ds_sensor_to_m(robocar.bot_distance)) < 0.35:
         print("Found target block")
         robocar.looking_at_block = True
+        robocar.original_heading = None # Reset original heading
         return True
     
     # IF block hasn't been found after rotating 360, then ignore this block
-    if robocar.rotate_to_bearing(robocar.original_heading + 10, dir='CCW'):
+    if robocar.rotate_to_bearing(robocar.original_heading + 20, dir='CCW'):
         # Reset original heading
         print("Did not find target block")
         robocar.original_heading = None
@@ -212,7 +215,7 @@ blocks = []
 
 # Main loop:
 def main_loop(time=300):
-    blocks = []
+    global blocks
 
     print(robocar.getTime())
     if robocar.getTime() > time:
@@ -223,20 +226,22 @@ def main_loop(time=300):
 
     # Look around for blocks
     robocar.looking_at_block = False
-    while not find_blocks():
+    while not find_blocks(blocks):
         robocar.update_sensors()
         robocar.step(timestep)
 
     # If a target block hasn't been identified, move around
     # TO BE IMPLEMENTED
     if robocar.target_block is None:
+        print("Resetting the list of blocks")
         go(MIDDLE)
-        blocks = [] # Try resetting list of blocks
+        blocks = []
+        # blocks = [] # Try resetting list of blocks
         return
 
     # Otherwise, go to closest block
     print(f"--- Target block located at {robocar.target_block.position}")
-    go(robocar.target_block.position, range=0.35)
+    go(robocar.target_block.position, range=0.3)
 
     # Look around to find target block
     while not rotate_to_target_block():
@@ -269,7 +274,7 @@ def main_loop(time=300):
         print(b)
 
     robocar.stop()
-    print("- Finished 1 loop")
+    print("--- Finished 1 loop")
 
 # Drive around blue robot if less 120 secs
 while robocar.step(timestep) != -1:

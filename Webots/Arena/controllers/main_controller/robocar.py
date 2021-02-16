@@ -217,7 +217,7 @@ class Robocar(Robot):
         if location is None:
             return False
         
-        # location = np.array(location)
+        location = np.array(location)
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         # print(pos)
         pos -= location
