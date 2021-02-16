@@ -46,7 +46,7 @@ def find_blocks(other_robot_threshold=0.3):
             print("--- Object close to other robot. Ignoring it")
         elif utils.is_within_range(block_pos, robocar.HOME, range=0.2):
             print("--- Object close to HOME. ignoring it")
-        elif any([utils.is_within_range(block_pos, b.position, range=0.1) for b in blocks]):
+        elif any([utils.is_within_range(block_pos, b.position, range=0.15) for b in blocks]):
             print("--- Object is close to another block. Ignoring it")
         else:
             print("--- Found a block. Adding it to the list...")
@@ -194,16 +194,15 @@ HOME = [1.0, -1.0]
 MIDDLE = [0.0, 0.0]
 blocksCollected=0
 
-blocks = []
-
 # Set home
 robocar.step(timestep)
 robocar.update_sensors()
 robocar.set_home()
 
+blocks = []
+
 # Main loop:
 def main_loop(time=300):
-    #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
     blocks = []
 
     print(robocar.getTime())
@@ -227,7 +226,7 @@ def main_loop(time=300):
         return
 
     # Otherwise, go to closest block
-    print(f"Next block at {robocar.target_block.position}")
+    print(f"--- Target block located at {robocar.target_block.position}")
     go(robocar.target_block.position, range=0.35)
 
     # Look around to find target block
