@@ -120,12 +120,13 @@ def check_block_colour():
 
 def drive_around_block():
     """Somehow drive around the object"""
-    return True
-    # Try rotating CCW and then turn_and_drive
-    robocar.drive(robocar.rotate, count=20, dir='CCW')
-    robocar.drive(robocar.turn_and_drive, 100)
+    # return True
+    # # Try rotating CCW and then turn_and_drive
+    # robocar.drive(robocar.rotate, count=20, dir='CCW')
+    # robocar.drive(robocar.turn_and_drive, 100)
 
-    return True
+    # return True
+    
 
 ## START redundant functions
 
