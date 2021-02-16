@@ -10,201 +10,142 @@ from robocar import Robocar
 import json
 from task_manager import Task, TaskManager
 import numpy as np
-import block
+from block import Block
 import utils
 
 robocar = Robocar()
+robocar.robocar_hello()
+
 timestep = int(robocar.getBasicTimeStep())
 
 movementstep=32
 rotationstep=3
 collisiondistance=1
-blocks = []
 
 
+def find_blocks(other_robot_threshold=0.3):
+    """Rotate and Check if what we're seeing is a wall or a block"""
 
-def find_blocks():
-        """spin until facing -15 degrees from North"""
-        if robocar.original_heading is None:
-            robocar.original_heading = robocar.getHeadingDegrees()
+    # Keep track of the original heading
+    if robocar.original_heading is None:
+        print(f"---Setting original heading: {robocar.getHeadingDegrees():.2f}")
+        robocar.original_heading = robocar.getHeadingDegrees()
 
-        if robocar.bot_distance < robocar.top_distance - 20.0 and not robocar.looking_at_block:
-            robocar.looking_at_block = True
-            r = robocar.bot_distance/500  # cm distance of block from ds_sensor
-            theta = robocar.getHeadingDegrees()*np.pi/180
+    # Check if ds sensor sees a wall
+    if robocar.found_wall() and robocar.looking_at_block:
+        robocar.looking_at_block = False
 
-            # account for location of ds_sensor relative to gps sensor
-            ds_x = robocar.gps_vec[0] + 0.08*np.cos(theta) - 0.1*np.sin(theta)
-            ds_z = robocar.gps_vec[2] + 0.08*np.sin(theta) + 0.1*np.cos(theta)
+    # Check if ds sensor sees a block
+    if not robocar.looking_at_block and robocar.found_object():
+        robocar.looking_at_block = True
 
-            # global x,z pos of block
-            block_x = r*np.cos(theta) + ds_x
-            block_z = r*np.sin(theta) + ds_z
+        block_pos = robocar.get_ds_sensor_object_pos()
 
-            print(f"x: {block_x:.2f}\ty: {block_z:.2f}")
+        # Check if block is close to the other robot
+        if utils.is_within_range(robocar.get_other_robot_pos(), block_pos, range=other_robot_threshold):
+            print("--- Object close to other robot. Ignoring it")
+        elif any([utils.is_within_range(block_pos, b.position, range=0.1) for b in blocks]):
+            print("--- Object is close to another block. Ignoring it")
+        else:
+            print("--- Found a block. Adding it to the list...")
+            # Add block to list of blocks
+            # Appends a block to the list with its position, and it has not been picked up yet
+            
+            # ADD some algo to check if we have already "attempted" to pick up this block
+            # So that we don't try to pick it up again!
+            blocks.append(Block(block_pos, False))
 
-            # Store position in file
+            # Add block pos to a file
+            utils.store_block(pos=[block_pos[0], block_pos[1]], range=0.05)
 
+    # Once rotated 360
+    if robocar.rotate_to_bearing(robocar.original_heading - 15):
+        print("---Finished rotation")
+        # Reset original heading
+        robocar.original_heading = None
+        robocar.stop()
 
-            position = np.array([block_x, block_z])
+        # Print list of blocks
+        for b in blocks:
+            print(b)
 
-            # Check if block is close to the other robot
-            other_robot_pos = robocar.get_other_robot_pos()
-            if not other_robot_pos is None:
-                other_robot_pos = np.array([other_robot_pos[0], other_robot_pos[2]])
-                if np.linalg.norm(other_robot_pos - position) < 0.3:
-                    print("Block close to other robot")
-                    return False
+        # Get closest block
+        # robocar.closest_block_pos = utils.pop_closest_block(
+        #     my_pos=[robocar.gps_vec[0], robocar.gps_vec[2]],
+        # )
+        robocar.target_block = utils.next_block(blocks, pos=[robocar.gps_vec[0], robocar.gps_vec[2]])
+        print("---Finished scanning blocks")
+        return True
 
-            #appends a block to the list with its position, and it has not been picked up yet
-            currentBlock = block.Block(position, False)
-            blocks.append(currentBlock)
+    # Return false to advance the timestep
+    return False
 
-            print(f"Blocks length is {len(blocks)}")
-            for i in range(len(blocks)):
-                print(f"I am block {i}")
-                print(f"My position is {blocks[i].getPosition()}")
-
-            print(f"Blocks is: {blocks}")
-
-            utils.store_block(pos=[block_x, block_z], range=0.05)
-
-        if robocar.bot_distance > robocar.top_distance - 20.0 and robocar.looking_at_block:
-            robocar.looking_at_block = False
-
-        # Once rotated 360
-        if robocar.rotate_to_bearing(robocar.original_heading - 15):
-            print("Finished rotation")
-            # Reset original heading
-            robocar.original_heading = None
-
-            # Get closest block
-            robocar.closest_block_pos = utils.pop_closest_block(
-                my_pos=[robocar.gps_vec[0], robocar.gps_vec[2]],
-            )
-            return True
-        return False
-
-def get_block(block_coord=[0.03, 0.72]):
-        # Get close to block
-        # Look around to find block
-        # Check the colour
-        # Go over it
-        # if self.go_to_location(block_coord, range=0.05):
-
-        block_coord = robocar.closest_block_pos
-        #if haven't been to the block, go to the block
-        if not robocar.been_to_block:
-            go_to_location(block_coord, 0.03)
-            print("going to block!")
-        
-        #if at the block, 
-
-        if robocar.at_location(block_coord, 0.04):
-            robocar.been_to_block = True
-            print("arrived at the block")
-
-        if robocar.been_to_block and not robocar.gone_over_block:
-            print("been to the block, haven't driven over it yet")
-            print("ROTATING TO READ COLOR")
-            robocar.rotate()
-            # robocar.rotate_to_bearing(robocar.getHeadingDegrees() - 100)
-            detectedColor="b"
-            if robocar.COLOR != detectedColor:
-                # forget this block, go to a different one
-                pass
-            else:
-                robocar.match = False
-        if robocar.been_to_block and not robocar.gone_over_block and robocar.match:
-            print("trying to drive over block")
-            robocar.go_forward()
-        if robocar.been_to_block and not robocar.at_location(block_coord, 0.05):
-            robocar.gone_over_block = True
-        if robocar.been_to_block and robocar.gone_over_block:
-            robocar.been_to_block = False
-            robocar.gone_over_block = False
-            robocar.match = False
-            print("going home")
-            # self.stack.append(self.go_home)
-            return True
-        return False
-
-def find_target_block():
+def rotate_to_target_block():
     """Rotate until target block found"""
-    # Look around to find block and check colour
+    # Set original heading
     if robocar.original_heading is None:
         robocar.looking_at_block = False
         robocar.original_heading = robocar.getHeadingDegrees()
 
-    # Check distance
-    if abs(robocar.bot_distance) < 0.07:
+    # Check if ds sensors have found a block within 25 cm
+    # print(utils.ds_sensor_to_m(robocar.bot_distance))
+    if robocar.found_object() and abs(utils.ds_sensor_to_m(robocar.bot_distance)) < 0.25:
+        print("Found target block")
         robocar.looking_at_block = True
         return True
     
-    # Once rotate 360, block not found
-    if robocar.rotate_to_bearing(robocar.original_heading - 15):
+    # IF block hasn't been found after rotating 360, then ignore this block
+    if robocar.rotate_to_bearing(robocar.original_heading + 10, dir='CCW'):
         # Reset original heading
+        print("Did not find target block")
         robocar.original_heading = None
         robocar.looking_at_block = False
         return True
     return False
 
 def check_block_colour():
-    """Rotate until block colour detected"""
-    if robocar.original_heading is None:
-        robocar.match = False
-        if not robocar.looking_at_block:
-            return True
-        robocar.original_heading = robocar.getHeadingDegrees()
-    
+    """Assuming the colour sensor is looking at a block. Set robocar.match if color matches"""
+
     col = robocar.detect_block_colour()
     if not col is None:
-        if col == robocar.COLOR:
-            robocar.match = True
-        else:
-            robocar.match = False
-        return True
+        # Update colour of block in objects list
+        robocar.target_block.color = col
+        # if col == robocar.COLOR:
+        #     robocar.match = True
+        # else:
+        #     robocar.match = False
+    return True
 
-    # Once rotate 360, block not found
-    if robocar.rotate_to_bearing(robocar.original_heading - 15):
-        # Reset original heading
-        robocar.original_heading = None
-        robocar.match = False
-        return True
-    return False
+def drive_around_block():
+    """Somehow drive around the object"""
+    return True
+    # Try rotating CCW and then turn_and_drive
+    robocar.drive(robocar.rotate, count=20, dir='CCW')
+    robocar.drive(robocar.turn_and_drive, 100)
+
+    return True
+
+## START redundant functions
 
 def drive_over_block():
-    if robocar.count > 0:
-        robocar.go_forward()
-        robocar.count -= 1
-        return False
-    robocar.count = 100
-    return True
+    """Turn and drive over block"""
+    for _ in range(100):
+        robocar.update_sensors()
+        robocar.turn_and_drive()
+        robocar.step(timestep)
 
-def go_to_block(tm):
-    # Get close to the block
-    tm.push_tasks_in_reverse([
-        Task(
-            target=go_to_location,
-            kwargs={"location":robocar.closest_block_pos, "range":0.30}
-        ),
-        Task(
-            target=find_target_block
-        ),
-        Task(
-            target=check_block_colour
-        ),
-        Task(
-            target=drive_over_block
-        )
-    ])
+def deposit_block_at_home():
+    """Reverse from home until count = 0"""
+    for _ in range(100):
+        robocar.update_sensors()
+        robocar.go_backward()
+        robocar.step(timestep)
+    
+## -- END of redundant functions
 
-    return True
-
-    # block_coord = robocar.closest_block_pos
-
-def checkfrontClear():
-    for i in range(10):
+# idk if this actually works?
+def check_front_clear():
+    for _ in range(10):
         robocar.turn_left()
         robocar.step(rotationstep)
         robocar.stop()
@@ -219,65 +160,33 @@ def checkfrontClear():
     return True
 
 
-def go(location):
+def go(location, range=0.2):
 
+    # Check if location is close by
+    if robocar.at_location(location, range):
+        return True
+
+    # Turn to the right heading
     robocar.turn_to(location)
 
+    # Update the sensors
     robocar.update_sensors()
 
+    # Check if the front is clear
     if robocar.frontClear < 1:
         robocar.stop()
-        checkfrontClear()
+        check_front_clear()
 
     if robocar.frontClear<1:
         print("ABORT FRONT NOT CLEAR ABORT")
 
-
-    gps_vec = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
-    locationvec = np.array(location)
-    if np.linalg.norm(locationvec - gps_vec) < .2:
-        robocar.stop()
-        return
+    # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
         robocar.turn_to(location)
         robocar.go_forward()
         robocar.frontClear -= 1
         robocar.step(movementstep)
-        go(location)
-
-
-
-    
-
-
-
-def add_collect_block_tasks(tm):
-    """ """
-    if blocksCollected >= 4:
-        return True
-
-    print("adding tasks")
-    tm.push_tasks_in_reverse([
-        # Task(  # Head North
-        #     target=robocar.rotate_to_bearing,
-        #     kwargs={"angle": 0}
-        # ),
-        Task(  # Find blocks
-            target=find_blocks,
-            # This can be got from heading?
-            # kwargs={"original_bearing": 345}
-        ),
-        Task(  # Get blocks
-            target=go_to_block,
-            kwargs={"tm":tm}
-        ),
-        Task(
-            target=add_collect_block_tasks,
-            kwargs={"tm":tm}
-        )
-    ])
-
-    return True
+        go(location, range)
 
 HOME = [1.0, -1.0]
 MIDDLE = [0.0, 0.0]
@@ -289,11 +198,59 @@ blocks = []
 while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
 
+    print(robocar.getTime())
+
+    # Check if the time is 4:30
+    # Go home
+
     robocar.update_sensors()
 
-    go(MIDDLE)
+    # Look around for blocks
+    robocar.looking_at_block = False
+    while not find_blocks():
+        robocar.update_sensors()
+        robocar.step(timestep)
+
+    # Go to closest block
+    print(f"Next block at {robocar.target_block.position}")
+    go(robocar.target_block.position, range=0.35)
+
+    # Look around to find block
+    while not rotate_to_target_block():
+        robocar.update_sensors()
+        robocar.step(timestep)
+
+    # Check colour of block
+    if robocar.looking_at_block:
+        check_block_colour()
+
+    # Pick up block if correct colour
+    # robocar.count = 100
+    if robocar.target_block.color == robocar.COLOR:
+        print("---Found block with matching colour")
+        robocar.drive(robocar.turn_and_drive, 30)  # Drive over block
+        go(robocar.HOME)                            # Drive back home
+        robocar.drive(robocar.go_forward, 15)       # Drive a few cm forwards
+        robocar.drive(robocar.go_backward, 40)     # Reverse out of home
+
+    else: # Drive around block if it's not the correct colour
+        print("Block is not the right colour. Driving around it")
+        while not drive_around_block():
+            robocar.update_sensors()
+            robocar.step(timestep)
+
+
+    for b in blocks:
+        print(b)
+
+
+    # go(MIDDLE)
 
     print("gone to the middle!")
+
+    robocar.stop()
+    print("Finishing up robot")
+
 
 '''
     if blocks<4:

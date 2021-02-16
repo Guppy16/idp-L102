@@ -2,7 +2,7 @@ from controller import Robot
 import json
 import numpy as np
 import block
-from utils import store_block, pop_closest_block
+import utils
 from task_manager import Task, TaskManager
 
 
@@ -19,14 +19,11 @@ class Robocar(Robot):
         self.timestep = 32
         self.frontClear = 0
 
-        self.OTHER_NAME = OTHER_NAME
-        self.closest_block_pos = None
+        self.OTHER_NAME = "redRobot" if self.COLOR == 'b' else 'blueRobot'
+        # self.closest_block_pos = None
+        self.target_block = None
         self.original_heading = None
         # self.stack = [self.go_home, self.go_middle, self.set_home, self.robocar_hello]
-
-       
-        # self.required_bearing = 0
-
 
 
         # init FLAGS!!!
@@ -77,7 +74,7 @@ class Robocar(Robot):
 
     def robocar_hello(self):
         print("I am a robocar!")
-        print(f"{self.NAME}\n{self.COLOR}")
+        print(f"My details:{self.NAME}\t{self.COLOR}\nOther Robot:{self.OTHER_NAME}")
         return True
 
     def go_forward(self):
@@ -96,13 +93,36 @@ class Robocar(Robot):
         self.left_motor.setVelocity(self.MAX_SPEED)
         self.right_motor.setVelocity(-self.MAX_SPEED)
 
+    def turn_and_drive(self, dir='CW'):
+        """Move forwards and turn"""
+        if dir == 'CW':
+            self.right_motor.setVelocity(0.5*self.MAX_SPEED)
+            self.left_motor.setVelocity(0.9*self.MAX_SPEED)
+        else:
+            self.right_motor.setVelocity(0.9*self.MAX_SPEED)
+            self.left_motor.setVelocity(0.5*self.MAX_SPEED)   
+
     def stop(self):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
 
-    def rotate(self):
-        self.right_motor.setVelocity(-0.5*self.MAX_SPEED)
-        self.left_motor.setVelocity(0.5*self.MAX_SPEED)
+    def drive(self, f, count, *args, **kwargs):
+        """Execute a driving function for count timesteps"""
+        self.stop()
+        for _ in range(count):
+            self.step(self.timestep)
+            self.update_sensors()
+            f(*args, **kwargs)
+
+
+    def rotate(self, dir='CW'):
+        """Set rotation of motors to rotate CW or CCW"""
+        if dir == 'CW':
+            self.right_motor.setVelocity(-0.5*self.MAX_SPEED)
+            self.left_motor.setVelocity(0.5*self.MAX_SPEED)
+        else:
+            self.right_motor.setVelocity(0.5*self.MAX_SPEED)
+            self.left_motor.setVelocity(-0.5*self.MAX_SPEED)
 
     def getHeadingDegrees(self):
         """Return angle of robot head wrt global north"""
@@ -111,9 +131,9 @@ class Robocar(Robot):
         bearing %= 360
         return bearing
 
-    def rotate_to_bearing(self, angle, tol=5):
+    def rotate_to_bearing(self, angle, tol=5, dir='CW'):
         """Rotate until bearing = angle (degrees)"""
-        self.rotate()
+        self.rotate(dir)
         return abs(self.getHeadingDegrees() - angle) < tol
 
     def getLocationBearing(self, loc_vec):
@@ -124,17 +144,34 @@ class Robocar(Robot):
         angle %= 360
         return angle
 
-    def turn_to(self,location, range=0.1):
+    def get_ds_sensor_object_pos(self):
+        """Get 2D position of object form bottom distance sensor"""
+        r = utils.ds_sensor_to_m(self.bot_distance)
+        theta = self.getHeadingDegrees()*np.pi/180
 
-        """Sets the velocities of the motor to return home"""
+        # global x,z pos of block
+        block_x = r*np.cos(theta)
+        block_z = r*np.sin(theta)
+
+        # account for location of ds_sensor relative to gps sensor
+        block_x += self.gps_vec[0] + 0.08*np.cos(theta) - 0.1*np.sin(theta)
+        block_z += self.gps_vec[2] + 0.08*np.sin(theta) + 0.1*np.cos(theta)
+
+        position = np.array([block_x, block_z])
+        print(f"Found object at\tx: {block_x:.2f}\tz: {block_z:.2f}")
+        return position
+
+    def turn_to(self,location, range=0.1):
+        """Rotate until pointing in the right direction"""
+
         self.update_sensors()
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
         heading = self.getHeadingDegrees()
         location_bearing = self.getLocationBearing(location - pos)
-        print(f"location is {location}")
-        print(f"pos is {pos}")
-        print(f"heading is {heading}")
-        print(f"location bearing is is {location_bearing}")
+        # print(f"location is {location}")
+        # print(f"pos is {pos}")
+        # print(f"heading is {heading}")
+        # print(f"location bearing is is {location_bearing}")
 
         if heading > location_bearing - 2 and heading < location_bearing + 2:
             self.stop()
@@ -143,20 +180,21 @@ class Robocar(Robot):
 
         elif heading < location_bearing:
             self.turn_right()
-            print("Turning right")
+            # print("Turning right")
             self.step(self.timestep)
             self.stop()
             self.turn_to(location)
+
         elif heading > location_bearing:
             self.turn_left()
-            print("Turning left")
+            # print("Turning left")
             self.step(self.timestep)
             self.stop()
             self.turn_to(location)
 
     def turn_left_time(self,time, range=0.1):
         #turns a number of degrees
-        """Sets the velocities of the motor to return home"""
+        """Advance enough time steps to turn left"""
         self.turn_left()
         self.step(time)
         self.stop()
@@ -175,13 +213,15 @@ class Robocar(Robot):
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
-    def get_block(self):
-        """ """
-        # Get close to block
-        # Look around to find block
-        # Check the colour
-        # Go over it
-        # if self.go_to_location(block_coord, range=0.05):
+    def found_wall(self, wall_threshold=20.0):
+        """Check if ds sensors are looking at a wall"""
+        return self.bot_distance > self.top_distance- wall_threshold
+
+
+    def found_object(self, wall_threshold=20.0):
+        """Check if ds_sensors have found an object"""
+        return self.bot_distance < self.top_distance - wall_threshold
+        
 
 
     def detect_block_colour(self):
@@ -190,7 +230,7 @@ class Robocar(Robot):
         """
         # NOTE: Max value of colour is 256?
         # NOTE: may need to compare values??
-        print(f"Detecting block color. Block color reading is {colour_sensor[0]}")
+        print(f"Detecting block color. Block color reading is {self.colour_sensor[0]}")
         if self.colour_sensor[0] > 70:
             print('red')
             return 'r'
@@ -211,13 +251,17 @@ class Robocar(Robot):
         json.dump(data, open(fName, 'w+'))
 
     def get_other_robot_pos(self, fName='vision.json'):
+        """Return x-z position of other robot"""
         # Write position of robot in a file
         data = json.load(open(fName))
 
         # Get position of other robot
-        if not self.OTHER_NAME in data:
+        if not self.OTHER_NAME in data['robots']:
+            print("Other robot pos not found")
             return None
-        return np.array(data[self.OTHER_NAME]["pos"])
+        other_robot_pos = data['robots'][self.OTHER_NAME]["pos"]
+        print(f"Other robot pos: {other_robot_pos}")
+        return np.array([other_robot_pos[0], other_robot_pos[2]])
 
     # def detect_other_robot(self, range=0.2, fName='vision.json'):
     #     """Find co-ordinates of other robot and check if that's within 30 cm"""
