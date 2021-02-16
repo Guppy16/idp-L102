@@ -221,6 +221,7 @@ while robocar.step(timestep) != -1:
     # TO BE IMPLEMENTED
     if robocar.target_block is None:
         go(MIDDLE)
+        blocks = [] # Try resetting list of blocks
         continue
 
     # Otherwise, go to closest block
