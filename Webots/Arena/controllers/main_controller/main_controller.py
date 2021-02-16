@@ -44,6 +44,8 @@ def find_blocks(other_robot_threshold=0.3):
         # Check if block is close to the other robot
         if utils.is_within_range(robocar.get_other_robot_pos(), block_pos, range=other_robot_threshold):
             print("--- Object close to other robot. Ignoring it")
+        elif utils.is_within_range(block_pos, robocar.HOME, range=0.2):
+            print("--- Object close to HOME. ignoring it")
         elif any([utils.is_within_range(block_pos, b.position, range=0.1) for b in blocks]):
             print("--- Object is close to another block. Ignoring it")
         else:
@@ -194,6 +196,10 @@ blocksCollected=0
 
 blocks = []
 
+robocar.step(timestep)
+robocar.update_sensors()
+robocar.set_home()
+
 # Main loop:
 while robocar.step(timestep) != -1:
     #print(f"Lookup table is: {distanceSensor.getLookupTable()}")
@@ -211,11 +217,17 @@ while robocar.step(timestep) != -1:
         robocar.update_sensors()
         robocar.step(timestep)
 
-    # Go to closest block
+    # If a target block hasn't been identified, move around
+    # TO BE IMPLEMENTED
+    if robocar.target_block is None:
+        go(MIDDLE)
+        continue
+
+    # Otherwise, go to closest block
     print(f"Next block at {robocar.target_block.position}")
     go(robocar.target_block.position, range=0.35)
 
-    # Look around to find block
+    # Look around to find target block
     while not rotate_to_target_block():
         robocar.update_sensors()
         robocar.step(timestep)
@@ -228,10 +240,12 @@ while robocar.step(timestep) != -1:
     # robocar.count = 100
     if robocar.target_block.color == robocar.COLOR:
         print("---Found block with matching colour")
-        robocar.drive(robocar.turn_and_drive, 30)  # Drive over block
+        robocar.drive(robocar.turn_and_drive, 30)   # Drive over block
         go(robocar.HOME)                            # Drive back home
         robocar.drive(robocar.go_forward, 15)       # Drive a few cm forwards
-        robocar.drive(robocar.go_backward, 40)     # Reverse out of home
+        robocar.drive(robocar.go_backward, 40)      # Reverse out of home
+
+        robocar.target_block.position = robocar.HOME    # Set new position of block
 
     else: # Drive around block if it's not the correct colour
         print("Block is not the right colour. Driving around it")

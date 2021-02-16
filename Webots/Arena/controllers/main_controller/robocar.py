@@ -175,7 +175,7 @@ class Robocar(Robot):
 
         if heading > location_bearing - 2 and heading < location_bearing + 2:
             self.stop()
-            print("Done turning.")
+            # print("Done turning.")
             return
 
         elif heading < location_bearing:

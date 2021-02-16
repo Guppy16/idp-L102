@@ -53,6 +53,7 @@ def next_block(blocks, pos=[0,0]):
             closest_dist = np.linalg.norm(block.position - pos)
             next_block = block
     if closest_dist == 100:
+        print("--- No closest block found")
         return None
     return next_block
 
