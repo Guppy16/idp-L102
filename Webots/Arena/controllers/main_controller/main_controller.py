@@ -120,6 +120,10 @@ def check_block_colour():
 
 def drive_around_block():
     """Somehow drive around the object"""
+    #determine which way to go around the block
+    pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
+    heading = robocar.getHeadingDegrees()
+
     # return True
     # # Try rotating CCW and then turn_and_drive
     # robocar.drive(robocar.rotate, count=20, dir='CCW')
@@ -182,6 +186,7 @@ def go(location, range=0.2):
 
     if robocar.frontClear<1:
         print("ABORT FRONT NOT CLEAR ABORT")
+        # put drive_around_block here?
 
     # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
@@ -262,7 +267,7 @@ def main_loop(time=300):
         print(b)
 
     robocar.stop()
-    print("- Finisehed 1 loop")
+    print("- Finished 1 loop")
 
 # Drive around blue robot if less 120 secs
 while robocar.step(timestep) != -1:
