@@ -265,9 +265,9 @@ class Robocar(Robot):
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
-    def found_wall(self, wall_threshold=20.0):
+    def found_wall(self, wall_threshold=0.7):
         """Check if ds sensors are looking at a wall"""
-        return self.bot_distance > self.top_distance- wall_threshold
+        return utils.ds_sensor_to_m(self.bot_distance) > utils.ds_sensor_to_m(self.top_distance) - wall_threshold
 
     # REDUNDANT
     def crashing_into_wall(self):
@@ -282,9 +282,11 @@ class Robocar(Robot):
         return False
             
 
-    def found_object(self, wall_threshold=20.0):
+    def found_object(self, wall_threshold=0.7):
         """Check if ds_sensors have found an object"""
-        return self.bot_distance < self.top_distance - wall_threshold
+        # print(f"BOTTOM: {self.bot_distance}")
+        # print(f"TOP: {self.top_distance}")
+        return utils.ds_sensor_to_m(self.bot_distance) < utils.ds_sensor_to_m(self.top_distance) - wall_threshold
 
     def detect_block_colour(self, fName='vision.json'):
         """Return the colour displayed in the camera

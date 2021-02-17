@@ -33,11 +33,13 @@ def find_blocks(blocks, other_robot_threshold=0.3):
 
     # Check if ds sensor sees a wall
     if robocar.found_wall() and robocar.looking_at_block:
+        # print("LOOKING AT WALL")
         robocar.looking_at_block = False
 
     # Check if ds sensor sees a block
     if not robocar.looking_at_block and robocar.found_object():
         robocar.looking_at_block = True
+        # print("LOOKING AT BLOCK")
 
         block_pos = robocar.get_ds_sensor_object_pos()
 
@@ -304,7 +306,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "redRobot":
+    if robocar.NAME != "blueRobot":
         continue
     main_loop(time=120)
 
@@ -315,7 +317,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "blueRobot":
+    if robocar.NAME != "redRobot":
         continue
     main_loop(time=240)
  
