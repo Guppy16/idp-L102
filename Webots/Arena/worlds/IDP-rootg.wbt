@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5800970080725968 0.5820141667202766 0.5698657481917331 4.183508626299941
-  position -0.09473176534553096 7.5605791879051685 -0.16123015916020106
+  orientation -0.22507040732916345 -0.938199194480409 -0.26291744563835245 2.0115829582050284
+  position -4.77790910549514 3.524659543321239 -2.156304529268869
 }
 TexturedBackground {
 }
@@ -31,8 +31,7 @@ Floor {
   }
 }
 DEF Block_R1 Solid {
-  translation -0.224355 0.0249755 0.620402
-  rotation 0.16686656833226043 0.9636641493310073 -0.2085832104153186 -1.0219557955004574e-16
+  translation  0.7396    0.0500    1.0751
   children [
     DEF BOX_R Shape {
       appearance PBRAppearance {
@@ -51,20 +50,18 @@ DEF Block_R1 Solid {
   }
 }
 DEF Block_R2 Solid {
-  translation -0.723327 0.0249755 -0.497888
-  rotation -0.36750708266021803 0.9087236729683694 -0.19788842912472573 1.508061640284877e-16
+  translation 0.9770    0.0500    0.6057
   children [
     USE BOX_R
   ]
   name "solid(13)"
-  contactMaterial "box"
+  contactMaterial "block"
   boundingObject USE BOX_R
   physics Physics {
   }
 }
 DEF Block_R3 Solid {
-  translation -0.306171 0.0249755 -0.623087
-  rotation 0.3854770849102864 0.922717409074451 -4.081832740687572e-14 -1.1059688322464795e-17
+  translation -0.8766    0.0500   -0.8046
   children [
     USE BOX_R
   ]
@@ -74,8 +71,7 @@ DEF Block_R3 Solid {
   }
 }
 DEF Block_R4 Solid {
-  translation 0.259577 0.0249755 1.00568
-  rotation 3.487333347262494e-14 0.6771592814607587 0.7358364679271808 -6.373130797970658e-17
+  translation -0.1839    0.0500    0.4200
   children [
     USE BOX_R
   ]
@@ -85,8 +81,7 @@ DEF Block_R4 Solid {
   }
 }
 DEF Block_B1 Solid {
-  translation 0.13588 0.0249755 -0.616603
-  rotation -0.48510915379872044 0.8735186698642385 0.04042576281655928 1.0545889842341123e-16
+  translation 0.3110    0.0500    1.0743
   children [
     DEF BOX_B Shape {
       appearance PBRAppearance {
@@ -104,8 +99,7 @@ DEF Block_B1 Solid {
   }
 }
 DEF Block_B2 Solid {
-  translation -0.496843 0.0249755 0.35874
-  rotation 0.14272312242232377 0.9663321678178627 0.21408468363349212 -5.974163600408589e-17
+  translation -0.9458    0.0500   -0.0344
   children [
     USE BOX_B
   ]
@@ -115,8 +109,7 @@ DEF Block_B2 Solid {
   }
 }
 DEF Block_B3 Solid {
-  translation -0.889227 0.0249755 0.270678
-  rotation -0.4247210096408211 0.8599067670138462 -0.28314733976055084 9.034002759480529e-17
+  translation -0.5205    0.0500    0.7057
   children [
     USE BOX_B
   ]
@@ -126,8 +119,7 @@ DEF Block_B3 Solid {
   }
 }
 DEF Block_B4 Solid {
-  translation 0.946323 0.0249755 0.0432692
-  rotation 0.2074031990538158 0.9773757054189204 0.04148063981077562 -1.0277701679650052e-16
+  translation 0.1102    0.0500   -0.8416
   children [
     USE BOX_B
   ]
@@ -295,8 +287,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000001704 0.06000129999506081
-        rotation 8.195561916099759e-09 -8.195621231861982e-09 0.9999999999999999 1.57080364146185
+        translation 0.1 -0.07500000000001707 0.06000129999506081
+        rotation 8.219081687974473e-09 -8.219141175776622e-09 0.9999999999999999 1.57080364146185
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +320,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999997292 0.06000130000688864
-        rotation -1.2476403309901004e-08 1.2476484256083439e-08 0.9999999999999999 1.570802907465454
+        translation -0.0999996 -0.07499999999997288 0.06000130000688864
+        rotation -1.2509206062431752e-08 1.2509287224479006e-08 0.9999999999999999 1.570802907465454
         children [
           USE WHEEL
         ]
@@ -489,6 +481,8 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
+  hidden rotation_3 7.725166478605475e-09 -7.725222353569184e-09 0.9999999999999999 1.57080364146185
+  hidden rotation_4 -1.182034825928603e-08 1.1820424888172094e-08 0.9999999999999999 1.570802907465454
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
 }
