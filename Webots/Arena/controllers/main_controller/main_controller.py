@@ -20,7 +20,7 @@ timestep = int(robocar.getBasicTimeStep())
 
 movementstep=32
 rotationstep=3
-collisiondistance=1
+collisiondistance=1.5
 
 
 def find_blocks(blocks, other_robot_threshold=0.3):
@@ -126,23 +126,22 @@ def check_block_colour():
 def drive_around_block():
     """Somehow drive around the object"""
     #determine which way to go around the block
-    pos = [robocar.gps_vec[0], robocar.gps_vec[2]]
     heading = robocar.getHeadingDegrees()
     mid_heading = robocar.getLocationBearing(robocar.MIDDLE)
 
     if mid_heading >= heading:
-        robocar.rotate_cw_by(50)
+        robocar.rotate_cw_by(45)
         heading = robocar.getHeadingDegrees()
-        point_x = robocar.gps_vec[0] + 0.35*np.cos(heading*np.pi/180)
-        point_z = robocar.gps_vec[2] + 0.35*np.sin(heading*np.pi/180)
+        point_x = robocar.gps_vec[0] + 0.4*np.cos(heading*np.pi/180)
+        point_z = robocar.gps_vec[2] + 0.4*np.sin(heading*np.pi/180)
         print("Yeah so just taking a quick detour to (" + str(point_x) + ", " + str(point_z) + ")")
         print("Current coords are (" + str(robocar.gps_vec[0]) + ", " + str(robocar.gps_vec[2]) + ")")
         go([point_x, point_z], 0.02)
     else:
-        robocar.rotate_cw_by(-50)
+        robocar.rotate_cw_by(-45)
         heading = robocar.getHeadingDegrees()
-        point_x = robocar.gps_vec[0] + 0.35*np.cos(heading*np.pi/180)
-        point_z = robocar.gps_vec[2] + 0.35*np.sin(heading*np.pi/180)
+        point_x = robocar.gps_vec[0] + 0.4*np.cos(heading*np.pi/180)
+        point_z = robocar.gps_vec[2] + 0.4*np.sin(heading*np.pi/180)
         print("Yeah so just taking a quick detour to (" + str(point_x) + ", " + str(point_z) + ")")
         print("Current coords are (" + str(robocar.gps_vec[0]) + ", " + str(robocar.gps_vec[2]) + ")")
         go([point_x, point_z], 0.02)
