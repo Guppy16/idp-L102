@@ -89,7 +89,7 @@ def find_blocks(blocks, other_robot_threshold=0.3):
 
 def rotate_to_target_block():
     """Rotate until target block found"""
-    print("---Locating Target block")
+    # print("---Locating Target block")
     # Set original heading
     if robocar.original_heading is None:
         robocar.looking_at_block = False
@@ -240,7 +240,7 @@ def main_loop(time=300):
     global blocks
 
     if robocar.getTime() > time:
-        print("--- returning home")
+        # print("--- returning home")
         go(robocar.HOME)
         # robocar.return_home()
         return
@@ -289,7 +289,6 @@ def main_loop(time=300):
     else: # Drive around block if it's not the correct colour
         print("Block is not the right colour. Driving around it")
         drive_around_block()
-
 
 
     for b in blocks:
