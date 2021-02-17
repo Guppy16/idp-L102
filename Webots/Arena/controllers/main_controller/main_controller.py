@@ -164,7 +164,8 @@ def check_front_clear():
         robocar.stop()
         robocar.step(rotationstep)
         robocar.update_sensors()
-        if robocar.bot_distance < collisiondistance or robocar.top_distance < collisiondistance:
+        if robocar.bot_distance < collisiondistance and robocar.found_object():
+            print("------FRONT NOT CLEAR?")
             return False
         else:
             pass
@@ -180,7 +181,11 @@ def go(location, range=0.2):
         return True
 
     # Turn to the right heading
+
+    # Turn to the right heading
     robocar.turn_to(location)
+
+    print("--- DONE TURNING TO LOCATIONS")
 
     # Update the sensors
     robocar.update_sensors()

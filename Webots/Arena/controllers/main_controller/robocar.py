@@ -133,11 +133,13 @@ class Robocar(Robot):
 
     def rotate_to_bearing(self, angle, tol=5, dir='CW'):
         """Rotate until bearing = angle (degrees)"""
+        angle %= 360 # Ensure that the angle is a multiple of 360
         self.rotate(dir)
+        # print(angle)
         return abs(self.getHeadingDegrees() - angle) < tol
 
     def getLocationBearing(self, loc_vec):
-        """Return angle between home and global north
+        """Return angle between location and global north
         loc_vec: 2D np array [x-coord, z-coord]
         """
         angle = np.arctan2(loc_vec[1], loc_vec[0]) * 180 / np.pi
@@ -163,6 +165,7 @@ class Robocar(Robot):
 
     def turn_to(self,location, range=0.1):
         """Rotate until pointing in the right direction"""
+        print("----- Turning to location")
 
         self.update_sensors()
         pos = np.array([self.gps_vec[0], self.gps_vec[2]])
@@ -173,21 +176,21 @@ class Robocar(Robot):
         # print(f"heading is {heading}")
         # print(f"location bearing is is {location_bearing}")
 
-        if heading > location_bearing - 2 and heading < location_bearing + 2:
+        if heading > location_bearing - 10 and heading < location_bearing + 10:
             self.stop()
-            # print("Done turning.")
+            print("Done turning.")
             return
 
         elif heading < location_bearing:
             self.turn_right()
-            # print("Turning right")
+            print("Turning right")
             self.step(self.timestep)
             self.stop()
             self.turn_to(location)
 
         elif heading > location_bearing:
             self.turn_left()
-            # print("Turning left")
+            print("Turning left")
             self.step(self.timestep)
             self.stop()
             self.turn_to(location)
@@ -232,8 +235,6 @@ class Robocar(Robot):
     def found_object(self, wall_threshold=20.0):
         """Check if ds_sensors have found an object"""
         return self.bot_distance < self.top_distance - wall_threshold
-        
-
 
     def detect_block_colour(self):
         """Return the colour displayed in the camera
@@ -243,10 +244,10 @@ class Robocar(Robot):
         # NOTE: may need to compare values??
         print(f"Detecting block color. Block color reading is {self.colour_sensor[0]}")
         if self.colour_sensor[0] > 70:
-            print('red')
+            print('+++RED')
             return 'r'
         if self.colour_sensor[2] > 70:
-            print('blue')
+            print('+++BLUE')
             return 'b'
         return None
 

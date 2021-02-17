@@ -45,6 +45,8 @@ def pop_closest_block(my_pos, fName='vision.json'):
 # Functions related to list of Block
 def next_block(blocks, pos=[0,0]):
     """Given a list of blocks, return block of col=None, pickedUp=False that is closest to pos"""
+    if blocks == []:
+        return None
     pos = np.array(pos)
 
     print(f"--- My position {pos}")
