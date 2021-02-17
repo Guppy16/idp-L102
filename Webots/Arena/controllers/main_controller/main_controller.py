@@ -126,9 +126,29 @@ def check_block_colour():
 def drive_around_block():
     """Somehow drive around the object"""
     #determine which way to go around the block
-    return True
-    pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
+    pos = [robocar.gps_vec[0], robocar.gps_vec[2]]
     heading = robocar.getHeadingDegrees()
+    mid_heading = robocar.getLocationBearing(robocar.MIDDLE)
+    point_x = robocar.gps_vec[0] + 0.2*np.sin(heading*np.pi/180)
+    point_y = robocar.gps_vec[2] + 0.2*np.cos(heading*np.pi/180)
+
+
+    if 360 - heading + mid_heading >= heading:
+        robocar.rotate_cw_by(60)
+        heading = robocar.getHeadingDegrees()
+        point_x = robocar.gps_vec[0] + 0.2*np.sin(heading*np.pi/180)
+        point_y = robocar.gps_vec[2] + 0.2*np.cos(heading*np.pi/180)
+        go([point_x, point_y], 0.02)
+    else:
+        robocar.rotate_cw_by(-60)
+        heading = robocar.getHeadingDegrees()
+        point_x = robocar.gps_vec[0] + 0.2*np.sin(heading*np.pi/180)
+        point_y = robocar.gps_vec[2] + 0.2*np.cos(heading*np.pi/180)
+        go([point_x, point_y], 0.02)
+        
+    return True
+
+
 
     # return True
     # # Try rotating CCW and then turn_and_drive
