@@ -45,14 +45,19 @@ def pop_closest_block(my_pos, fName='vision.json'):
 # Functions related to list of Block
 def next_block(blocks, pos=[0,0]):
     """Given a list of blocks, return block of col=None, pickedUp=False that is closest to pos"""
+    if blocks == []:
+        return None
     pos = np.array(pos)
+
+    print(f"--- My position {pos}")
+
     next_block = blocks[0]
-    closest_dist = 100
+    closest_dist = 1000
     for block in blocks:
-        if block.color is None and not block.pickedUp and np.linalg.norm(block.position - pos):
+        if block.color is None and not block.pickedUp and np.linalg.norm(block.position - pos) < closest_dist:
             closest_dist = np.linalg.norm(block.position - pos)
             next_block = block
-    if closest_dist == 100:
+    if closest_dist == 1000:
         print("--- No closest block found")
         return None
     return next_block
