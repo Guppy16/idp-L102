@@ -181,9 +181,12 @@ def go(location, range=0.2):
         return True
 
     # Turn to the right heading
+    while not robocar.rotate_to_location(location, tol=10):
+        robocar.update_sensors()
+        robocar.step(timestep)
 
     # Turn to the right heading
-    robocar.turn_to(location)
+    # robocar.turn_to(location)
 
     print("--- DONE TURNING TO LOCATIONS")
 
@@ -201,7 +204,7 @@ def go(location, range=0.2):
 
     # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
-        robocar.turn_to(location)
+        # robocar.turn_to(location)
         robocar.go_forward()
         robocar.frontClear -= 1
         robocar.step(movementstep)

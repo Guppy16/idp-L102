@@ -124,6 +124,10 @@ class Robocar(Robot):
             self.right_motor.setVelocity(0.5*self.MAX_SPEED)
             self.left_motor.setVelocity(-0.5*self.MAX_SPEED)
 
+    def get_relative_pos(self, loc=[0,0]):
+        """Return 2D x-z position of robot"""
+        return np.array([self.gps_vec[0], self.gps_vec[2]] - np.array(loc))
+
     def getHeadingDegrees(self):
         """Return angle of robot head wrt global north"""
         angle = np.arctan2(self.cps_vec[0], self.cps_vec[2])
@@ -133,9 +137,8 @@ class Robocar(Robot):
 
     def rotate_to_bearing(self, angle, tol=5, dir='CW'):
         """Rotate until bearing = angle (degrees)"""
-        angle %= 360 # Ensure that the angle is a multiple of 360
+        angle %= 360 # Ensure that the angle is 0 - 360
         self.rotate(dir)
-        # print(angle)
         return abs(self.getHeadingDegrees() - angle) < tol
 
     def getLocationBearing(self, loc_vec):
@@ -145,6 +148,22 @@ class Robocar(Robot):
         angle = np.arctan2(loc_vec[1], loc_vec[0]) * 180 / np.pi
         angle %= 360
         return angle
+
+    def rotate_to_location(self, location, tol=5):
+        """Given a location, rotate to that bearing"""
+        location_bearing = self.getLocationBearing(-self.get_relative_pos(location))
+        my_bearing = self.getHeadingDegrees()
+
+
+        if my_bearing < location_bearing:
+            self.rotate(dir='CW')
+        else:
+            self.rotate(dir='CCW')
+
+        print(location_bearing)
+        print(my_bearing)
+        return abs(location_bearing - my_bearing) < tol or 360 - abs(location_bearing - my_bearing) < tol
+
 
     def get_ds_sensor_object_pos(self):
         """Get 2D position of object form bottom distance sensor"""
@@ -163,37 +182,37 @@ class Robocar(Robot):
         print(f"Found object at\tx: {block_x:.2f}\tz: {block_z:.2f}")
         return position
 
-    def turn_to(self,location, range=0.1):
-        """Rotate until pointing in the right direction"""
-        print("----- Turning to location")
+    # def turn_to(self,location, range=0.1):
+    #     """Rotate until pointing in the right direction"""
+    #     print("----- Turning to location")
 
-        self.update_sensors()
-        pos = np.array([self.gps_vec[0], self.gps_vec[2]])
-        heading = self.getHeadingDegrees()
-        location_bearing = self.getLocationBearing(location - pos)
-        # print(f"location is {location}")
-        # print(f"pos is {pos}")
-        # print(f"heading is {heading}")
-        # print(f"location bearing is is {location_bearing}")
+    #     self.update_sensors()
+    #     pos = np.array([self.gps_vec[0], self.gps_vec[2]])
+    #     heading = self.getHeadingDegrees()
+    #     location_bearing = self.getLocationBearing(location - pos)
+    #     # print(f"location is {location}")
+    #     # print(f"pos is {pos}")
+    #     # print(f"heading is {heading}")
+    #     # print(f"location bearing is is {location_bearing}")
 
-        if heading > location_bearing - 10 and heading < location_bearing + 10:
-            self.stop()
-            print("Done turning.")
-            return
+    #     if heading > location_bearing - 10 and heading < location_bearing + 10:
+    #         self.stop()
+    #         print("Done turning.")
+    #         return
 
-        elif heading < location_bearing:
-            self.turn_right()
-            print("Turning right")
-            self.step(self.timestep)
-            self.stop()
-            self.turn_to(location)
+    #     elif heading < location_bearing:
+    #         self.turn_right()
+    #         print("Turning right")
+    #         self.step(self.timestep)
+    #         self.stop()
+    #         self.turn_to(location)
 
-        elif heading > location_bearing:
-            self.turn_left()
-            print("Turning left")
-            self.step(self.timestep)
-            self.stop()
-            self.turn_to(location)
+    #     elif heading > location_bearing:
+    #         self.turn_left()
+    #         print("Turning left")
+    #         self.step(self.timestep)
+    #         self.stop()
+    #         self.turn_to(location)
 
     def turn_left_time(self,time, range=0.1):
         #turns a number of degrees
