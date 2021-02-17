@@ -155,13 +155,13 @@ class Robocar(Robot):
         my_bearing = self.getHeadingDegrees()
 
 
-        if my_bearing < location_bearing:
+        if my_bearing < location_bearing or 360 - my_bearing + location_bearing < my_bearing - location_bearing:
             self.rotate(dir='CW')
         else:
             self.rotate(dir='CCW')
 
-        print(location_bearing)
-        print(my_bearing)
+        print(f"LOC: {location_bearing}")
+        print(f"MY: {my_bearing}")
         return abs(location_bearing - my_bearing) < tol or 360 - abs(location_bearing - my_bearing) < tol
 
 
@@ -255,19 +255,29 @@ class Robocar(Robot):
         """Check if ds_sensors have found an object"""
         return self.bot_distance < self.top_distance - wall_threshold
 
-    def detect_block_colour(self):
+    def detect_block_colour(self, fName='vision.json'):
         """Return the colour displayed in the camera
         returns: 'b', 'r', or None
         """
         # NOTE: Max value of colour is 256?
         # NOTE: may need to compare values??
-        print(f"Detecting block color. Block color reading is {self.colour_sensor[0]}")
+        print(f"Detecting block color. Block color reading is {self.colour_sensor}")
         if self.colour_sensor[0] > 70:
             print('+++RED')
             return 'r'
         if self.colour_sensor[2] > 70:
             print('+++BLUE')
             return 'b'
+
+        # Otherwise check the json file for irregular colours
+        data = json.load(open(fName))
+        if self.colour_sensor in data["colours"]["red"]:
+            print('+++RED')
+            return 'r'
+        elif self.colour_sensor in data["colours"]["blue"]:
+            print('+++BLUE')
+            return 'b'
+        
         return None
 
     def update_my_pos(self, fName='vision.json'):

@@ -125,6 +125,7 @@ def check_block_colour():
 
 def drive_around_block():
     """Somehow drive around the object"""
+    return True
     #determine which way to go around the block
     pos = [robocar.gps_vec[0], robocar.gps_vec[2]]
     heading = robocar.getHeadingDegrees()
