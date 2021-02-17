@@ -228,10 +228,13 @@ class Robocar(Robot):
             while abs(self.getHeadingDegrees() - heading) < angle or abs(self.getHeadingDegrees() - heading + 360) < angle:
                 self.turn_right()
                 self.step(self.timestep)
+                self.update_sensors()
         else:
             while abs(self.getHeadingDegrees() - heading) < abs(angle) or abs(self.getHeadingDegrees() - heading - 360) < abs(angle):
+                print(self.getHeadingDegrees())
                 self.turn_left()
-                self.step(self.timestep)            
+                self.step(self.timestep)  
+                self.update_sensors()      
         self.stop()
 
     def at_location(self, location, range=0.1):
