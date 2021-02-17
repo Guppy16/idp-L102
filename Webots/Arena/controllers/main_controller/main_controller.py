@@ -239,7 +239,7 @@ blocks = []
 
 # Main loop:
 def main_loop(time=300):
-    global blocks
+    global blocks, blocksCollected
 
     if robocar.getTime() > time:
         # print("--- returning home")
@@ -258,7 +258,7 @@ def main_loop(time=300):
     # If a target block hasn't been identified, move around
     if robocar.target_block is None:
         print("Resetting the list of blocks")
-        go(MIDDLE)
+        go(robocar.get_next_loc())
         blocks = []
         # blocks = [] # Try resetting list of blocks
         return
@@ -287,6 +287,7 @@ def main_loop(time=300):
         robocar.drive(robocar.go_backward, 40)      # Reverse out of home
 
         robocar.target_block.position = robocar.HOME    # Set new position of block
+        blocksCollected += 1                        # Increment the number of blocks collected
 
     else: # Drive around block if it's not the correct colour
         print("Block is not the right colour. Driving around it")
@@ -302,7 +303,7 @@ def main_loop(time=300):
 # Drive around blue robot if less 120 secs
 while robocar.step(timestep) != -1:
     # Drive back home if more than 2 mins passed
-    if robocar.getTime() > 150:
+    if blocksCollected >= 4 or robocar.getTime() > 150:
         go(robocar.HOME)
         robocar.stop()
         break
@@ -313,13 +314,13 @@ while robocar.step(timestep) != -1:
 # Drive around red robot if less 240 secs
 while robocar.step(timestep) != -1:
     # Drive back home if more than 2 mins passed
-    if robocar.getTime() > 280:
+    if blocksCollected >= 4 or robocar.getTime() > 280:
         go(robocar.HOME)
         robocar.stop()
         break
     if robocar.NAME != "redRobot":
         continue
-    main_loop(time=240)
+    main_loop(time=270)
  
 
 # Only drive blue robot

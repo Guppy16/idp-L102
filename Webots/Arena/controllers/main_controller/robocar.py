@@ -32,6 +32,7 @@ class Robocar(Robot):
         self.gone_over_block = False
         self.match = False
         self.count = 100
+        self.places = [self.MIDDLE, [-0.5,0.5], [-0.5,-0.5]]
 
         # Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -76,6 +77,12 @@ class Robocar(Robot):
         print("I am a robocar!")
         print(f"My details:{self.NAME}\t{self.COLOR}\nOther Robot:{self.OTHER_NAME}")
         return True
+
+    def get_next_loc(self):
+        """Next location to explore when no block found"""
+        self.places.append(self.places[0])
+        return self.places.pop(0)
+
 
     def go_forward(self):
         self.left_motor.setVelocity(self.MAX_SPEED)
@@ -265,7 +272,7 @@ class Robocar(Robot):
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
-    def found_wall(self, wall_threshold=0.7):
+    def found_wall(self, wall_threshold=0.1):
         """Check if ds sensors are looking at a wall"""
         return utils.ds_sensor_to_m(self.bot_distance) > utils.ds_sensor_to_m(self.top_distance) - wall_threshold
 
@@ -282,7 +289,7 @@ class Robocar(Robot):
         return False
             
 
-    def found_object(self, wall_threshold=0.7):
+    def found_object(self, wall_threshold=0.1):
         """Check if ds_sensors have found an object"""
         # print(f"BOTTOM: {self.bot_distance}")
         # print(f"TOP: {self.top_distance}")
