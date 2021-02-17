@@ -83,7 +83,10 @@ class Robocar(Robot):
 
     def get_next_loc(self):
         """Next location to explore when no block found"""
-        self.places.append(self.places[0])
+        if not utils.is_within_range(self.places[0], self.HOME, range=0.3):
+            self.places.append(self.places[0])
+
+        # self.places.append(self.places[0])
         return self.places.pop(0)
 
 
