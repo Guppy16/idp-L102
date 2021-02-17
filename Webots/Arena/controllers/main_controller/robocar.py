@@ -3,6 +3,7 @@ import json
 import numpy as np
 import block
 import utils
+from colorama import Fore, Style
 from task_manager import Task, TaskManager
 
 
@@ -213,38 +214,6 @@ class Robocar(Robot):
         print(f"Found object at\tx: {block_x:.2f}\tz: {block_z:.2f}")
         return position
 
-    # def turn_to(self,location, range=0.1):
-    #     """Rotate until pointing in the right direction"""
-    #     print("----- Turning to location")
-
-    #     self.update_sensors()
-    #     pos = np.array([self.gps_vec[0], self.gps_vec[2]])
-    #     heading = self.getHeadingDegrees()
-    #     location_bearing = self.getLocationBearing(location - pos)
-    #     # print(f"location is {location}")
-    #     # print(f"pos is {pos}")
-    #     # print(f"heading is {heading}")
-    #     # print(f"location bearing is is {location_bearing}")
-
-    #     if heading > location_bearing - 10 and heading < location_bearing + 10:
-    #         self.stop()
-    #         print("Done turning.")
-    #         return
-
-    #     elif heading < location_bearing:
-    #         self.turn_right()
-    #         print("Turning right")
-    #         self.step(self.timestep)
-    #         self.stop()
-    #         self.turn_to(location)
-
-    #     elif heading > location_bearing:
-    #         self.turn_left()
-    #         print("Turning left")
-    #         self.step(self.timestep)
-    #         self.stop()
-    #         self.turn_to(location)
-
     def turn_left_time(self,time, range=0.1):
         #turns a number of degrees
         """Advance enough time steps to turn left"""
@@ -303,22 +272,22 @@ class Robocar(Robot):
         # NOTE: may need to compare values??
         print(f"Detecting block color. Block color reading is {self.colour_sensor}")
         if self.colour_sensor[0] > 70:
-            print('+++RED')
+            print(Fore.RED + 'RED' + Style.RESET_ALL)
             return 'r'
         if self.colour_sensor[2] > 70:
-            print('+++BLUE')
+            print(Fore.BLUE + 'BLUE' + Style.RESET_ALL)
             return 'b'
 
         # Otherwise check the json file for irregular colours
         data = json.load(open(fName))
         if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["green"]]):
-            print('+++GREEN?!')
+            print(Fore.GREEN + 'GREEN?!' + Style.RESET_ALL)
             return 'g'
         if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["red"]]):
-            print('+++RED')
+            print(Fore.RED + 'RED' + Style.RESET_ALL)
             return 'r'
         if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["blue"]]):
-            print('+++BLUE')
+            print(Fore.BLUE + 'BLUE' + Style.RESET_ALL)
             return 'b'
         
         print(f"+++UNIDENTIFIED BLOCK with colour: {self.colour_sensor}")
