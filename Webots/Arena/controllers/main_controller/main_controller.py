@@ -206,11 +206,11 @@ def go(location, range=0.2):
     # Check if the front is clear
     if robocar.frontClear < 1:
         robocar.stop()
-        check_front_clear()
+        if not check_front_clear():
+            drive_around_block()
 
     if robocar.frontClear<1:
         print("ABORT FRONT NOT CLEAR ABORT")
-        # put drive_around_block here?
 
     # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
