@@ -160,8 +160,6 @@ class Robocar(Robot):
         else:
             self.rotate(dir='CCW')
 
-        print(f"LOC: {location_bearing}")
-        print(f"MY: {my_bearing}")
         return abs(location_bearing - my_bearing) < tol or 360 - abs(location_bearing - my_bearing) < tol
 
 
@@ -274,10 +272,10 @@ class Robocar(Robot):
 
         # Otherwise check the json file for irregular colours
         data = json.load(open(fName))
-        if self.colour_sensor in data["colours"]["red"]:
+        if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["red"]]):
             print('+++RED')
             return 'r'
-        elif self.colour_sensor in data["colours"]["blue"]:
+        if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["blue"]]):
             print('+++BLUE')
             return 'b'
         

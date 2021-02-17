@@ -58,7 +58,7 @@ def find_blocks(blocks, other_robot_threshold=0.3):
             blocks.append(Block(block_pos, False))
 
             # Add block pos to a file
-            utils.store_block(pos=[block_pos[0], block_pos[1]], range=0.05)
+            # utils.store_block(pos=[block_pos[0], block_pos[1]], range=0.05)
 
     # Once rotated 360
     if robocar.rotate_to_bearing(robocar.original_heading - 15):
@@ -76,6 +76,8 @@ def find_blocks(blocks, other_robot_threshold=0.3):
         # robocar.closest_block_pos = utils.pop_closest_block(
         #     my_pos=[robocar.gps_vec[0], robocar.gps_vec[2]],
         # )
+        robocar.step(timestep)
+        robocar.update_sensors()
         block = utils.next_block(blocks, pos=[robocar.gps_vec[0], robocar.gps_vec[2]])
         robocar.target_block = None if robocar.target_block == block else block
         
@@ -209,7 +211,7 @@ def go(location, range=0.2):
     # Turn to the right heading
     # robocar.turn_to(location)
 
-    print("--- DONE TURNING TO LOCATIONS")
+    # print("--- DONE TURNING TO LOCATIONS")
 
     # Update the sensors
     robocar.update_sensors()
