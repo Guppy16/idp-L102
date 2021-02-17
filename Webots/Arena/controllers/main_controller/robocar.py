@@ -17,7 +17,7 @@ class Robocar(Robot):
         self.NAME = self.getName()
         self.COLOR = 'b' if self.NAME == 'blueRobot' else 'r'
         self.timestep = 32
-        self.frontClear = 0
+        self.frontClear = 50
 
         self.OTHER_NAME = "redRobot" if self.COLOR == 'b' else 'blueRobot'
         # self.closest_block_pos = None
@@ -171,6 +171,23 @@ class Robocar(Robot):
 
         return abs(location_bearing - my_bearing) < tol or 360 - abs(location_bearing - my_bearing) < tol
 
+    def return_home(self):
+        """Return home (only to be used in emergency)"""
+        print("--- EMERGENCY - Going home")
+        while not self.rotate_to_location(self.HOME):
+            self.step(self.timestep)
+            self.update_sensors()
+
+        while not utils.is_within_range(self.get_relative_pos(), self.HOME, range=0.2):
+            self.step(self.timestep)
+            self.update_sensors()
+            self.go_forward()
+        
+        self.stop()
+        self.step(self.timestep)
+
+        print("RETURNED HOME")
+        return True
 
     def get_ds_sensor_object_pos(self):
         """Get 2D position of object form bottom distance sensor"""
@@ -252,6 +269,7 @@ class Robocar(Robot):
         """Check if ds sensors are looking at a wall"""
         return self.bot_distance > self.top_distance- wall_threshold
 
+    # REDUNDANT
     def crashing_into_wall(self):
         """Detect if robot is crashing into the wall"""
         # right wall (z = 1.2), but gps = 1.1

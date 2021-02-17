@@ -127,23 +127,11 @@ def check_block_colour():
 def drive_around_block():
     """Somehow drive around the object"""
 
-    # Determine if crashing into a wall
-    if robocar.crashing_into_wall():
-        # Reverse a bit and do a 180
-        robocar.drive(robocar.go_backward, 10)
-        robocar.rotate_cw_by(180)
-
     robocar.drive(robocar.go_backward, 10)      # Reverse a bit
 
-    # Determine which way to go around the block
-    heading = robocar.getHeadingDegrees()
-    # mid_heading = robocar.getLocationBearing(robocar.MIDDLE - robocar.get_relative_pos())
-
-    # if heading < mid_heading or 360 - heading + mid_heading < heading - mid_heading:
-    # Rotate in the direction of pos x-cross-x cps
-    # print(f"Heading vector: {robocar.bearing_to_vec(robocar.getHeadingDegrees())}")
-    
-    if np.cross(robocar.get_relative_pos(), robocar.bearing_to_vec(robocar.getHeadingDegrees())) > 0:
+    # Determine which way to go around the block using cross product
+    heading = robocar.getHeadingDegrees()    
+    if np.cross(robocar.get_relative_pos(), robocar.bearing_to_vec(heading)) > 0:
         robocar.rotate_cw_by(45)
     else:
         robocar.rotate_cw_by(-45)
@@ -157,15 +145,6 @@ def drive_around_block():
     go([point_x, point_z], 0.08)
 
     return True
-
-
-
-    # return True
-    # # Try rotating CCW and then turn_and_drive
-    # robocar.drive(robocar.rotate, count=20, dir='CCW')
-    # robocar.drive(robocar.turn_and_drive, 100)
-
-    # return True
     
 
 ## START redundant functions
@@ -262,6 +241,8 @@ def main_loop(time=300):
 
     if robocar.getTime() > time:
         print("--- returning home")
+        go(robocar.HOME)
+        # robocar.return_home()
         return
 
     robocar.update_sensors()
@@ -273,7 +254,6 @@ def main_loop(time=300):
         robocar.step(timestep)
 
     # If a target block hasn't been identified, move around
-    # TO BE IMPLEMENTED
     if robocar.target_block is None:
         print("Resetting the list of blocks")
         go(MIDDLE)
@@ -283,6 +263,7 @@ def main_loop(time=300):
 
     # Otherwise, go to closest block
     print(f"--- Target block located at {robocar.target_block.position}")
+    robocar.frontClear = 50
     go(robocar.target_block.position, range=0.3)
 
     # Look around to find target block
@@ -320,7 +301,7 @@ def main_loop(time=300):
 # Drive around blue robot if less 120 secs
 while robocar.step(timestep) != -1:
     # Drive back home if more than 2 mins passed
-    if robocar.getTime() > 120:
+    if robocar.getTime() > 150:
         go(robocar.HOME)
         robocar.stop()
         break
@@ -331,7 +312,7 @@ while robocar.step(timestep) != -1:
 # Drive around red robot if less 240 secs
 while robocar.step(timestep) != -1:
     # Drive back home if more than 2 mins passed
-    if robocar.getTime() > 240:
+    if robocar.getTime() > 280:
         go(robocar.HOME)
         robocar.stop()
         break
