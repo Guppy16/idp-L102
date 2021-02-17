@@ -116,13 +116,7 @@ def check_block_colour():
     """Assuming the colour sensor is looking at a block. Set robocar.match if color matches"""
 
     col = robocar.detect_block_colour()
-    if not col is None:
-        # Update colour of block in objects list
-        robocar.target_block.color = col
-        # if col == robocar.COLOR:
-        #     robocar.match = True
-        # else:
-        #     robocar.match = False
+    robocar.target_block.color = robocar.colour_sensor if col is None else col
     return True
 
 def drive_around_block():

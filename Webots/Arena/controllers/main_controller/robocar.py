@@ -279,6 +279,7 @@ class Robocar(Robot):
             print('+++BLUE')
             return 'b'
         
+        print(f"+++UNIDENTIFIED BLOCK with colour: {self.colour_sensor}")
         return None
 
     def update_my_pos(self, fName='vision.json'):
