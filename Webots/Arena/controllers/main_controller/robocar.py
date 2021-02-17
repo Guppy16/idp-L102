@@ -264,6 +264,9 @@ class Robocar(Robot):
 
         # Otherwise check the json file for irregular colours
         data = json.load(open(fName))
+        if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["green"]]):
+            print('+++GREEN?!')
+            return 'g'
         if any([np.linalg.norm(np.array(self.colour_sensor) - np.array(col)) < 10 for col in data["colours"]["red"]]):
             print('+++RED')
             return 'r'

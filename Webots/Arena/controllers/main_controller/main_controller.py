@@ -89,6 +89,7 @@ def find_blocks(blocks, other_robot_threshold=0.3):
 
 def rotate_to_target_block():
     """Rotate until target block found"""
+    print("---Locating Target block")
     # Set original heading
     if robocar.original_heading is None:
         robocar.looking_at_block = False
@@ -115,33 +116,36 @@ def check_block_colour():
     """Assuming the colour sensor is looking at a block. Set robocar.match if color matches"""
 
     col = robocar.detect_block_colour()
+
+    if col == 'g': # If colour is green, then reverse a bit and check the colour again
+        robocar.drive(robocar.go_backward, 10)      # Reverse a bit
+        col = robocar.detect_block_colour()
+    col = None if col == 'g' else col
     robocar.target_block.color = robocar.colour_sensor if col is None else col
     return True
 
 def drive_around_block():
     """Somehow drive around the object"""
     #determine which way to go around the block
+    robocar.drive(robocar.go_backward, 10)      # Reverse a bit
+
     pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
     heading = robocar.getHeadingDegrees()
     mid_heading = robocar.getLocationBearing(robocar.MIDDLE - pos)
 
     if mid_heading >= heading:
         robocar.rotate_cw_by(45)
-        heading = robocar.getHeadingDegrees()
-        point_x = robocar.gps_vec[0] + 0.3*np.cos(heading*np.pi/180)
-        point_z = robocar.gps_vec[2] + 0.3*np.sin(heading*np.pi/180)
-        print("Yeah bro, just taking a quick detour to (" + str(point_x) + ", " + str(point_z) + ")")
-        print("Current coords are (" + str(robocar.gps_vec[0]) + ", " + str(robocar.gps_vec[2]) + ")")
-        go([point_x, point_z], 0.08)
     else:
         robocar.rotate_cw_by(-45)
-        heading = robocar.getHeadingDegrees()
-        point_x = robocar.gps_vec[0] + 0.3*np.cos(heading*np.pi/180)
-        point_z = robocar.gps_vec[2] + 0.3*np.sin(heading*np.pi/180)
-        print("Yeah so just taking a quick detour to (" + str(point_x) + ", " + str(point_z) + ")")
-        print("Current coords are (" + str(robocar.gps_vec[0]) + ", " + str(robocar.gps_vec[2]) + ")")
-        go([point_x, point_z], 0.08)
-        
+
+    heading = robocar.getHeadingDegrees()
+    point_x = robocar.gps_vec[0] + 0.3*np.cos(heading*np.pi/180)
+    point_z = robocar.gps_vec[2] + 0.3*np.sin(heading*np.pi/180)
+    print("Yeah bro, just taking a quick detour to (" + str(point_x) + ", " + str(point_z) + ")")
+    print("Current coords are (" + str(robocar.gps_vec[0]) + ", " + str(robocar.gps_vec[2]) + ")")
+
+    go([point_x, point_z], 0.08)
+
     return True
 
 
@@ -174,7 +178,7 @@ def deposit_block_at_home():
 
 # idk if this actually works?
 def check_front_clear():
-    for _ in range(10):
+    for _ in range(20):
         robocar.turn_left()
         robocar.step(rotationstep)
         robocar.stop()
@@ -197,7 +201,7 @@ def go(location, range=0.2):
         return True
 
     # Turn to the right heading
-    while not robocar.rotate_to_location(location, tol=15):
+    while not robocar.rotate_to_location(location, tol=10):
         robocar.update_sensors()
         robocar.step(timestep)
 
@@ -221,6 +225,11 @@ def go(location, range=0.2):
     # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
         # robocar.turn_to(location)
+        # Turn to the right heading
+        while not robocar.rotate_to_location(location, tol=10):
+            robocar.update_sensors()
+            robocar.step(timestep)
+
         robocar.go_forward()
         robocar.frontClear -= 1
         robocar.step(movementstep)
@@ -305,7 +314,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "blueRobot":
+    if robocar.NAME != "redRobot":
         continue
     main_loop(time=120)
 
@@ -316,7 +325,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "redRobot":
+    if robocar.NAME != "blueRobot":
         continue
     main_loop(time=240)
  
