@@ -1,10 +1,10 @@
 PROTO root_g [
-    field SFVec3f    translation  1 0.15 1
-    field SFRotation rotation     0 1 0 3.14159
-    field SFColor    color        1 0 0
-    field SFString   name         "redRobot"
-    field SFString   controller   "main_controller"
-]
+            field SFVec3f    translation  1 0.15 1
+            field SFRotation rotation     0 1 0 3.14159
+            field SFColor    color        1 0 0
+            field SFString   name         "redRobot"
+            field SFString   controller   "main_controller"
+        ]
 {
 Robot {
   translation IS translation
@@ -96,8 +96,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000001412 0.06000129999506081
-        rotation 6.960773892677281e-09 -6.960824176343384e-09 1 1.57080364146185
+        translation 0.1 -0.07500000000001587 0.06000129999506081
+        rotation 7.70164670673076e-09 -7.701702409654544e-09 0.9999999999999999 1.57080364146185
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -129,8 +129,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.0749999999999773 0.06000130000688864
-        rotation -1.0754258802036699e-08 1.0754328415316161e-08 0.9999999999999999 1.570802907465454
+        translation -0.0999996 -0.07499999999997467 0.06000130000688864
+        rotation -1.1787545506755281e-08 1.1787621919776527e-08 0.9999999999999999 1.570802907465454
         children [
           USE WHEEL
         ]
@@ -157,9 +157,10 @@ Robot {
       ]
       name "ds_bottom"
       lookupTable [
-        0 0 0
-        1.4 700 0
+        0.2 100 0.05
+        1.4 700 0.05
       ]
+      resolution 0.03
     }
     DEF DS_TOP DistanceSensor {
       translation -0.08 -0.05 0.0999999
@@ -178,15 +179,19 @@ Robot {
       ]
       name "ds_top"
       lookupTable [
-        0 0 0
-        1.4 700 0
+        0.2 100 0.05
+        1.4 700 0.05
       ]
+      resolution 0.03
     }
     GPS {
       translation 0 0.005 0
+      accuracy 0.01
+      resolution 0.03
     }
     Compass {
       rotation 0 1 0 -1.5707953071795862
+      resolution 0.05
     }
     LED {
       translation -0.03 0.01 0

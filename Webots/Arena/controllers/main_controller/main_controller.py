@@ -32,12 +32,19 @@ def find_blocks(blocks, other_robot_threshold=0.3):
         robocar.original_heading = robocar.getHeadingDegrees()
 
     # Check if ds sensor sees a wall
-    if robocar.found_wall() and robocar.looking_at_block:
+    if robocar.found_wall() and (robocar.looking_at_block or robocar.looking_at_object):
         # print("LOOKING AT WALL")
         robocar.looking_at_block = False
+        robocar.looking_at_object = False
+        return False
 
-    # Check if ds sensor sees a block
-    if not robocar.looking_at_block and robocar.found_object():
+    # Check if ds sensor reads a difference
+    if not robocar.looking_at_object and robocar.found_object():
+        robocar.looking_at_object = True
+        return False
+
+    # Check if ds sensor sees an object and a block
+    if robocar.looking_at_object and robocar.found_object():
         robocar.looking_at_block = True
         # print("LOOKING AT BLOCK")
 
@@ -46,7 +53,7 @@ def find_blocks(blocks, other_robot_threshold=0.3):
         # Check if block is close to the other robot
         if utils.is_within_range(robocar.get_other_robot_pos(), block_pos, range=other_robot_threshold):
             print("--- Object close to other robot. Ignoring it")
-        elif utils.is_within_range(block_pos, robocar.HOME, range=0.2):
+        elif utils.is_within_range(block_pos, robocar.HOME, range=0.5):
             print("--- Object close to HOME. ignoring it")
         elif any([utils.is_within_range(block_pos, b.position, range=0.15) for b in blocks]):
             print("--- Object is close to another block. Ignoring it")
@@ -71,8 +78,8 @@ def find_blocks(blocks, other_robot_threshold=0.3):
         robocar.stop()
 
         # Print list of blocks
-        for b in blocks:
-            print(b)
+        # for b in blocks:
+        #     print(b)
 
         # Get closest block
         # robocar.closest_block_pos = utils.pop_closest_block(
@@ -97,7 +104,7 @@ def rotate_to_target_block():
         robocar.looking_at_block = False
         robocar.original_heading = robocar.getHeadingDegrees()
 
-    # Check if ds sensors have found a block within 25 cm
+    # Check if ds sensors have found a block within 35 cm
     # print(utils.ds_sensor_to_m(robocar.bot_distance))
     if robocar.found_object() and abs(utils.ds_sensor_to_m(robocar.bot_distance)) < 0.35:
         print("Found target block")
@@ -248,6 +255,7 @@ def main_loop(time=300):
         return
 
     robocar.update_sensors()
+    go(robocar.get_next_loc())
 
     # Look around for blocks
     robocar.looking_at_block = False
@@ -294,11 +302,11 @@ def main_loop(time=300):
         drive_around_block()
 
 
-    for b in blocks:
-        print(b)
+    # for b in blocks:
+    #     print(b)
 
     robocar.stop()
-    print("--- Finished 1 loop")
+    print("--- Finished a loop")
 
 # Drive around blue robot if less 120 secs
 while robocar.step(timestep) != -1:

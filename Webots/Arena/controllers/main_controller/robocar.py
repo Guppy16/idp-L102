@@ -29,11 +29,12 @@ class Robocar(Robot):
 
         # Init FLAGS!!!
         self.looking_at_block = False
+        self.looking_at_object = False
         self.been_to_block = False
         self.gone_over_block = False
         self.match = False
         self.count = 100
-        self.places = [self.MIDDLE, [-0.5,0.5], [-0.5,-0.5]]
+        self.places = [self.HOME, self.MIDDLE, [0.5, 0], [-0.5,0.5], [-0.5,-0.5]]
 
         # Init motors
         self.left_motor = self.getDevice("wheel1")
@@ -72,6 +73,7 @@ class Robocar(Robot):
     def set_home(self):
         self.HOME = np.array([self.gps_vec[0], self.gps_vec[2]])
         print(f"{self.NAME} Set HOME: {self.HOME}")
+        self.places = [self.HOME, self.MIDDLE, [0.5, 0], [-0.5,0.5], [-0.5,-0.5]]
         return True
 
     def robocar_hello(self):
@@ -241,7 +243,7 @@ class Robocar(Robot):
         # print(f"Distance from location: {np.linalg.norm(pos)}")
         return np.linalg.norm(pos) < range
 
-    def found_wall(self, wall_threshold=0.1):
+    def found_wall(self, wall_threshold=0.30):
         """Check if ds sensors are looking at a wall"""
         return utils.ds_sensor_to_m(self.bot_distance) > utils.ds_sensor_to_m(self.top_distance) - wall_threshold
 
@@ -258,7 +260,7 @@ class Robocar(Robot):
         return False
             
 
-    def found_object(self, wall_threshold=0.1):
+    def found_object(self, wall_threshold=0.10):
         """Check if ds_sensors have found an object"""
         # print(f"BOTTOM: {self.bot_distance}")
         # print(f"TOP: {self.top_distance}")
