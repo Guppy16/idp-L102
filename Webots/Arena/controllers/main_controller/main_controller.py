@@ -181,7 +181,7 @@ def go(location, range=0.2):
         return True
 
     # Turn to the right heading
-    while not robocar.rotate_to_location(location, tol=10):
+    while not robocar.rotate_to_location(location, tol=15):
         robocar.update_sensors()
         robocar.step(timestep)
 
