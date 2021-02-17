@@ -69,7 +69,7 @@ class Robocar(Robot):
 
     def set_home(self):
         self.HOME = np.array([self.gps_vec[0], self.gps_vec[2]])
-        print(f"Set HOME: {self.HOME}")
+        print(f"{self.NAME} Set HOME: {self.HOME}")
         return True
 
     def robocar_hello(self):
@@ -222,17 +222,9 @@ class Robocar(Robot):
     def rotate_cw_by(self, angle):
         """rotates through the angle, if the angle is negative then it is anticlockwise"""
         heading = self.getHeadingDegrees()
-        if angle > 0:
-            while abs(self.getHeadingDegrees() - heading) < angle or abs(self.getHeadingDegrees() - heading + 360) < angle:
-                self.turn_right()
-                self.step(self.timestep)
-                self.update_sensors()
-        else:
-            while abs(self.getHeadingDegrees() - heading) < abs(angle) or abs(self.getHeadingDegrees() - heading - 360) < abs(angle):
-                print(self.getHeadingDegrees())
-                self.turn_left()
-                self.step(self.timestep)  
-                self.update_sensors()      
+        dir = "CW" if angle > 0 else "CCW"
+        while abs(self.getHeadingDegrees() - heading) < abs(angle) or abs(self.getHeadingDegrees() - heading + np.sign(angle)*360) < abs(angle):
+            self.drive(self.rotate, count=10, dir=dir) 
         self.stop()
 
     def at_location(self, location, range=0.1):
@@ -303,7 +295,7 @@ class Robocar(Robot):
             print("Other robot pos not found")
             return None
         other_robot_pos = data['robots'][self.OTHER_NAME]["pos"]
-        print(f"Other robot pos: {other_robot_pos}")
+        # print(f"Other robot pos: {other_robot_pos}")
         return np.array([other_robot_pos[0], other_robot_pos[2]])
 
     # def detect_other_robot(self, range=0.2, fName='vision.json'):

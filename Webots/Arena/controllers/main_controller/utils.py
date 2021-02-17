@@ -49,7 +49,7 @@ def next_block(blocks, pos=[0,0]):
         return None
     pos = np.array(pos)
 
-    print(f"--- My position {pos}")
+    # print(f"--- My position {pos}")
 
     next_block = blocks[0]
     closest_dist = 1000

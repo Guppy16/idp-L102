@@ -10,6 +10,7 @@ from robocar import Robocar
 import json
 from task_manager import Task, TaskManager
 import numpy as np
+np.set_printoptions(formatter={'float': lambda x: "{0:0.2f}".format(x)})
 from block import Block
 import utils
 
@@ -28,7 +29,6 @@ def find_blocks(blocks, other_robot_threshold=0.3):
 
     # Keep track of the original heading
     if robocar.original_heading is None:
-        print(f"---Setting original heading: {robocar.getHeadingDegrees():.2f}")
         robocar.original_heading = robocar.getHeadingDegrees()
 
     # Check if ds sensor sees a wall
@@ -91,7 +91,6 @@ def rotate_to_target_block():
     """Rotate until target block found"""
     # Set original heading
     if robocar.original_heading is None:
-        print("--- Setting original heading in rotate_to_target_block")
         robocar.looking_at_block = False
         robocar.original_heading = robocar.getHeadingDegrees()
 
@@ -242,7 +241,6 @@ blocks = []
 def main_loop(time=300):
     global blocks
 
-    print(robocar.getTime())
     if robocar.getTime() > time:
         print("--- returning home")
         return
