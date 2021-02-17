@@ -57,7 +57,7 @@ DEF Block_R2 Solid {
     USE BOX_R
   ]
   name "solid(13)"
-  contactMaterial "block"
+  contactMaterial "box"
   boundingObject USE BOX_R
   physics Physics {
   }
@@ -295,8 +295,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation 0.1 -0.07500000000001276 0.06000129999506081
-        rotation 6.361019763701762e-09 -6.3610655509283655e-09 1 1.5708036414618505
+        translation 0.1 -0.07500000000001407 0.06000129999506081
+        rotation 6.913734348927854e-09 -6.913784288514103e-09 1 1.57080364146185
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -328,8 +328,8 @@ DEF ROOT_G Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0999996 -0.07499999999997933 0.06000130000688864
-        rotation -9.917788592283672e-09 9.91785274001842e-09 0.9999999999999999 1.570802907465454
+        translation -0.0999996 -0.07499999999997738 0.06000130000688864
+        rotation -1.0688653296975202e-08 1.0688722478525026e-08 0.9999999999999999 1.570802907465454
         children [
           USE WHEEL
         ]
@@ -484,8 +484,8 @@ DEF ROOT_G Robot {
   controller "main_controller"
 }
 root_g {
-  hidden rotation_3 3.5621664797310992e-09 -3.5621922199286135e-09 1 1.570803641461852
-  hidden rotation_4 -6.014260767842975e-09 6.0142997152551805e-09 1 1.5708029074654553
+  hidden rotation_3 3.573926365668456e-09 -3.5739521918859342e-09 1 1.570803641461852
+  hidden rotation_4 -6.030662144108351e-09 6.030701199452965e-09 1 1.5708029074654553
   translation 0.9996342927663698 0.07776465206441362 1.002648509782327
   rotation -0.0014558512676722715 0.9998752754316399 0.015726222610296565 3.139309764783284
   name "redRobot"

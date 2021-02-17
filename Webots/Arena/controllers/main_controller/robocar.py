@@ -135,6 +135,15 @@ class Robocar(Robot):
         bearing %= 360
         return bearing
 
+    def bearing_to_vec(self, b):
+        """Convert bearing in degrees to a unit vector in x-z"""
+        # print(f"Bearing: {b}")
+        b %= 360
+        b *= np.pi/180
+        vec = np.array([np.cos(b), np.sin(b)])
+        vec /= np.linalg.norm(vec)
+        return vec
+
     def rotate_to_bearing(self, angle, tol=5, dir='CW'):
         """Rotate until bearing = angle (degrees)"""
         angle %= 360 # Ensure that the angle is 0 - 360
@@ -243,6 +252,17 @@ class Robocar(Robot):
         """Check if ds sensors are looking at a wall"""
         return self.bot_distance > self.top_distance- wall_threshold
 
+    def crashing_into_wall(self):
+        """Detect if robot is crashing into the wall"""
+        # right wall (z = 1.2), but gps = 1.1
+        print(f"POS: {self.gps_vec}")
+        print(f"BEARING: {self.getHeadingDegrees()}")
+        if abs(self.gps_vec[2] - 1.1) < 0.1 and abs(self.getHeadingDegrees() - 90) < 15:
+            print("Colliding with right wall")
+            return True
+        
+        return False
+            
 
     def found_object(self, wall_threshold=20.0):
         """Check if ds_sensors have found an object"""

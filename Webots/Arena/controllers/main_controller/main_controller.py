@@ -126,14 +126,24 @@ def check_block_colour():
 
 def drive_around_block():
     """Somehow drive around the object"""
-    #determine which way to go around the block
+
+    # Determine if crashing into a wall
+    if robocar.crashing_into_wall():
+        # Reverse a bit and do a 180
+        robocar.drive(robocar.go_backward, 10)
+        robocar.rotate_cw_by(180)
+
     robocar.drive(robocar.go_backward, 10)      # Reverse a bit
 
-    pos = np.array([robocar.gps_vec[0], robocar.gps_vec[2]])
+    # Determine which way to go around the block
     heading = robocar.getHeadingDegrees()
-    mid_heading = robocar.getLocationBearing(robocar.MIDDLE - pos)
+    # mid_heading = robocar.getLocationBearing(robocar.MIDDLE - robocar.get_relative_pos())
 
-    if mid_heading >= heading:
+    # if heading < mid_heading or 360 - heading + mid_heading < heading - mid_heading:
+    # Rotate in the direction of pos x-cross-x cps
+    # print(f"Heading vector: {robocar.bearing_to_vec(robocar.getHeadingDegrees())}")
+    
+    if np.cross(robocar.get_relative_pos(), robocar.bearing_to_vec(robocar.getHeadingDegrees())) > 0:
         robocar.rotate_cw_by(45)
     else:
         robocar.rotate_cw_by(-45)
