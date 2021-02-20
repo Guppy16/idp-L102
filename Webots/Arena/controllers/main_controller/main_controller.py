@@ -309,7 +309,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "blueRobot":
+    if robocar.NAME != "redRobot":
         continue
     main_loop(time=120)
 
@@ -320,7 +320,7 @@ while robocar.step(timestep) != -1:
         go(robocar.HOME)
         robocar.stop()
         break
-    if robocar.NAME != "redRobot":
+    if robocar.NAME != "blueRobot":
         continue
     main_loop(time=270)
  
