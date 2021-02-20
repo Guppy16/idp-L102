@@ -12,7 +12,11 @@ Design and simulate 2 similar robots with the same controller to collect coloure
 
 
 ---
-## File Structure
+## Quick Links
+- [Webots Tutorials](https://cyberbotics.com/doc/guide/tutorials)
+- [Parts list](https://www.vle.cam.ac.uk/pluginfile.php/19716321/mod_resource/content/0/Tools%20and%20Parts%20List%20Rev%202.0.pdf)
+- [CAD Model](https://drive.google.com/drive/folders/1H2YYnImyA4o20oNFYkEqHbo80u9imQ9U?usp=sharing)
+- [G Drive Folder](https://drive.google.com/drive/folders/1ipIikCvn5a5h6eHkmM2m4k-qFC2ZiWPo)
 
  
 
@@ -61,11 +65,3 @@ Design and simulate 2 similar robots with the same controller to collect coloure
   - [ ] Electrical Docs
   - [ ] Software Docs
   - [ ] Cleanup README file
-
----
-
-## Quick Links
-- [Webots Tutorials](https://cyberbotics.com/doc/guide/tutorials)
-- [Parts list](https://www.vle.cam.ac.uk/pluginfile.php/19716321/mod_resource/content/0/Tools%20and%20Parts%20List%20Rev%202.0.pdf)
-- [CAD Model](https://drive.google.com/drive/folders/1H2YYnImyA4o20oNFYkEqHbo80u9imQ9U?usp=sharing)
-- [G Drive Folder](https://drive.google.com/drive/folders/1ipIikCvn5a5h6eHkmM2m4k-qFC2ZiWPo)
