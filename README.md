@@ -1,16 +1,40 @@
 # IDP L102
-Team Name: Root g 
+Team Name: Root g \
 Robots: pi, e
 
 The ultimate repo for the idp
 
-# Tasks
-- [x] Complete all the Webots [tutorials](https://cyberbotics.com/doc/guide/tutorials) (in python)
-- [ ] Complete cad design of bulk components
-- [ ] Finished full schematic
-- [ ] Started implementing algorithms
+## Task
+Design and simulate 2 similar robots with the same controller to collect coloured blocks in an arena.
+
+
+## Assumptions
+
+
+---
+## File Structure
+
  
- 
+
+---
+## Schedule
+- Week 1
+  - Tue 26 14:30 - [First Presentation](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo)
+- Week 2
+  - Thurs 28 16:00 - [First Report](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo)
+  - Tue 2 14:30 - [Progress Meeting 1](https://docs.google.com/presentation/d/1rXteifI9VppYjKGW0S_Uu-YhoCQ_Fu2L5HWq04Rq7eM)
+- Week 3
+  - Tue 9 14:30 - [Progress Meeting 2](https://docs.google.com/presentation/d/10YraGNGObi2IVQ-5OzObUJLeiZdhKT9rYpSfk6eRZUg)
+- Week 4
+  - Thurs 11 09:00 - First Competition
+  - Tue 16 09:00 - [Final Presentation](https://docs.google.com/presentation/d/1EIgQiFh6fY0tn3hVZZiFkF7x_DoJgEBwd8sGT5k-Sp4)
+  - Wed 17 14:00 - Final Competition
+- Week 5
+  - Mon 22 16:00 - Final Report and Documentation Deadline
+
+## Plan
+- [Gannt Chart](https://docs.google.com/spreadsheets/d/1-Yt5QpvAf2re6IKUbvELp7eMGsR5QatMflTM9JjYLDc)
+
 - Before the first Presenetation ~ 5 days
   - [x] Gannt chart -> [ ] Make this better
   - [x] Get used to Webots ~ 2 days
@@ -18,85 +42,30 @@ The ultimate repo for the idp
   - [x] Inital algorithms for navigation ~ 4
 - Before progress Meeting 1 ~ 7 days
   - [x] Complete simulation of environment (2 robots)
-  - [ ] Complete cad design of bulk components ~ 5
-  - [ ] Finished full schematic ~ 3
-  - [ ] Started implementing algorithms ~ 3
+  - [x] Complete cad design of bulk components ~ 5
+  - [x] Finished full schematic ~ 3
+  - [x] Started implementing algorithms ~ 3
 - Before Progress Meeting 2 ~ 7 days
-  - [ ] Finished CAD design
-  - [ ] Implemented Algorithms
-  - [ ] Start documentation
+  - [x] Finished CAD design
+  - [x] Implemented Algorithms
+  - [x] Start documentation
 - Before First Competition ~ 2 days
-  - [ ] Fully tested algorithms in simulation
+  - [x] Fully tested algorithms in simulation
 - Before Final Presentation
-  - [ ] Complete presentation ~ 
+  - [x] Complete presentation ~ 
 - Before Final Competition
-  - [ ] Improved the simulation environment
-  - [ ] Improved software
+  - [x] Improved the simulation environment
+  - [x] Improved algorithms
 - Before Final Report
-  - [ ] Completed documentation
-
----
-## Schedule
-- Week 1
-  - Tue 26 14:30 - [First Presentation](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit#slide=id.gb7adb26c31_0_31)
-- Week 2
-  - Thurs 28 16:00 - [First Report](https://docs.google.com/presentation/d/1Jz8pw5dtujUt2GG7nFzDspJj2hsbr5QpLF5pbWbA2lo/edit?usp=sharing)
-  - Tue 2 14:30 - Progress Meeting
-- Week 3
-  - Tue 9 14:30 - Progress Meeting
-- Week 4
-  - Thurs 11 09:00 - First Competition
-  - Tue 16 09:00 - Final Presentation
-  - Wed 17 14:00 - Final Competition
-- Week 5
-  - Mon 22 16:00 - Final Report and Documentation Deadline
-
----
-## Software
-
-- [x] Build a simulation
-- [x] Add robots
-- [x] Add controllers to the robot to drive it using arrow keys
-- [ ] Add a colour sensor
-- [ ] Add a distance sensor
-- [ ] Add a GPS sensor
-- [ ] Add a compass
-- [ ] Control Algorithm
-  - AVOID THE OTHER ROBOT AT ALL COST. Possible ways of implementing this:
-    - Get the location of the other robot using GPS
-    - Use IR emitter and receiver to send a signal
-  - Find a block. This can be implemented in 2 ways: 
-    - Rotate the robot
-    - Rotate the distance sensor (trickier)
-    - Ques: how to distringuish between a wall and block from far away
-  - Get close to the block
-    - Once the block is located, keep the heading aligned to the block
-    - Don't get too close to it, because we don't know whether we'll be be aligned with it or not
-  - Check the colour
-    - Use the colour sensor
-  - if it's not the right colour, restart the loop. otherwise:
-    - Somehow get aligned to it
-    - Get close to it and "pick it up"
-    - Ques: How can we be confident that we've picked up the block
-  - Once the block has been picked up
-    - Use the GPS sensor to locate ur pos
-    - Align the robot using the hall sensor
-
-
-Extras
-- [ ] Control the robot using a simple grid search algo (without building a map of the env)
-- [ ] Test some extreme cases: e.g. detecting collisions, getting a block from the wall
-- [ ] Build a map of the env by detecting blocks using the distance sensor with GPS
-- [ ] Use an algo (e.g. A* or Dijkstras) to find the best path to search for blocks
-- [ ] Add a servo to the distance sensor to make it rotate to build a more accurate map
-
+  - [ ] Mechanics Docs
+  - [ ] Electrical Docs
+  - [ ] Software Docs
+  - [ ] Cleanup README file
 
 ---
 
 ## Quick Links
-- CAD
-  - [Parts list](https://www.vle.cam.ac.uk/pluginfile.php/19716321/mod_resource/content/0/Tools%20and%20Parts%20List%20Rev%202.0.pdf)
-  - [Good and bad drawings](https://www.vle.cam.ac.uk/pluginfile.php/19604241/mod_resource/content/1/Good_Bad_drawing_examples.pdf)
-  - 
-- [repo for CAD](onshape.com)
-- [Drive Folder](https://drive.google.com/drive/folders/1ipIikCvn5a5h6eHkmM2m4k-qFC2ZiWPo?usp=sharing)
+- [Webots Tutorials](https://cyberbotics.com/doc/guide/tutorials)
+- [Parts list](https://www.vle.cam.ac.uk/pluginfile.php/19716321/mod_resource/content/0/Tools%20and%20Parts%20List%20Rev%202.0.pdf)
+- [CAD Model](https://drive.google.com/drive/folders/1H2YYnImyA4o20oNFYkEqHbo80u9imQ9U?usp=sharing)
+- [G Drive Folder](https://drive.google.com/drive/folders/1ipIikCvn5a5h6eHkmM2m4k-qFC2ZiWPo)
