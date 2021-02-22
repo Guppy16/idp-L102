@@ -68,7 +68,7 @@ Sensor Modules:
   - [x] Improved the simulation environment
   - [x] Improved algorithms
 - Before Final Report
-  - [ ] Mechanics Docs
-  - [ ] Electrical Docs
-  - [ ] Software Docs
-  - [ ] Cleanup README file
+  - [x] Mechanics Docs
+  - [x] Electrical Docs
+  - [x] Software Docs
+  - [x] Cleanup README file
