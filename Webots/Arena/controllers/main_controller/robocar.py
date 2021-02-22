@@ -1,24 +1,21 @@
 from controller import Robot
 import json
 import numpy as np
-import block
 import utils
 from colorama import Fore, Style
-from task_manager import Task, TaskManager
-
 
 class Robocar(Robot):
     def __init__(self, MAX_SPEED=10, HOME=[1.0, -1.0], MIDDLE=[0.0, 0.0], COLOR='b', NAME="blueRobot", OTHER_NAME="redRobot"):
         """Initialise Robots, sensors and motors"""
         Robot.__init__(self)
         timestep = int(self.getBasicTimeStep())
+
         self.MAX_SPEED = MAX_SPEED
         self.HOME = np.array(HOME)
         self.MIDDLE = MIDDLE
         self.NAME = self.getName()
         self.COLOR = 'b' if self.NAME == 'blueRobot' else 'r'
         self.timestep = 32
-        self.frontClear = 50
 
         self.OTHER_NAME = "redRobot" if self.COLOR == 'b' else 'blueRobot'
         # self.closest_block_pos = None
@@ -34,6 +31,7 @@ class Robocar(Robot):
         self.gone_over_block = False
         self.match = False
         self.count = 100
+        self.frontClear = 50
         self.places = [self.HOME, self.MIDDLE, [0.5, 0], [-0.5,0.5], [-0.5,-0.5]]
 
         # Init motors
@@ -42,7 +40,6 @@ class Robocar(Robot):
         self.left_motor.setVelocity(0.0)
 
         self.right_motor = self.getDevice("wheel2")
-
         self.right_motor.setPosition(float('inf'))
         self.right_motor.setVelocity(0.0)
 
@@ -83,10 +80,11 @@ class Robocar(Robot):
 
     def get_next_loc(self):
         """Next location to explore when no block found"""
+
+        # Rotate the list of locations to visit (except if it's close to home)
         if not utils.is_within_range(self.places[0], self.HOME, range=0.3):
             self.places.append(self.places[0])
 
-        # self.places.append(self.places[0])
         return self.places.pop(0)
 
 
@@ -249,18 +247,6 @@ class Robocar(Robot):
     def found_wall(self, wall_threshold=0.30):
         """Check if ds sensors are looking at a wall"""
         return utils.ds_sensor_to_m(self.bot_distance) > utils.ds_sensor_to_m(self.top_distance) - wall_threshold
-
-    # REDUNDANT
-    def crashing_into_wall(self):
-        """Detect if robot is crashing into the wall"""
-        # right wall (z = 1.2), but gps = 1.1
-        print(f"POS: {self.gps_vec}")
-        print(f"BEARING: {self.getHeadingDegrees()}")
-        if abs(self.gps_vec[2] - 1.1) < 0.1 and abs(self.getHeadingDegrees() - 90) < 15:
-            print("Colliding with right wall")
-            return True
-        
-        return False
             
 
     def found_object(self, wall_threshold=0.10):
@@ -271,7 +257,7 @@ class Robocar(Robot):
 
     def detect_block_colour(self, fName='vision.json'):
         """Return the colour displayed in the camera
-        returns: 'b', 'r', or None
+        returns: 'b', 'r', or 'g'
         """
         # NOTE: Max value of colour is 256?
         # NOTE: may need to compare values??
@@ -298,20 +284,8 @@ class Robocar(Robot):
         print(f"+++UNIDENTIFIED BLOCK with colour: {self.colour_sensor}")
         return None
 
-    def update_my_pos(self, fName='vision.json'):
-
-        # Write position of robot in a file
-        data = json.load(open(fName))
-
-        # Update my pos
-        if not self.NAME in data:
-            data[self.NAME] = {}
-        data[self.NAME]["pos"] = self.gps_vec
-        json.dump(data, open(fName, 'w+'))
-
     def get_other_robot_pos(self, fName='vision.json'):
         """Return x-z position of other robot"""
-        # Write position of robot in a file
         data = json.load(open(fName))
 
         # Get position of other robot
@@ -322,9 +296,13 @@ class Robocar(Robot):
         # print(f"Other robot pos: {other_robot_pos}")
         return np.array([other_robot_pos[0], other_robot_pos[2]])
 
-    # def detect_other_robot(self, range=0.2, fName='vision.json'):
-    #     """Find co-ordinates of other robot and check if that's within 30 cm"""
+    def update_my_pos(self, fName='vision.json'):
 
+        # Write position of robot in a file
+        data = json.load(open(fName))
 
-    #     # Check if within range
-    #     return np.linalg.norm(other_robot_pos - self.gps_vec) < range
+        # Update my pos
+        if not self.NAME in data:
+            data[self.NAME] = {}
+        data[self.NAME]["pos"] = self.gps_vec
+        json.dump(data, open(fName, 'w+'))

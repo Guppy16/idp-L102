@@ -1,6 +1,41 @@
 import numpy as np
 import json
 
+# Functions related to list of Block
+def next_block(blocks, pos=[0,0]):
+    """Given a list of blocks, return block of col=None, pickedUp=False that is closest to pos"""
+    if blocks == []:
+        return None
+    pos = np.array(pos)
+
+    # print(f"--- My position {pos}")
+
+    next_block = blocks[0]
+    closest_dist = 1000
+    for block in blocks:
+        if block.color is None and not block.pickedUp and np.linalg.norm(block.position - pos) < closest_dist:
+            closest_dist = np.linalg.norm(block.position - pos)
+            next_block = block
+    if closest_dist == 1000:
+        print("--- No closest block found")
+        return None
+    return next_block
+
+def ds_sensor_to_m(val):
+    """Cover ds_sensor distance to cm using lookup tables"""
+    return val / 500
+
+def is_within_range(a,b, range=0.1):
+    """Returns true if np.abs(a-b)<range. Assuming numpy array"""
+    try:
+        # print(np.linalg.norm(a - b))
+        return np.linalg.norm(a - b) < range
+    except Exception as e:
+        print(e)
+        return False
+        
+### REDUNDANT FUNCS
+
 def store_block(pos, range=0.1, fName='vision.json'):
     """Store block pos if not within range of any other block"""
     pos = np.array(pos)             # Conert pos to np array
@@ -40,40 +75,3 @@ def pop_closest_block(my_pos, fName='vision.json'):
     json.dump(data, open(fName, 'w+'))
 
     return blocks[closest_block]
-
-
-# Functions related to list of Block
-def next_block(blocks, pos=[0,0]):
-    """Given a list of blocks, return block of col=None, pickedUp=False that is closest to pos"""
-    if blocks == []:
-        return None
-    pos = np.array(pos)
-
-    # print(f"--- My position {pos}")
-
-    next_block = blocks[0]
-    closest_dist = 1000
-    for block in blocks:
-        if block.color is None and not block.pickedUp and np.linalg.norm(block.position - pos) < closest_dist:
-            closest_dist = np.linalg.norm(block.position - pos)
-            next_block = block
-    if closest_dist == 1000:
-        print("--- No closest block found")
-        return None
-    return next_block
-
-def ds_sensor_to_m(val):
-    """Cover ds_sensor distance to cm using lookup tables"""
-    return val / 500
-
-def is_within_range(a,b, range=0.1):
-    """Returns true if np.abs(a-b)<range. Assuming numpy array"""
-    try:
-        # print(np.linalg.norm(a - b))
-        return np.linalg.norm(a - b) < range
-    except Exception as e:
-        print(e)
-        return False
-    print("*** utils.is_witin_range !!!Something went wrong.")
-    return False
-        

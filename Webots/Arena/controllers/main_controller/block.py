@@ -1,3 +1,5 @@
+"""Class to store details about a block"""
+
 import numpy as np
 
 class Block():

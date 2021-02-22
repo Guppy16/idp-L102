@@ -1,8 +1,6 @@
 """main_controller controller."""
 
 from robocar import Robocar
-import json
-from task_manager import Task, TaskManager
 import numpy as np
 np.set_printoptions(formatter={'float': lambda x: "{0:0.2f}".format(x)})
 from block import Block
@@ -12,11 +10,7 @@ robocar = Robocar()
 robocar.robocar_hello()
 
 timestep = int(robocar.getBasicTimeStep())
-
-movementstep=32
 rotationstep=3
-collisiondistance=1.0
-
 
 def find_blocks(blocks, other_robot_threshold=0.3):
     """Rotate and Check if what we're seeing is a wall or a block"""
@@ -55,35 +49,24 @@ def find_blocks(blocks, other_robot_threshold=0.3):
             print("--- Found a block. Adding it to the list...")
             # Add block to list of blocks
             # Appends a block to the list with its position, and it has not been picked up yet
-            
-            # ADD some algo to check if we have already "attempted" to pick up this block
-            # So that we don't try to pick it up again!
             blocks.append(Block(block_pos, False))
 
             # Add block pos to a file
             # utils.store_block(pos=[block_pos[0], block_pos[1]], range=0.05)
 
-    # Once rotated 360
+    # Once rotated 360 degrees (tolerance of 15)
     if robocar.rotate_to_bearing(robocar.original_heading - 15):
         print("---Finished scanning blocks")
         
         # Reset original heading
         robocar.original_heading = None
         robocar.stop()
-
-        # Print list of blocks
-        # for b in blocks:
-        #     print(b)
-
-        # Get closest block
-        # robocar.closest_block_pos = utils.pop_closest_block(
-        #     my_pos=[robocar.gps_vec[0], robocar.gps_vec[2]],
-        # )
         robocar.step(timestep)
         robocar.update_sensors()
+
+        # Select next block if it is different from the one just attempted
         block = utils.next_block(blocks, pos=[robocar.gps_vec[0], robocar.gps_vec[2]])
         robocar.target_block = None if robocar.target_block == block else block
-        
         
         return True
 
@@ -119,8 +102,8 @@ def check_block_colour():
     """Assuming the colour sensor is looking at a block. Set robocar.match if color matches"""
 
     col = robocar.detect_block_colour()
-
-    if col == 'g': # If colour is green, then reverse a bit and check the colour again
+    # If colour is green, then reverse a bit and check the colour again
+    if col == 'g': 
         robocar.drive(robocar.go_backward, 10)      # Reverse a bit
         col = robocar.detect_block_colour()
     col = None if col == 'g' else col
@@ -150,26 +133,9 @@ def drive_around_block():
     return True
     
 
-## START redundant functions
 
-def drive_over_block():
-    """Turn and drive over block"""
-    for _ in range(100):
-        robocar.update_sensors()
-        robocar.turn_and_drive()
-        robocar.step(timestep)
-
-def deposit_block_at_home():
-    """Reverse from home until count = 0"""
-    for _ in range(100):
-        robocar.update_sensors()
-        robocar.go_backward()
-        robocar.step(timestep)
-    
-## -- END of redundant functions
-
-# idk if this actually works?
-def check_front_clear():
+# Function to check if front is clear
+def check_front_clear(collisiondistance=1.0):
     for _ in range(20):
         robocar.turn_left()
         robocar.step(rotationstep)
@@ -188,7 +154,7 @@ def check_front_clear():
 
 def go(location, range=0.2):
 
-    # Check if location is close by
+    # Exit if location is close by
     if robocar.at_location(location, range):
         return True
 
@@ -196,11 +162,6 @@ def go(location, range=0.2):
     while not robocar.rotate_to_location(location, tol=10):
         robocar.update_sensors()
         robocar.step(timestep)
-
-    # Turn to the right heading
-    # robocar.turn_to(location)
-
-    # print("--- DONE TURNING TO LOCATIONS")
 
     # Update the sensors
     robocar.update_sensors()
@@ -216,7 +177,6 @@ def go(location, range=0.2):
 
     # Otherwise, advance the timestep and keep on going
     elif robocar.frontClear > 0:
-        # robocar.turn_to(location)
         # Turn to the right heading
         while not robocar.rotate_to_location(location, tol=10):
             robocar.update_sensors()
@@ -224,11 +184,9 @@ def go(location, range=0.2):
 
         robocar.go_forward()
         robocar.frontClear -= 1
-        robocar.step(movementstep)
+        robocar.step(timestep)
         go(location, range)
 
-HOME = [1.0, -1.0]
-MIDDLE = [0.0, 0.0]
 blocksCollected=0
 
 # Set home
@@ -323,8 +281,3 @@ while robocar.step(timestep) != -1:
     if robocar.NAME != "blueRobot":
         continue
     main_loop(time=270)
- 
-
-# Only drive blue robot
-
-# Now drive red robo
