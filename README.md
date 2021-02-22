@@ -10,6 +10,13 @@ Design and simulate 2 similar robots with the same controller to collect coloure
 
 ## Assumptions
 
+Sensor Modules:
+- Colour sensor: 1 pixel camera; range of 1 - 10 cm
+- Ultrasound sensor: Distance sensor; range = 20 - 140 cm; 3 cm resolution; 5% std
+- IR sensor: Same as ultrasound
+- Position sensor: GPS sensor; 1 cm accuracy; 3cm resolution
+- Rotation sensor: Compass sensor; 5cm resolution
+
 
 ---
 ## Quick Links
